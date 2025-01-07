@@ -176,7 +176,7 @@ object OntologyHelpers {
     directClassCardinalities: Map[SmartIri, Map[SmartIri, KnoraCardinalityInfo]],
     classCardinalitiesWithInheritance: Map[SmartIri, Map[SmartIri, KnoraCardinalityInfo]],
     allSubClassOfRelations: Map[SmartIri, Seq[SmartIri]],
-    allSubPropertyOfRelations: Map[SmartIri, Set[SmartIri]],
+    superPropertyLookup: SmartIri => Option[Set[SmartIri]],
     allPropertyDefs: Map[SmartIri, PropertyInfoContentV2],
     allKnoraResourceProps: Set[SmartIri],
     allLinkProps: Set[SmartIri],
@@ -266,7 +266,7 @@ object OntologyHelpers {
 
         val maybePropertyAndSubproperty: Option[(SmartIri, SmartIri)] = OntologyHelpers.findPropertyAndSubproperty(
           propertyIris = allPropertyIrisForCardinalitiesInClass,
-          subPropertyOfRelations = allSubPropertyOfRelations,
+          superPropertyLookup = superPropertyLookup,
         )
 
         maybePropertyAndSubproperty match {
@@ -875,11 +875,11 @@ object OntologyHelpers {
    */
   private def findPropertyAndSubproperty(
     propertyIris: Set[SmartIri],
-    subPropertyOfRelations: Map[SmartIri, Set[SmartIri]],
+    superPropertyLookup: SmartIri => Option[Set[SmartIri]],
   ): Option[(SmartIri, SmartIri)] =
     propertyIris.flatMap { propertyIri =>
       val maybeBasePropertyIri: Option[SmartIri] = (propertyIris - propertyIri).find { otherPropertyIri =>
-        subPropertyOfRelations.get(propertyIri).exists { (baseProperties: Set[SmartIri]) =>
+        superPropertyLookup(propertyIri).exists { (baseProperties: Set[SmartIri]) =>
           baseProperties.contains(otherPropertyIri)
         }
       }
@@ -1038,7 +1038,7 @@ object OntologyHelpers {
               classIri = internalClassDef.classIri,
               thisClassCardinalities = classDefWithAddedLinkValueProps.directCardinalities,
               inheritableCardinalities = cardinalitiesAvailableToInherit,
-              allSubPropertyOfRelations = cacheData.subPropertyOfRelations,
+              superPropertyLookup = cacheData.getSuperPropertiesOf,
               errorSchema = ApiV2Complex,
               errorFun = { msg => throw BadRequestException(msg) },
             ),
@@ -1079,7 +1079,7 @@ object OntologyHelpers {
 
       _ <- findPropertyAndSubproperty(
              propertyIris = cardinalitiesForClassWithInheritance.keySet,
-             subPropertyOfRelations = cacheData.subPropertyOfRelations,
+             superPropertyLookup = cacheData.getSuperPropertiesOf,
            ) match {
              case Some((basePropertyIri, propertyIri)) =>
                Validation.fail(
@@ -1158,7 +1158,7 @@ object OntologyHelpers {
     classIri: SmartIri,
     thisClassCardinalities: Map[SmartIri, KnoraCardinalityInfo],
     inheritableCardinalities: Map[SmartIri, KnoraCardinalityInfo],
-    allSubPropertyOfRelations: Map[SmartIri, Set[SmartIri]],
+    superPropertyLookup: SmartIri => Option[Set[SmartIri]],
     errorSchema: OntologySchema,
     errorFun: String => Nothing,
   ): Map[SmartIri, KnoraCardinalityInfo] = {
@@ -1169,7 +1169,7 @@ object OntologyHelpers {
         // If the class has a cardinality for a non-Knora property like rdfs:label (which can happen only
         // if it's a built-in class), we won't have any information about the base properties of that property.
         val basePropsOfThisClassProp: Set[SmartIri] =
-          allSubPropertyOfRelations.getOrElse(thisClassProp, Set.empty[SmartIri])
+          superPropertyLookup(thisClassProp).getOrElse(Set.empty[SmartIri])
 
         val overriddenBaseProps: Set[SmartIri] = inheritableCardinalities.foldLeft(Set.empty[SmartIri]) {
           case (acc, (baseClassProp, baseClassCardinality)) =>
@@ -1377,7 +1377,7 @@ object OntologyHelpers {
   def inheritCardinalitiesInLoadedClass(
     classIri: SmartIri,
     directSubClassOfRelations: Map[SmartIri, Set[SmartIri]],
-    allSubPropertyOfRelations: Map[SmartIri, Set[SmartIri]],
+    superPropertyLookup: SmartIri => Option[Set[SmartIri]],
     directClassCardinalities: Map[SmartIri, Map[SmartIri, KnoraCardinalityInfo]],
   ): Map[SmartIri, KnoraCardinalityInfo] = {
     // Recursively get properties that are available to inherit from base classes. If we have no information about
@@ -1390,7 +1390,7 @@ object OntologyHelpers {
           acc ++ inheritCardinalitiesInLoadedClass(
             classIri = baseClass,
             directSubClassOfRelations = directSubClassOfRelations,
-            allSubPropertyOfRelations = allSubPropertyOfRelations,
+            superPropertyLookup = superPropertyLookup,
             directClassCardinalities = directClassCardinalities,
           )
       }
@@ -1405,7 +1405,7 @@ object OntologyHelpers {
       classIri = classIri,
       thisClassCardinalities = thisClassCardinalities,
       inheritableCardinalities = cardinalitiesAvailableToInherit,
-      allSubPropertyOfRelations = allSubPropertyOfRelations,
+      superPropertyLookup = superPropertyLookup,
       errorSchema = InternalSchema,
       (msg: String) => throw InconsistentRepositoryDataException(msg),
     )

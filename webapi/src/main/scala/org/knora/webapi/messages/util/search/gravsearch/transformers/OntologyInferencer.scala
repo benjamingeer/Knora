@@ -36,14 +36,14 @@ final case class OntologyInferencer(
       }
   } yield {
     // look up subclasses from ontology cache
-    val knownSubClasses = cache.classToSubclassLookup.get(baseClassIri.iri).getOrElse(Set(baseClassIri.iri)).toSeq
+    val knownSubClasses = cache.getSubClassesOf(baseClassIri.iri).getOrElse(Set(baseClassIri.iri)).toSeq
 
     // if provided, limit the child classes to those that belong to relevant ontologies
     val subClasses = limitInferenceToOntologies match {
       case None                       => knownSubClasses
       case Some(relevantOntologyIris) =>
         // filter the known subclasses against the relevant ontologies
-        knownSubClasses.filter(cache.classDefinedInOntology.get(_).exists(relevantOntologyIris.contains(_)))
+        knownSubClasses.filter(cache.classDefinedInOntology(_).exists(relevantOntologyIris.contains(_)))
     }
 
     // Searches for a `?v a <subClassIRI>`, or if multiple subclasses are present, then
@@ -63,12 +63,12 @@ final case class OntologyInferencer(
     queryVariableSuffix: Option[String],
   ): Seq[QueryPattern] = {
     // look up subproperties from ontology cache
-    val knownSubProps = cache.superPropertyOfRelations.get(predIri).getOrElse(Set(predIri)).toSeq
+    val knownSubProps = cache.getSubPropertiesOf(predIri).getOrElse(Set(predIri)).toSeq
 
     // if provided, limit the child properties to those that belong to relevant ontologies
     val subProps = limitInferenceToOntologies match {
       case Some(ontologyIris) =>
-        knownSubProps.filter(cache.propertyDefinedInOntology.get(_).exists(ontologyIris.contains(_)))
+        knownSubProps.filter(cache.propertyDefinedInOntology(_).exists(ontologyIris.contains(_)))
       case None => knownSubProps
     }
     // Searches for a `?v <propertyIRI> ?b`, or if multiple propertyIRIs are present, then

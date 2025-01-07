@@ -198,13 +198,12 @@ final case class OntologyResponderV2(
                              }
                            }.toMap
 
-      propertyDefsAvailable = propertyOntologies.flatMap { ontology =>
-                                ontology.properties.filter { case (propertyIri, _) =>
-                                  standoffPropertyIris.contains(propertyIri) && cacheData.standoffProperties.contains(
-                                    propertyIri,
-                                  )
-                                }
-                              }.toMap
+      propertyDefsAvailable =
+        propertyOntologies.flatMap { ontology =>
+          ontology.properties.filter { case (propertyIri, _) =>
+            standoffPropertyIris.contains(propertyIri) && cacheData.containsStandoffProperty(propertyIri)
+          }
+        }.toMap
 
       missingClassDefs    = classIrisForCache -- classDefsAvailable.keySet
       missingPropertyDefs = propertyIrisForCache -- propertyDefsAvailable.keySet
@@ -248,10 +247,9 @@ final case class OntologyResponderV2(
    * @return a [[StandoffAllPropertyEntitiesGetResponseV2]].
    */
   private def getAllStandoffPropertyEntitiesV2: Task[StandoffAllPropertyEntitiesGetResponseV2] =
-    ontologyCache.getCacheData.map { data =>
-      val ontologies: Iterable[ReadOntologyV2] = data.ontologies.values
-      ontologies.flatMap(_.properties.view.filterKeys(data.standoffProperties)).toMap
-    }.map(StandoffAllPropertyEntitiesGetResponseV2.apply)
+    ontologyCache.getCacheData
+      .map(_.getAllStandoffPropertyEntities)
+      .map(StandoffAllPropertyEntitiesGetResponseV2.apply)
 
   /**
    * Checks whether a certain Knora resource or value class is a subclass of another class.
@@ -264,7 +262,7 @@ final case class OntologyResponderV2(
     for {
       cacheData <- ontologyCache.getCacheData
       isSubClass <- ZIO
-                      .fromOption(cacheData.classToSuperClassLookup.get(subClassIri))
+                      .fromOption(cacheData.getSuperClassesOf(subClassIri))
                       .map(_.contains(superClassIri))
                       .orElseFail(BadRequestException(s"Class $subClassIri not found"))
     } yield CheckSubClassResponseV2(isSubClass)
@@ -279,7 +277,7 @@ final case class OntologyResponderV2(
     for {
       cacheData <- ontologyCache.getCacheData
       subClasses <-
-        ZIO.foreach(cacheData.classToSubclassLookup(classIri).toVector.sorted) { subClassIri =>
+        ZIO.foreach(cacheData.getSubClassesOf(classIri).get.toVector.sorted) { subClassIri =>
           val labelValueMaybe = cacheData
             .ontologies(subClassIri.getOntologyFromEntity)
             .classes(subClassIri)
@@ -786,8 +784,9 @@ final case class OntologyResponderV2(
         // Check for rdfs:subClassOf cycles.
 
         allBaseClassIrisWithoutSelf: Set[SmartIri] = internalClassDef.subClassOf.flatMap { baseClassIri =>
-                                                       cacheData.classToSuperClassLookup
-                                                         .getOrElse(baseClassIri, Set.empty[SmartIri])
+                                                       cacheData
+                                                         .getSuperClassesOf(baseClassIri)
+                                                         .getOrElse(Set.empty[SmartIri])
                                                          .toSet
                                                      }
 
@@ -1147,10 +1146,11 @@ final case class OntologyResponderV2(
         // Check that the new cardinalities are valid, and add any inherited cardinalities.
 
         allBaseClassIrisWithoutInternal = newInternalClassDef.subClassOf.toSeq.flatMap { baseClassIri =>
-                                            cacheData.classToSuperClassLookup.getOrElse(
-                                              baseClassIri,
-                                              Seq.empty[SmartIri],
-                                            )
+                                            cacheData
+                                              .getSuperClassesOf(baseClassIri)
+                                              .getOrElse(
+                                                Seq.empty[SmartIri],
+                                              )
                                           }
 
         allBaseClassIris = internalClassIri +: allBaseClassIrisWithoutInternal
@@ -1320,10 +1320,11 @@ final case class OntologyResponderV2(
       // Check that the new cardinalities are valid, and don't add any inherited cardinalities.
       newInternalClassDef = oldClassInfo.copy(directCardinalities = newClassInfo.directCardinalities)
       allBaseClassIrisWithoutInternal = newInternalClassDef.subClassOf.toSeq.flatMap { baseClassIri =>
-                                          cacheData.classToSuperClassLookup.getOrElse(
-                                            baseClassIri,
-                                            Seq.empty[SmartIri],
-                                          )
+                                          cacheData
+                                            .getSuperClassesOf(baseClassIri)
+                                            .getOrElse(
+                                              Seq.empty[SmartIri],
+                                            )
                                         }
 
       allBaseClassIris = classIri +: allBaseClassIrisWithoutInternal
@@ -1976,10 +1977,11 @@ final case class OntologyResponderV2(
         // Check for rdfs:subPropertyOf cycles.
 
         allKnoraSuperPropertyIrisWithoutSelf: Set[SmartIri] = knoraSuperProperties.flatMap { superPropertyIri =>
-                                                                cacheData.subPropertyOfRelations.getOrElse(
-                                                                  superPropertyIri,
-                                                                  Set.empty[SmartIri],
-                                                                )
+                                                                cacheData
+                                                                  .getSuperPropertiesOf(superPropertyIri)
+                                                                  .getOrElse(
+                                                                    Set.empty[SmartIri],
+                                                                  )
                                                               }
 
         _ <- ZIO.when(allKnoraSuperPropertyIrisWithoutSelf.contains(internalPropertyIri)) {

@@ -352,9 +352,9 @@ object OntologyCache {
       if (OntologyConstants.Owl.ClassesThatCanBeKnoraClassConstraints.contains(constraintValueToBeChecked.toString)) {
         Set(constraintValueToBeChecked)
       } else {
-        cacheData.classToSuperClassLookup
+        cacheData
+          .getSuperClassesOf(constraintValueToBeChecked)
           .getOrElse(
-            constraintValueToBeChecked,
             errorFun(
               s"Property ${internalPropertyIri.toOntologySchema(errorSchema)} cannot have a ${constraintPredicateIri
                   .toOntologySchema(errorSchema)} of " +
@@ -679,7 +679,7 @@ final case class OntologyCacheLive(triplestore: TriplestoreService, cacheDataRef
           OntologyHelpers.inheritCardinalitiesInLoadedClass(
             classIri = resourceClassIri,
             directSubClassOfRelations = directSubClassOfRelations,
-            allSubPropertyOfRelations = allSubPropertyOfRelations,
+            superPropertyLookup = allSubPropertyOfRelations.get,
             directClassCardinalities = directClassCardinalities,
           )
 
@@ -692,7 +692,7 @@ final case class OntologyCacheLive(triplestore: TriplestoreService, cacheDataRef
       directClassCardinalities = directClassCardinalities,
       classCardinalitiesWithInheritance = classCardinalitiesWithInheritance,
       allSubClassOfRelations = allSubClassOfRelations,
-      allSubPropertyOfRelations = allSubPropertyOfRelations,
+      superPropertyLookup = allSubPropertyOfRelations.get,
       allPropertyDefs = allPropertyDefs,
       allKnoraResourceProps = allKnoraResourceProps,
       allLinkProps = allLinkProps,
@@ -881,7 +881,7 @@ final case class OntologyCacheLive(triplestore: TriplestoreService, cacheDataRef
   private def updateSubClasses(baseClassIri: SmartIri, cacheData: OntologyCacheData): OntologyCacheData = {
     // Get the class definitions of all the subclasses of the base class.
 
-    val allSubClassIris: Set[SmartIri] = cacheData.classToSubclassLookup(baseClassIri)
+    val allSubClassIris: Set[SmartIri] = cacheData.getSubClassesOf(baseClassIri).get
 
     val allSubClasses: Set[ReadClassInfoV2] = allSubClassIris.map { subClassIri =>
       cacheData.ontologies(subClassIri.getOntologyFromEntity).classes(subClassIri)
@@ -914,7 +914,7 @@ final case class OntologyCacheLive(triplestore: TriplestoreService, cacheDataRef
           classIri = directSubClassIri,
           thisClassCardinalities = directSubClass.entityInfoContent.directCardinalities,
           inheritableCardinalities = inheritableCardinalities,
-          allSubPropertyOfRelations = cacheData.subPropertyOfRelations,
+          superPropertyLookup = cacheData.getSuperPropertiesOf,
           errorSchema = ApiV2Complex,
           errorFun = { (msg: String) =>
             throw BadRequestException(msg)

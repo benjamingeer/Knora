@@ -38,14 +38,14 @@ final case class InferenceOptimizationService(
    * if so, all ontologies defined by the project to which the data belongs, will be included in the results.
    *
    * @param entity       an RDF entity.
-   * @param map          a map of entity IRIs to the IRIs of the ontology where they are defined.
+   * @param lookup       a function optionally defining the ontology in an entity is defined.
    * @return a sequence of ontology IRIs which relate to the input RDF entity.
    */
-  private def resolveEntity(entity: Entity, map: Map[SmartIri, SmartIri]): Task[Seq[SmartIri]] =
+  private def resolveEntity(entity: Entity, lookup: SmartIri => Option[SmartIri]): Task[Seq[SmartIri]] =
     entity match {
       case IriRef(iri, _) =>
         val internal     = iri.toOntologySchema(InternalSchema)
-        val maybeOntoIri = map.get(internal)
+        val maybeOntoIri = lookup(internal)
         maybeOntoIri match {
           // if the map contains an ontology IRI corresponding to the entity IRI, then this can be returned
           case Some(iri) => ZIO.succeed(Seq(iri))
@@ -105,10 +105,8 @@ final case class InferenceOptimizationService(
 
     for {
       ontoCache <- ontologyCache.getCacheData
-      // from the cache, get the map from entity to the ontology where the entity is defined
-      entityMap = ontoCache.entityDefinedInOntology
       // resolve all entities from the WHERE clause to the ontology where they are defined
-      relevantOntologies   <- ZIO.foreach(entities)(resolveEntity(_, entityMap))
+      relevantOntologies   <- ZIO.foreach(entities)(resolveEntity(_, ontoCache.entityDefinedInOntology))
       relevantOntologiesSet = relevantOntologies.flatten.toSet
       relevantOntologiesMaybe =
         relevantOntologiesSet match {

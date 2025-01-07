@@ -7,6 +7,7 @@ package org.knora.webapi.slice.ontology.repo.model
 import org.knora.webapi.messages.SmartIri
 import org.knora.webapi.messages.v2.responder.ontologymessages.PropertyInfoContentV2
 import org.knora.webapi.messages.v2.responder.ontologymessages.ReadOntologyV2
+import org.knora.webapi.messages.v2.responder.ontologymessages.ReadPropertyInfoV2
 
 /**
  * The in-memory cache of ontologies.
@@ -23,20 +24,35 @@ import org.knora.webapi.messages.v2.responder.ontologymessages.ReadOntologyV2
  */
 case class OntologyCacheData(
   ontologies: Map[SmartIri, ReadOntologyV2],
-  classToSuperClassLookup: Map[SmartIri, Seq[SmartIri]],
-  classToSubclassLookup: Map[SmartIri, Set[SmartIri]],
-  subPropertyOfRelations: Map[SmartIri, Set[SmartIri]],
-  superPropertyOfRelations: Map[SmartIri, Set[SmartIri]],
-  classDefinedInOntology: Map[SmartIri, SmartIri],
-  propertyDefinedInOntology: Map[SmartIri, SmartIri],
-  entityDefinedInOntology: Map[SmartIri, SmartIri],
-  standoffProperties: Set[SmartIri],
+  private val classToSuperClassLookup: Map[SmartIri, Seq[SmartIri]],
+  private val classToSubclassLookup: Map[SmartIri, Set[SmartIri]],
+  private val subPropertyOfRelations: Map[SmartIri, Set[SmartIri]],
+  private val superPropertyOfRelations: Map[SmartIri, Set[SmartIri]],
+  private val classDefinedInOntology: Map[SmartIri, SmartIri],
+  private val propertyDefinedInOntology: Map[SmartIri, SmartIri],
+  private val entityDefinedInOntology: Map[SmartIri, SmartIri],
+  private val standoffProperties: Set[SmartIri],
 ) {
   lazy val allPropertyDefs: Map[SmartIri, PropertyInfoContentV2] = ontologies.values
     .flatMap(_.properties.map { case (propertyIri, readPropertyInfo) =>
       propertyIri -> readPropertyInfo.entityInfoContent
     })
     .toMap
+
+  def containsStandoffProperty(propertyIri: SmartIri): Boolean = standoffProperties.contains(propertyIri)
+
+  def getAllStandoffPropertyEntities: Map[SmartIri, ReadPropertyInfoV2] =
+    ontologies.values.flatMap(_.properties.view.filterKeys(standoffProperties)).toMap
+
+  def entityDefinedInOntology(propertyIri: SmartIri): Option[SmartIri]   = entityDefinedInOntology.get(propertyIri)
+  def classDefinedInOntology(classIri: SmartIri): Option[SmartIri]       = classDefinedInOntology.get(classIri)
+  def propertyDefinedInOntology(propertyIri: SmartIri): Option[SmartIri] = propertyDefinedInOntology.get(propertyIri)
+
+  def getSubPropertiesOf(propertyIri: SmartIri): Option[Set[SmartIri]]   = superPropertyOfRelations.get(propertyIri)
+  def getSuperPropertiesOf(propertyIri: SmartIri): Option[Set[SmartIri]] = subPropertyOfRelations.get(propertyIri)
+
+  def getSubClassesOf(classIri: SmartIri): Option[Set[SmartIri]]   = classToSubclassLookup.get(classIri)
+  def getSuperClassesOf(classIri: SmartIri): Option[Seq[SmartIri]] = classToSuperClassLookup.get(classIri)
 }
 object OntologyCacheData {
   val Empty = OntologyCacheData(

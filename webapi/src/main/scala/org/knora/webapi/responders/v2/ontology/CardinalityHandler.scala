@@ -100,10 +100,7 @@ final case class CardinalityHandler(
 
       allBaseClassIrisWithoutInternal =
         newClassDefinitionWithRemovedCardinality.subClassOf.toSeq.flatMap { baseClassIri =>
-          cacheData.classToSuperClassLookup.getOrElse(
-            baseClassIri,
-            Seq.empty[SmartIri],
-          )
+          cacheData.getSuperClassesOf(baseClassIri).getOrElse(Seq.empty[SmartIri])
         }
 
       allBaseClassIris = internalClassIri +: allBaseClassIrisWithoutInternal
@@ -242,10 +239,7 @@ final case class CardinalityHandler(
 
       allBaseClassIrisWithoutInternal =
         newClassDefinitionWithRemovedCardinality.subClassOf.toSeq.flatMap { baseClassIri =>
-          cacheData.classToSuperClassLookup.getOrElse(
-            baseClassIri,
-            Seq.empty[SmartIri],
-          )
+          cacheData.getSuperClassesOf(baseClassIri).getOrElse(Seq.empty[SmartIri])
         }
 
       allBaseClassIris = internalClassIri +: allBaseClassIrisWithoutInternal
