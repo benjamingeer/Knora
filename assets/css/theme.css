@@ -1,0 +1,28 @@
+[data-md-color-scheme="default"] {
+    --md-primary-fg-color: rgb(33, 68, 95);
+    --md-accent-fg-color: rgb(0, 94, 84);
+    /* --md-default-bg-color: rgb(235, 235, 235); */
+}
+
+[data-md-color-scheme="slate"] {
+    --md-primary-fg-color: rgb(116, 162, 207);
+    --md-accent-fg-color: rgb(0, 94, 84);
+    --md-default-bg-color: rgb(36, 37, 46);
+}
+
+.md-header,
+.md-tabs {
+    background-color: rgb(33, 68, 95) !important;
+}
+
+.md-content a {
+    text-decoration: underline;
+}
+
+h1,
+h2,
+h3,
+h4 {
+    font-weight: bold;
+    padding-top: 50px;
+}

@@ -1,0 +1,30 @@
+digraph G {
+  a [label="Start"];
+
+  b [label="Get all groups for user"];
+
+  c1 [label="Get all Resource Creation Permissions"];
+  c2 [label="Decide if user is allowed to create the resource type"];
+
+  d1 [label="Get all Default Object Access Permissions"];
+  d2 [label="Get Default Object Access Permissions attached to Groups"];
+  d3 [label="Get Default Object Access Permissions attached to Resources/Values"];
+  d4 [label="Calculate maximum Default Object Access Permissions"];
+
+  e [label="Create Resource/Values with maximum Default Object Access Permissions"];
+
+  z [label="End"];
+
+  a -> b;
+  b -> c1;
+  c1 -> c2;
+  c2 -> e;
+
+  b -> d1;
+  d1 -> d2;
+  d2 -> d3;
+  d3 -> d4;
+  d4 -> e;
+
+  e -> z;
+}
