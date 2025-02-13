@@ -1,0 +1,12 @@
+digraph AdministrativePermissions {
+  rankdir="LR"
+
+  ap [label="knora-base:AdministrativePermission"]
+  kp [label="knora-base:knoraProject"]
+  ug [label="knora-base:UserGroup"]
+
+  ap -> kp [ label="knora-base:forProject" ]
+  ap -> ug [ label="knora-base:forGroup" ]
+
+  ap -> "Administrative permissions compact format string" [ label="knora-base:hasPermissions" ]
+}
