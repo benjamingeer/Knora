@@ -6,6 +6,10 @@
 package org.knora.webapi.slice.common
 
 import zio.prelude.Validation
+import zio.prelude.ZValidation
+
+import java.net.URI
+import scala.util.Try
 
 import org.knora.webapi.slice.common.Value.IntValue
 import org.knora.webapi.slice.common.Value.StringValue
@@ -30,7 +34,35 @@ trait WithFrom[-I, +A] {
 }
 
 trait StringValueCompanion[A <: StringValue] extends WithFrom[String, A]
-trait IntValueCompanion[A <: IntValue]       extends WithFrom[Int, A]
+object StringValueCompanion {
+
+  def nonEmpty: String => Validation[String, String] =
+    value => Validation.fromPredicateWith(s"cannot be empty")(value)((str: String) => str.nonEmpty)
+
+  def noLineBreaks: String => Validation[String, String] =
+    value => Validation.fromPredicateWith(s"must not contain line breaks")(value)((str: String) => !str.contains("\n"))
+
+  def maxLength(max: Int): String => Validation[String, String] =
+    value =>
+      Validation.fromPredicateWith(s"must be maximum $max characters long")(value)((str: String) => str.length <= max)
+
+  def isUri: String => Validation[String, String] =
+    value => Validation.fromTry(Try(URI.create(value))).as(value).mapError(_ => s"is not a valid URI")
+
+  def fromValidations[A](
+    typ: String,
+    make: String => A,
+    validations: List[String => Validation[String, String]],
+  ): String => Either[String, A] = value =>
+    ZValidation
+      .validateAll(validations.map(_(value)))
+      .as(make(value))
+      .toEither
+      .left
+      .map(_.mkString(s"$typ ", ", ", "."))
+}
+
+trait IntValueCompanion[A <: IntValue] extends WithFrom[Int, A]
 
 object ToValidation {
   def validateOneWithFrom[A, B <: Value[?], E](

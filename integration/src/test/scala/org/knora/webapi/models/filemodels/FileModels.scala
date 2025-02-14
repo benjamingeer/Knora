@@ -15,20 +15,18 @@ import org.knora.webapi.messages.v2.responder.resourcemessages.CreateResourceV2
 import org.knora.webapi.messages.v2.responder.resourcemessages.CreateValueInNewResourceV2
 import org.knora.webapi.sharedtestdata.SharedTestDataADM
 import org.knora.webapi.slice.admin.api.model.Project
-import org.knora.webapi.slice.admin.domain.model.KnoraProject.CopyrightAttribution
-import org.knora.webapi.slice.admin.domain.model.KnoraProject.LicenseText
-import org.knora.webapi.slice.admin.domain.model.KnoraProject.LicenseUri
-import org.knora.webapi.slice.admin.domain.model.KnoraProject.Shortcode
+import org.knora.webapi.slice.admin.domain.model.*
+import org.knora.webapi.slice.admin.domain.model.KnoraProject.*
 
 sealed abstract case class UploadFileRequest private (
   fileType: FileType,
   internalFilename: String,
   label: String,
   resourceIRI: Option[String] = None,
-  copyrightAttribution: Option[CopyrightAttribution] = None,
-  licenseText: Option[LicenseText] = None,
-  licenseUri: Option[LicenseUri] = None,
-) {
+  copyrightHolder: Option[CopyrightHolder] = None,
+  authorship: Option[List[Authorship]] = None,
+  licenseIri: Option[LicenseIri] = None,
+) { self =>
 
   /**
    * Create a JSON-LD serialization of the request. This can be used for e2e and integration tests.
@@ -57,22 +55,31 @@ sealed abstract case class UploadFileRequest private (
       case None    => ""
     }
 
-    s"""{
-       |  $resorceIRIOrEmptyString"@type" : "$ontologyName:$classNameWithDefaults",
-       |  "$fileValuePropertyName" : {
-       |    "@type" : "$fileValueType",
-       |    "knora-api:fileValueHasFilename" : "$internalFilename"
-       |    ${copyrightAttribution.map(ca => s""","knora-api:hasCopyrightAttribution" : "${ca.value}"""").getOrElse("")}
-       |    ${licenseText.map(l => s""","knora-api:hasLicenseText" : "${l.value}"""").getOrElse("")}
-       |    ${licenseUri
-        .map(u => s""", "knora-api:hasLicenseUri" : { "@type" : "xsd:anyURI", "@value":"${u.value}" }""")
-        .getOrElse("")}
-       |  },
-       |  "knora-api:attachedToProject" : {
-       |    "@id" : "http://rdfh.ch/projects/$shortcode"
-       |  },
-       |  "rdfs:label" : "$label",
-       |  $context}""".stripMargin
+    val copyrightHolderJson =
+      copyrightHolder.map(ca => s""","knora-api:hasCopyrightHolder" : "${ca.value}"""").getOrElse("")
+    val authorshipJson = authorship
+      .filter(_.nonEmpty)
+      .map(a => s""","knora-api:hasAuthorship" : [ ${a.map(_.value).mkString("\"", "\",\"", "\"")} ]""")
+      .getOrElse("")
+
+    val jsonLd =
+      s"""{
+         |  $resorceIRIOrEmptyString"@type" : "$ontologyName:$classNameWithDefaults",
+         |  "$fileValuePropertyName" : {
+         |    "@type" : "$fileValueType",
+         |    "knora-api:fileValueHasFilename" : "$internalFilename"
+         |    $copyrightHolderJson
+         |    $authorshipJson
+         |    ${licenseIri
+          .map(u => s""","knora-api:hasLicense" : { "@id" : "${u.value}" }""")
+          .getOrElse("")}
+         |  },
+         |  "knora-api:attachedToProject" : {
+         |    "@id" : "http://rdfh.ch/projects/$shortcode"
+         |  },
+         |  "rdfs:label" : "$label",
+         |  $context}""".stripMargin
+    jsonLd
   }
 
   /**
@@ -116,9 +123,6 @@ sealed abstract case class UploadFileRequest private (
     resourceClassIRI: Option[SmartIri] = None,
     valuePropertyIRI: Option[SmartIri] = None,
     project: Option[Project] = None,
-    copyrightAttribution: Option[CopyrightAttribution] = None,
-    licenseText: Option[LicenseText] = None,
-    licenseUri: Option[LicenseUri] = None,
   ): CreateResourceV2 = {
     implicit val stringFormatter: StringFormatter = StringFormatter.getGeneralInstance
 
@@ -137,9 +141,9 @@ sealed abstract case class UploadFileRequest private (
       originalFilename = originalFilename,
       originalMimeType = originalMimeType,
       comment = comment,
-      copyrightAttribution,
-      licenseText,
-      licenseUri,
+      copyrightHolder = self.copyrightHolder,
+      authorship = self.authorship,
+      licenseIri = self.licenseIri,
     )
 
     val values = List(
@@ -190,18 +194,18 @@ object UploadFileRequest {
     internalFilename: String,
     label: String = "test label",
     resourceIRI: Option[String] = None,
-    copyrightAttribution: Option[CopyrightAttribution] = None,
-    licenseText: Option[LicenseText] = None,
-    licenseUri: Option[LicenseUri] = None,
+    copyrightHolder: Option[CopyrightHolder] = None,
+    authorship: Option[List[Authorship]] = None,
+    licenseIri: Option[LicenseIri] = None,
   ): UploadFileRequest =
     new UploadFileRequest(
       fileType,
       internalFilename,
       label,
       resourceIRI,
-      copyrightAttribution,
-      licenseText,
-      licenseUri,
+      copyrightHolder,
+      authorship,
+      licenseIri,
     ) {}
 }
 

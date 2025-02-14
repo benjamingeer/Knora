@@ -8,7 +8,7 @@ package org.knora.webapi.slice.common.jena
 import zio.*
 import zio.test.*
 
-import org.knora.webapi.slice.common.jena.ModelOps.singleRootResource
+import org.knora.webapi.slice.common.jena.ModelOps.*
 
 object ModelOpsSpec extends ZIOSpecDefault {
 

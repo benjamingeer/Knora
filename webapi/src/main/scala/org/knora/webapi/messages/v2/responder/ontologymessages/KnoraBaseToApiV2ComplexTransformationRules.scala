@@ -152,19 +152,20 @@ object KnoraBaseToApiV2ComplexTransformationRules extends OntologyTransformation
     .withIsResourceProp()
     .withIsLinkValueProp()
 
-  private val HasCopyrightAttribution = makeOwlDatatypeProperty(KA.HasCopyrightAttribution, XSD.STRING)
-    .withRdfLabelEn("has copyright attribution")
-    .withRdfCommentEn("The copyright statement that gives credit to the original author.")
+  private val HasCopyrightHolder = makeOwlDatatypeProperty(KA.HasCopyrightHolder, XSD.STRING)
+    .withRdfLabelEn("has copyright holder")
+    .withRdfCommentEn("The copyright holder.")
+    .withSubjectType(KA.FileValue)
 
-  private val HasLicenseText = makeOwlDatatypeProperty(KA.HasLicenseText, XSD.STRING)
-    .withRdfLabelEn("has license text")
-    .withRdfCommentEn(
-      "Specifies the terms under which a work can be used. This statement may be a reference to a well-known license, such as Creative Commons (e.g. CC BY-SA) or a custom license.",
-    )
+  private val HasAuthorship = makeOwlDatatypeProperty(KA.HasAuthorship, XSD.STRING)
+    .withRdfLabelEn("has authorship")
+    .withRdfCommentEn("Credit, Moral Rights, Author(s)")
+    .withSubjectType(KA.FileValue)
 
-  private val HasLicenseUri = makeOwlDatatypeProperty(KA.HasLicenseUri, XSD.STRING)
-    .withRdfLabelEn("has license URI")
-    .withRdfCommentEn("Canonical link to license.")
+  private val HasLicense = makeOwlObjectProperty(KA.HasLicense, KA.License)
+    .withRdfLabelEn("has license")
+    .withRdfCommentEn("Specifies the license under which a work can be used.")
+    .withSubjectType(KA.FileValue)
 
   private val ValueAsString = makeOwlDatatypeProperty(KA.ValueAsString, XSD.STRING)
     .withSubjectType(KA.Value)
@@ -659,10 +660,10 @@ object KnoraBaseToApiV2ComplexTransformationRules extends OntologyTransformation
     FileValueHasFilename,
     GeometryValueAsGeometry,
     GeonameValueAsGeonameCode,
-    HasCopyrightAttribution,
+    HasCopyrightHolder,
+    HasAuthorship,
     HasIncomingLinkValue,
-    HasLicenseText,
-    HasLicenseUri,
+    HasLicense,
     IntValueAsInt,
     IntervalValueHasEnd,
     IntervalValueHasStart,

@@ -234,23 +234,25 @@ DELETE {
                     case None => {}
                 }
 
-                @fileValueContentV2.fileValue.copyrightAttribution match {
-                    case Some(copyrightAttribution) => {
-                        <@newValueIri> knora-base:hasCopyrightAttribution """@copyrightAttribution.value""" .
+                @fileValueContentV2.fileValue.copyrightHolder match {
+                    case Some(copyrightHolder) => {
+                        <@newValueIri> knora-base:hasCopyrightHolder """@copyrightHolder.value""" .
                     }
                     case None => {}
                 }
 
-                @fileValueContentV2.fileValue.licenseText match {
-                    case Some(text) => {
-                        <@newValueIri> knora-base:hasLicenseText """@text.value""" .
+                @fileValueContentV2.fileValue.authorship match {
+                    case Some(authors) => {
+                        @authors.map { author =>
+                            <@newValueIri> knora-base:hasAuthorship """@author.value""" .
+                        }
                     }
                     case None => {}
                 }
 
-                @fileValueContentV2.fileValue.licenseUri match {
-                    case Some(uri) => {
-                        <@newValueIri> knora-base:hasLicenseUri """@uri.value"""^^xsd:anyURI .
+                @fileValueContentV2.fileValue.licenseIri match {
+                    case Some(licenseIri) => {
+                        <@newValueIri> knora-base:hasLicense <@licenseIri> .
                     }
                     case None => {}
                 }

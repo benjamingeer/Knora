@@ -20,7 +20,7 @@
     rdf:type           owl:Ontology ;
     rdfs:label         "The Knora base ontology"@en ;
     :attachedToProject knora-admin:SystemProject ;
-    :ontologyVersion   "knora-base v46" .
+    :ontologyVersion   "knora-base v47" .
 
 
 #################################################################
@@ -550,29 +550,31 @@
     :subjectClassConstraint :Resource ;
     :objectClassConstraint  :Value .
 
-###  http://www.knora.org/ontology/knora-base#hasCopyrightAttribution
 
-:hasCopyrightAttribution
+###  http://www.knora.org/ontology/knora-base#hasCopyrightHolder
+
+:hasCopyrightHolder
     rdf:type                  owl:DatatypeProperty ;
-    rdfs:label                "copyright attribution"@en; 
-    rdfs:comment              "The copyright statement that gives credit to the original author."@en ;
+    rdfs:label                "has copyright holder"@en;
+    rdfs:comment              "The copyright holder."@en ;
+    :objectDatatypeConstraint xsd:string .
+
+
+###  http://www.knora.org/ontology/knora-base#hasAuthorship
+
+:hasAuthorship
+    rdf:type                  owl:DatatypeProperty ;
+    rdfs:label                "has authorship"@en;
+    rdfs:comment              "Credit, Moral Rights, Author(s)"@en ;
     :objectDatatypeConstraint xsd:string .
 
 ###  http://www.knora.org/ontology/knora-base#hasLicense
 
-:hasLicenseText
+:hasLicense
     rdf:type                  owl:DatatypeProperty ;
-    rdfs:label                "license text"@en;
-    rdfs:comment              "Specifies the terms under which a work can be used. This statement may be a reference to a well-known license, such as Creative Commons (e.g. 'CC BY-SA') or a custom license."@en ;
-    :objectDatatypeConstraint xsd:string .
-
-###  http://www.knora.org/ontology/knora-base#hasLicenseUri
-
-:hasLicenseUri
-    rdf:type                  owl:DatatypeProperty ;
-    rdfs:label                "license URI"@en;
-    rdfs:comment              "Canonical link to license."@en ;
-    :objectDatatypeConstraint xsd:anyUri .
+    rdfs:label                "has license"@en;
+    rdfs:comment              "The license"@en ;
+    :objectDatatypeConstraint :License .
 
 ###  http://www.knora.org/ontology/knora-base#isAnnotationOf
 
@@ -1590,14 +1592,35 @@
                       owl:onProperty     :originalMimeType ;
                       owl:maxCardinality "1"^^xsd:nonNegativeInteger ],
                     [ rdf:type           owl:Restriction ;
-                      owl:onProperty     :hasCopyrightAttribution ;
+                      owl:onProperty     :hasCopyrightHolder ;
                       owl:maxCardinality "1"^^xsd:nonNegativeInteger ],
                     [ rdf:type           owl:Restriction ;
-                      owl:onProperty     :hasLicenseText  ;
-                      owl:maxCardinality "1"^^xsd:nonNegativeInteger ],
+                      owl:onProperty     :hasAuthorship ;
+                      owl:minCardinality "0"^^xsd:nonNegativeInteger ],
                     [ rdf:type           owl:Restriction ;
-                      owl:onProperty     :hasLicenseUri ;
+                      owl:onProperty     :hasLicense;
                       owl:maxCardinality "1"^^xsd:nonNegativeInteger ].
+
+
+###  http://www.knora.org/ontology/knora-base#License
+:License
+    rdf:type        owl:Class ;
+    rdfs:label      "License"@en ;
+    rdfs:comment    "A license for a FileValue."@en ;
+    rdfs:subClassOf :ValueBase ,
+                    [ rdf:type           owl:Restriction ;
+                      owl:onProperty     :hasLicenseUri;
+                      owl:cardinality    "1"^^xsd:nonNegativeInteger ].
+
+
+###  http://www.knora.org/ontology/knora-base#hasLicenseUri
+
+:hasLicenseUri
+    rdf:type                  owl:DatatypeProperty ;
+    rdfs:label                "has license URI"@en ;
+    rdfs:comment              "The canonical URI to the license."@en ;
+    :subjectClassConstraint   :License ;
+    :objectDatatypeConstraint xsd:anyURI .
 
 
 ###  http://www.knora.org/ontology/knora-base#DecimalBase

@@ -175,6 +175,7 @@ object KnoraBaseToApiV2SimpleTransformationRules extends OntologyTransformationR
     OntologyConstants.KnoraBase.IsRootNode,
     OntologyConstants.KnoraBase.HasRootNode,
     OntologyConstants.KnoraBase.HasSubListNode,
+    OntologyConstants.KnoraBase.HasLicense,
     OntologyConstants.KnoraBase.ListNodeName,
     OntologyConstants.KnoraBase.ListNodePosition,
     OntologyConstants.KnoraBase.ValueCreationDate,

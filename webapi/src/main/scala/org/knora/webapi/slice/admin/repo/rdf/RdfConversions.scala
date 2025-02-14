@@ -9,15 +9,8 @@ import dsp.valueobjects.LanguageCode
 import org.knora.webapi.messages.OntologyConstants.KnoraAdmin.KnoraAdminPrefix
 import org.knora.webapi.messages.OntologyConstants.KnoraAdmin.KnoraAdminPrefixExpansion
 import org.knora.webapi.messages.store.triplestoremessages.StringLiteralV2
-import org.knora.webapi.slice.admin.domain.model.Email
-import org.knora.webapi.slice.admin.domain.model.FamilyName
-import org.knora.webapi.slice.admin.domain.model.GivenName
-import org.knora.webapi.slice.admin.domain.model.GroupIri
+import org.knora.webapi.slice.admin.domain.model.*
 import org.knora.webapi.slice.admin.domain.model.KnoraProject.*
-import org.knora.webapi.slice.admin.domain.model.PasswordHash
-import org.knora.webapi.slice.admin.domain.model.SystemAdmin
-import org.knora.webapi.slice.admin.domain.model.UserStatus
-import org.knora.webapi.slice.admin.domain.model.Username
 import org.knora.webapi.slice.common.repo.rdf.LangString
 import org.knora.webapi.slice.resourceinfo.domain.InternalIri
 
@@ -42,9 +35,6 @@ object RdfConversions {
   implicit val selfjoinConverter: Boolean => Either[String, SelfJoin]    = value => Right(SelfJoin.from(value))
   implicit val descriptionConverter: LangString => Either[String, Description] = langString =>
     Description.from(StringLiteralV2.from(langString.value, langString.lang))
-  implicit val copyrightAttributionConverter: String => Either[String, CopyrightAttribution] = CopyrightAttribution.from
-  implicit val licenseTextConverter: String => Either[String, LicenseText]                   = LicenseText.from
-  implicit val licenseUriConverter: String => Either[String, LicenseUri]                     = LicenseUri.from
 
   // User properties
   implicit val usernameConverter: String => Either[String, Username]         = Username.from

@@ -491,95 +491,19 @@ final case class CreateResourceV2Handler(
                 case GeonameValueContentV2(_, valueHasGeonameCode, _) =>
                   ZIO.succeed(GeonameValueInfo(valueHasGeonameCode))
                 case StillImageFileValueContentV2(_, fileValue, dimX, dimY, _) =>
-                  ZIO.succeed(
-                    StillImageFileValueInfo(
-                      internalFilename = fileValue.internalFilename,
-                      internalMimeType = fileValue.internalMimeType,
-                      originalFilename = fileValue.originalFilename,
-                      originalMimeType = fileValue.originalMimeType,
-                      dimX = dimX,
-                      dimY = dimY,
-                      fileValue.copyrightAttribution,
-                      fileValue.licenseText,
-                      fileValue.licenseUri,
-                    ),
-                  )
+                  ZIO.succeed(StillImageFileValueInfo(fileValue, dimX, dimY))
                 case StillImageExternalFileValueContentV2(_, fileValue, externalUrl, _) =>
-                  ZIO.succeed(
-                    StillImageExternalFileValueInfo(
-                      internalFilename = fileValue.internalFilename,
-                      internalMimeType = fileValue.internalMimeType,
-                      originalFilename = fileValue.originalFilename,
-                      originalMimeType = fileValue.originalMimeType,
-                      externalUrl = externalUrl.value.toString(),
-                      fileValue.copyrightAttribution,
-                      fileValue.licenseText,
-                      fileValue.licenseUri,
-                    ),
-                  )
+                  ZIO.succeed(StillImageExternalFileValueInfo(fileValue, externalUrl.value.toString))
                 case DocumentFileValueContentV2(_, fileValue, pageCount, dimX, dimY, _) =>
-                  ZIO.succeed(
-                    DocumentFileValueInfo(
-                      internalFilename = fileValue.internalFilename,
-                      internalMimeType = fileValue.internalMimeType,
-                      originalFilename = fileValue.originalFilename,
-                      originalMimeType = fileValue.originalMimeType,
-                      dimX = dimX,
-                      dimY = dimY,
-                      pageCount = pageCount,
-                      fileValue.copyrightAttribution,
-                      fileValue.licenseText,
-                      fileValue.licenseUri,
-                    ),
-                  )
+                  ZIO.succeed(DocumentFileValueInfo(fileValue = fileValue, dimX, dimY, pageCount))
                 case ArchiveFileValueContentV2(_, fileValue, _) =>
-                  ZIO.succeed(
-                    OtherFileValueInfo(
-                      internalFilename = fileValue.internalFilename,
-                      internalMimeType = fileValue.internalMimeType,
-                      originalFilename = fileValue.originalFilename,
-                      originalMimeType = fileValue.originalMimeType,
-                      fileValue.copyrightAttribution,
-                      fileValue.licenseText,
-                      fileValue.licenseUri,
-                    ),
-                  )
+                  ZIO.succeed(OtherFileValueInfo(fileValue))
                 case TextFileValueContentV2(_, fileValue, _) =>
-                  ZIO.succeed(
-                    OtherFileValueInfo(
-                      internalFilename = fileValue.internalFilename,
-                      internalMimeType = fileValue.internalMimeType,
-                      originalFilename = fileValue.originalFilename,
-                      originalMimeType = fileValue.originalMimeType,
-                      fileValue.copyrightAttribution,
-                      fileValue.licenseText,
-                      fileValue.licenseUri,
-                    ),
-                  )
+                  ZIO.succeed(OtherFileValueInfo(fileValue))
                 case AudioFileValueContentV2(_, fileValue, _) =>
-                  ZIO.succeed(
-                    OtherFileValueInfo(
-                      internalFilename = fileValue.internalFilename,
-                      internalMimeType = fileValue.internalMimeType,
-                      originalFilename = fileValue.originalFilename,
-                      originalMimeType = fileValue.originalMimeType,
-                      fileValue.copyrightAttribution,
-                      fileValue.licenseText,
-                      fileValue.licenseUri,
-                    ),
-                  )
+                  ZIO.succeed(OtherFileValueInfo(fileValue))
                 case MovingImageFileValueContentV2(_, fileValue, _) =>
-                  ZIO.succeed(
-                    OtherFileValueInfo(
-                      internalFilename = fileValue.internalFilename,
-                      internalMimeType = fileValue.internalMimeType,
-                      originalFilename = fileValue.originalFilename,
-                      originalMimeType = fileValue.originalMimeType,
-                      fileValue.copyrightAttribution,
-                      fileValue.licenseText,
-                      fileValue.licenseUri,
-                    ),
-                  )
+                  ZIO.succeed(OtherFileValueInfo(fileValue))
                 case LinkValueContentV2(
                       _,
                       referredResourceIri,

@@ -56,6 +56,9 @@ abstract class E2EZSpec extends ZIOSpecDefault with TestStartupUtils {
       response <- client.url(urlFull).addHeaders(Headers(bearer)).get("").orDie
     } yield response
 
+  def sendPutRequestAsRoot(url: String, data: String): ZIO[env, String, Response] =
+    sendPutRequestAsRoot(url, Body.fromString(data))
+
   def sendPutRequestAsRoot(url: String, body: Body): URIO[env, Response] =
     for {
       token    <- getRootToken.mapError(Exception(_)).orDie

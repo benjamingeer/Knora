@@ -81,9 +81,6 @@ object ApiComplexV2JsonLdRequestParserSpec extends ZIOSpecDefault {
     "internalMimeType",
     Some("originalFilename.orig"),
     Some("originalMimeType"),
-    None,
-    None,
-    None,
   )
 
   private val configureSipiServiceMock = for {
@@ -443,6 +440,48 @@ object ApiComplexV2JsonLdRequestParserSpec extends ZIOSpecDefault {
         ),
       )
     },
+    test("should parse StillImageFileValue with copyright and license information") {
+      for {
+        _ <- configureSipiServiceMock
+        actual <-
+          service(
+            _.createValueV2FromJsonLd(
+              s"""
+                 |{
+                 |  "@id" : "http://rdfh.ch/0001/a-thing",
+                 |  "@type" : "ex:Thing",
+                 |  "ex:hasOtherThingValue" : {
+                 |    "@id" : "http://rdfh.ch/0001/a-thing/values/mr9i2aUUJolv64V_9hYdTw",
+                 |    "@type" : "ka:StillImageFileValue",
+                 |    "ka:fileValueHasFilename": "internalFilename.ext",
+                 |    "ka:hasCopyrightHolder" : "Jane Doe",
+                 |    "ka:hasAuthorship" : [ "Mr. Smith", "Author McAuthorface" ],
+                 |    "ka:hasLicense" : {
+                 |      "@id" : "http://rdfh.ch/licenses/i6xBpZn4RVOdOIyTezEumw"
+                 |    }
+                 |  },
+                 |  "@context": {
+                 |    "ka": "http://api.knora.org/ontology/knora-api/v2#",
+                 |    "ex": "http://0.0.0.0:3333/ontology/0001/anything/v2#",
+                 |    "xsd": "http://www.w3.org/2001/XMLSchema#"
+                 |  }
+                 |}""".stripMargin,
+            ),
+          )
+      } yield assertTrue(
+        actual.valueContent == StillImageFileValueContentV2(
+          ApiV2Complex,
+          expectedFileValue.copy(
+            copyrightHolder = Some(CopyrightHolder.unsafeFrom("Jane Doe")),
+            authorship = Some(List(Authorship.unsafeFrom("Author McAuthorface"), Authorship.unsafeFrom("Mr. Smith"))),
+            licenseIri = Some(LicenseIri.unsafeFrom("http://rdfh.ch/licenses/i6xBpZn4RVOdOIyTezEumw")),
+          ),
+          givenFileInfo.width.getOrElse(throw new Exception("width is missing")),
+          givenFileInfo.height.getOrElse(throw new Exception("height is missing")),
+          None,
+        ),
+      )
+    },
     test("should parse StillImageExternalFileValue") {
       for {
         _ <- ZIO.serviceWithZIO[SipiServiceMock](_.assertNoInteraction)
@@ -474,9 +513,6 @@ object ApiComplexV2JsonLdRequestParserSpec extends ZIOSpecDefault {
             "internalMimeType",
             Some("originalFilename"),
             Some("originalMimeType"),
-            None,
-            None,
-            None,
           ),
           IiifImageRequestUrl.unsafeFrom("http://www.example.org/prefix1/abcd1234/full/0/native.jpg"),
           None,

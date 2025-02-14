@@ -14,7 +14,7 @@ package object webapi {
    * The version of `knora-base` and of the other built-in ontologies that this version of Knora requires.
    * Must be the same as the object of `knora-base:ontologyVersion` in the `knora-base` ontology being used.
    */
-  val KnoraBaseVersion: Int          = 46
+  val KnoraBaseVersion: Int          = 47
   val KnoraBaseVersionString: String = s"$versionPrefix$KnoraBaseVersion"
 
   /**

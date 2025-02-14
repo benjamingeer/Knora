@@ -30,7 +30,10 @@ object ResourceOpsSpec extends ZIOSpecDefault {
       |     ex:str      "Foo" ;
       |     ex:decimal  "42.0"^^xsd:decimal ;
       |     ex:bool     "true"^^xsd:boolean ;
-      |     ex:dts       "1879-03-14T00:00:00Z"^^xsd:dateTimeStamp .
+      |     ex:dts      "1879-03-14T00:00:00Z"^^xsd:dateTimeStamp ;
+      |     ex:date     "1879-03-14"^^xsd:date ;
+      |     ex:list     "Foo" ;
+      |     ex:list     "Bar" .
       |""".stripMargin
 
   private def resource() =
@@ -271,6 +274,93 @@ object ResourceOpsSpec extends ZIOSpecDefault {
     ),
   )
 
+  private val objectStringListSuite = suite("Getting List of String values of Objects")(
+    suite("objectStringList")(
+      suite("without mapper")(
+        test("should succeed if value is present") {
+          for {
+            res   <- resource()
+            actual = res.objectStringList("https://example.com/test#list")
+          } yield assert(actual.getOrElse(List.empty))(Assertion.hasSameElements(List("Foo", "Bar")))
+        },
+        test("should fail if property is not present ") {
+          for {
+            res   <- resource()
+            actual = res.objectStringList("https://example.com/test#notPresent")
+          } yield assertTrue(actual == Left("Required property https://example.com/test#notPresent not found"))
+        },
+      ),
+      suite("with mapper")(
+        test("should succeed if value is present and mapper succeeds") {
+          for {
+            res   <- resource()
+            actual = res.objectStringList("https://example.com/test#list", s => Right(s.toUpperCase))
+          } yield assert(actual.getOrElse(List.empty))(Assertion.hasSameElements(List("FOO", "BAR")))
+        },
+        test("should fail if value is present and mapper fails") {
+          for {
+            res   <- resource()
+            actual = res.objectStringList("https://example.com/test#list", _ => Left("Error"))
+          } yield assertTrue(actual == Left("Error"))
+        },
+      ),
+    ),
+    suite("objectStringListOption")(
+      suite("without mapper")(
+        test("should succeed if value is present") {
+          for {
+            res   <- resource()
+            actual = res.objectStringListOption("https://example.com/test#list")
+          } yield assert(actual.map(_.getOrElse(List.empty)).getOrElse(List.empty))(
+            Assertion.hasSameElements(List("Foo", "Bar")),
+          )
+        },
+        test("should succeed if property is not present ") {
+          for {
+            res   <- resource()
+            actual = res.objectStringListOption("https://example.com/test#notPresent")
+          } yield assertTrue(actual == Right(None))
+        },
+      ),
+      suite("with mapper")(
+        test("should succeed if value is present and mapper succeeds") {
+          for {
+            res   <- resource()
+            actual = res.objectStringListOption("https://example.com/test#list", s => Right(s.toUpperCase))
+          } yield assert(actual.map(_.getOrElse(List.empty)).getOrElse(List.empty))(
+            Assertion.hasSameElements(List("FOO", "BAR")),
+          )
+        },
+        test("should succeed if value is present and mapper succeeds") {
+          for {
+            res   <- resource()
+            actual = res.objectStringListOption("https://example.com/test#list", _ => Left("Error"))
+          } yield assertTrue(actual == Left("Error"))
+        },
+      ),
+    ),
+  )
+  private val objectDataTypeOptionSuite = suite("objectDataTypeOption")(
+    suite("date")(
+      test("should return a date") {
+        for {
+          res   <- resource()
+          actual = res.objectDataTypeOption("https://example.com/test#date", "http://www.w3.org/2001/XMLSchema#date")
+        } yield assertTrue(actual == Right(Some("1879-03-14")))
+      },
+      test("should fail if it is not a date") {
+        for {
+          res   <- resource()
+          actual = res.objectDataTypeOption("https://example.com/test#str", "http://www.w3.org/2001/XMLSchema#date")
+        } yield assertTrue(
+          actual == Left(
+            "Invalid datatype for property https://example.com/test#str, http://www.w3.org/2001/XMLSchema#date expected",
+          ),
+        )
+      },
+    ),
+  )
+
   private val rdfTypeTest = test("rdfsType should get the type") {
     for {
       res   <- resource()
@@ -278,12 +368,14 @@ object ResourceOpsSpec extends ZIOSpecDefault {
     } yield assertTrue(actual.contains("https://example.com/test#Thing"))
   }
 
-  val spec = suite("ResourceOps")(
+  val spec: Spec[Scope, String] = suite("ResourceOps")(
     objectBigDecimalSuite,
     objectBooleanSuite,
     objectIntSuite,
     objectInstantSuite,
     objectStringSuite,
+    objectStringListSuite,
+    objectDataTypeOptionSuite,
     rdfTypeTest,
   )
 }
