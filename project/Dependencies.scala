@@ -39,10 +39,10 @@ object Dependencies {
   val zioConfigMagnolia = "dev.zio" %% "zio-config-magnolia" % ZioConfigVersion
   val zioConfigTypesafe = "dev.zio" %% "zio-config-typesafe" % ZioConfigVersion
 
-  // jwt-scala 10.0.1 depends on zio-json 0.7.4
+  // jwt-scala 10.0.1 depends on zio-json 0.7.21
   // though newer version compatible with a newer zio-json version is available
   // it is not yet published: https://github.com/jwt-scala/jwt-scala/issues/642
-  val ZioJsonVersion        = "0.7.4"
+  val ZioJsonVersion        = "0.7.21"
   val zioJson               = "dev.zio"                       %% "zio-json"                  % ZioJsonVersion
   val zioLogging            = "dev.zio"                       %% "zio-logging"               % ZioLoggingVersion
   val zioLoggingSlf4jBridge = "dev.zio"                       %% "zio-logging-slf4j2-bridge" % ZioLoggingVersion
@@ -115,7 +115,7 @@ object Dependencies {
   val jakartaJSON    = "org.glassfish"     % "jakarta.json"     % "2.0.1"
   val saxonHE        = "net.sf.saxon"      % "Saxon-HE"         % "12.5"
   val scalaGraph     = "org.scala-graph"  %% "graph-core"       % "2.0.2"
-  val titaniumJSONLD = "com.apicatalog"    % "titanium-json-ld" % "1.4.1"
+  val titaniumJSONLD = "com.apicatalog"    % "titanium-json-ld" % "1.5.0"
   val xmlunitCore    = "org.xmlunit"       % "xmlunit-core"     % "2.10.0"
 
   // test
@@ -126,7 +126,7 @@ object Dependencies {
 
   val testcontainers = "org.testcontainers" % "testcontainers" % "1.20.4"
 
-  val wiremock = "org.wiremock" % "wiremock" % "3.11.0"
+  val wiremock = "org.wiremock" % "wiremock" % "3.12.0"
 
   // found/added by the plugin but deleted anyway
   val commonsLang3 = "org.apache.commons" % "commons-lang3" % "3.17.0"
