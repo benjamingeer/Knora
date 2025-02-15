@@ -21,7 +21,7 @@ object Dependencies {
 
   val MonocleVersion = "3.3.0"
 
-  val Rdf4jVersion         = "5.1.1"
+  val Rdf4jVersion         = "5.1.2"
   val TopbraidShaclVersion = "1.4.4"
   val JenaVersion          = "5.2.0" // should be aligned with the version topbraid-shacl uses
 
@@ -31,7 +31,7 @@ object Dependencies {
   val ZioMetricsConnectorsVersion = "2.3.1"
   val ZioPreludeVersion           = "1.0.0-RC37"
   val ZioSchemaVersion            = "0.2.0"
-  val ZioVersion                  = "2.1.14"
+  val ZioVersion                  = "2.1.15"
 
   // ZIO
   val zio               = "dev.zio" %% "zio"                 % ZioVersion
@@ -49,7 +49,7 @@ object Dependencies {
   val zioNio                = "dev.zio"                       %% "zio-nio"                   % ZioNioVersion
   val zioMacros             = "dev.zio"                       %% "zio-macros"                % ZioVersion
   val zioPrelude            = "dev.zio"                       %% "zio-prelude"               % ZioPreludeVersion
-  val zioSttp               = "com.softwaremill.sttp.client3" %% "zio"                       % "3.10.2"
+  val zioSttp               = "com.softwaremill.sttp.client3" %% "zio"                       % "3.10.3"
 
   // refined
   val refined = Seq(
@@ -96,7 +96,7 @@ object Dependencies {
     "commons-validator" % "commons-validator" % "1.9.0" exclude ("commons-logging", "commons-logging")
 
   // authentication
-  val jwtSprayJson = "com.github.jwt-scala" %% "jwt-zio-json" % "10.0.1"
+  val jwtSprayJson = "com.github.jwt-scala" %% "jwt-zio-json" % "10.0.4"
   // jwtSprayJson -> 9.0.2 is the latest version that's compatible with spray-json; if it wasn't for spray, this would be Scala 3 compatible
   val springSecurityCore =
     "org.springframework.security" % "spring-security-core" % "6.4.2" exclude (
@@ -131,7 +131,7 @@ object Dependencies {
   // found/added by the plugin but deleted anyway
   val commonsLang3 = "org.apache.commons" % "commons-lang3" % "3.17.0"
 
-  val tapirVersion = "1.11.13"
+  val tapirVersion = "1.11.14"
 
   val tapir = Seq(
     "com.softwaremill.sttp.tapir" %% "tapir-pekko-http-server" % tapirVersion,
