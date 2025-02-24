@@ -6,6 +6,7 @@
 package org.knora.webapi.slice.common
 import org.apache.jena.rdf.model.*
 import org.apache.jena.vocabulary.RDF
+import org.apache.jena.vocabulary.RDFS
 import zio.*
 import zio.ZIO
 import zio.ZLayer
@@ -18,6 +19,7 @@ import scala.language.implicitConversions
 
 import org.knora.webapi.IRI
 import org.knora.webapi.core.MessageRelay
+import org.knora.webapi.messages.OntologyConstants.KnoraApiV2Complex as KA
 import org.knora.webapi.messages.OntologyConstants.KnoraApiV2Complex.*
 import org.knora.webapi.messages.OntologyConstants.Rdfs
 import org.knora.webapi.messages.SmartIri
@@ -26,6 +28,7 @@ import org.knora.webapi.messages.v2.responder.resourcemessages.CreateResourceV2
 import org.knora.webapi.messages.v2.responder.resourcemessages.CreateValueInNewResourceV2
 import org.knora.webapi.messages.v2.responder.resourcemessages.DeleteOrEraseResourceRequestV2
 import org.knora.webapi.messages.v2.responder.resourcemessages.UpdateResourceMetadataRequestV2
+import org.knora.webapi.messages.v2.responder.standoffmessages.CreateMappingRequestMetadataV2
 import org.knora.webapi.messages.v2.responder.valuemessages.*
 import org.knora.webapi.messages.v2.responder.valuemessages.ValueContentV2.FileInfo
 import org.knora.webapi.slice.admin.api.model.Project
@@ -435,6 +438,23 @@ final case class ApiComplexV2JsonLdRequestParser(
           case UriValue                    => ZIO.fromEither(UriValueContentV2.from(valueResource))
           case unsupported                 => ZIO.fail(s"Unsupported value type: $unsupported")
     } yield content
+
+  def createMappingRequestMetadataV2(jsonlLd: String): IO[String, CreateMappingRequestMetadataV2] =
+    def findSingle[A](m: Model, p: Property, mapper: Resource => Property => Either[String, A]): IO[String, A] = {
+      m.listSubjectsWithProperty(p).asScala.toList match {
+        case Nil      => ZIO.fail(s"No $p found")
+        case r :: Nil => ZIO.succeed(r)
+        case _        => ZIO.fail(s"Multiple $p found")
+      }
+    }.map(r => mapper.apply(r)(p)).flatMap(ZIO.fromEither)
+    ZIO.scoped {
+      for {
+        m           <- ModelOps.fromJsonLd(jsonlLd).logError
+        label       <- findSingle(m, RDFS.label, _.objectString)
+        projectIri  <- findSingle(m, KA.AttachedToProject, r => r.objectUri(_, ProjectIri.from))
+        mappingName <- findSingle(m, KA.MappingHasName, _.objectString)
+      } yield CreateMappingRequestMetadataV2(label, projectIri, mappingName)
+    }
 }
 
 object ApiComplexV2JsonLdRequestParser {

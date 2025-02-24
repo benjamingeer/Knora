@@ -45,6 +45,7 @@ import org.knora.webapi.messages.v2.responder.valuemessages.*
 import org.knora.webapi.responders.IriLocker
 import org.knora.webapi.responders.Responder
 import org.knora.webapi.slice.admin.domain.model.KnoraProject
+import org.knora.webapi.slice.admin.domain.model.KnoraProject.ProjectIri
 import org.knora.webapi.slice.admin.domain.model.User
 import org.knora.webapi.slice.admin.domain.service.ProjectService
 import org.knora.webapi.slice.infrastructure.CacheManager
@@ -207,7 +208,7 @@ final case class StandoffResponderV2(
   private def createMappingV2(
     xml: String,
     label: String,
-    projectIri: SmartIri,
+    projectIri: ProjectIri,
     mappingName: String,
     requestingUser: User,
     apiRequestID: UUID,

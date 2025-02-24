@@ -5,6 +5,7 @@
 
 package org.knora.webapi.slice.common
 
+import org.apache.jena.vocabulary.RDFS
 import zio.*
 import zio.json.DecoderOps
 import zio.json.EncoderOps
@@ -16,9 +17,11 @@ import java.time.Instant
 import org.knora.webapi.ApiV2Complex
 import org.knora.webapi.config.AppConfig
 import org.knora.webapi.core.MessageRelayLive
+import org.knora.webapi.messages.OntologyConstants
 import org.knora.webapi.messages.StringFormatter
 import org.knora.webapi.messages.util.CalendarNameGregorian
 import org.knora.webapi.messages.util.DatePrecisionDay
+import org.knora.webapi.messages.v2.responder.standoffmessages.CreateMappingRequestMetadataV2
 import org.knora.webapi.messages.v2.responder.valuemessages.ArchiveFileValueContentV2
 import org.knora.webapi.messages.v2.responder.valuemessages.AudioFileValueContentV2
 import org.knora.webapi.messages.v2.responder.valuemessages.BooleanValueContentV2
@@ -44,6 +47,7 @@ import org.knora.webapi.messages.v2.responder.valuemessages.TimeValueContentV2
 import org.knora.webapi.messages.v2.responder.valuemessages.UriValueContentV2
 import org.knora.webapi.responders.IriService
 import org.knora.webapi.slice.admin.domain.model.*
+import org.knora.webapi.slice.admin.domain.model.KnoraProject.ProjectIri
 import org.knora.webapi.slice.admin.domain.repo.*
 import org.knora.webapi.slice.admin.domain.service.*
 import org.knora.webapi.slice.admin.repo.service.*
@@ -126,6 +130,24 @@ object ApiComplexV2JsonLdRequestParserSpec extends ZIOSpecDefault {
            "anything" : "http://0.0.0.0:3333/ontology/0001/anything/v2#"
          }
        }""".fromJson[Json].getOrElse(throw new Exception("Invalid JSON"))
+
+  private val standOffSuite = suite("createMappingRequestMetadataV2")(test("should parse valid JSON-LD") {
+    val expectedProjectIri  = ProjectIri.unsafeFrom("http://rdfh.ch/projects/0001")
+    val expectedLabel       = "My Label"
+    val expectedMappingName = "MyCustomMapping"
+
+    val jsonLd = Json.Obj(
+      (OntologyConstants.KnoraApiV2Complex.MappingHasName, Json.Str(expectedMappingName)),
+      (RDFS.label.toString, Json.Str(expectedLabel)),
+      (
+        OntologyConstants.KnoraApiV2Complex.AttachedToProject,
+        Json.Obj(("@id", Json.Str(expectedProjectIri.toString))),
+      ),
+    )
+    for {
+      req <- service(_.createMappingRequestMetadataV2(jsonLd.toString()))
+    } yield assertTrue(req == CreateMappingRequestMetadataV2(expectedLabel, expectedProjectIri, expectedMappingName))
+  })
 
   val spec = suite("KnoraApiValueModel")(
     test("getResourceIri should get the id") {
@@ -769,6 +791,7 @@ object ApiComplexV2JsonLdRequestParserSpec extends ZIOSpecDefault {
         )
       }
     },
+    standOffSuite,
   ).provideSome[Scope](
     AdministrativePermissionRepoInMemory.layer,
     AdministrativePermissionService.layer,

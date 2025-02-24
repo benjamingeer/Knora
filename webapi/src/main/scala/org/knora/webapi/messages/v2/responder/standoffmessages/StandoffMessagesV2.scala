@@ -10,7 +10,6 @@ import java.util.UUID
 import scala.collection.immutable.SortedSet
 
 import dsp.errors.AssertionException
-import dsp.valueobjects.Iri
 import dsp.valueobjects.UuidUtil
 import org.knora.webapi.*
 import org.knora.webapi.config.AppConfig
@@ -24,6 +23,7 @@ import org.knora.webapi.messages.util.rdf.*
 import org.knora.webapi.messages.v2.responder.KnoraContentV2
 import org.knora.webapi.messages.v2.responder.KnoraJsonLDResponseV2
 import org.knora.webapi.messages.v2.responder.ontologymessages.StandoffEntityInfoGetResponseV2
+import org.knora.webapi.slice.admin.domain.model.KnoraProject.ProjectIri
 import org.knora.webapi.slice.admin.domain.model.User
 
 /**
@@ -54,35 +54,8 @@ case class CreateMappingRequestV2(
  * @param projectIri  the IRI of the project the mapping belongs to.
  * @param mappingName the name of the mapping to be created.
  */
-case class CreateMappingRequestMetadataV2(label: String, projectIri: SmartIri, mappingName: String)
+case class CreateMappingRequestMetadataV2(label: String, projectIri: ProjectIri, mappingName: String)
     extends StandoffResponderRequestV2
-
-object CreateMappingRequestMetadataV2 {
-
-  def fromJsonLDSync(jsonLDDocument: JsonLDDocument): CreateMappingRequestMetadataV2 = {
-
-    implicit val stringFormatter: StringFormatter = StringFormatter.getGeneralInstance
-    val validationFun: (String, => Nothing) => String = (s, errorFun) =>
-      Iri.toSparqlEncodedString(s).getOrElse(errorFun)
-
-    val label: String =
-      jsonLDDocument.body.requireStringWithValidation(OntologyConstants.Rdfs.Label, validationFun)
-
-    val projectIri: SmartIri = jsonLDDocument.body.requireIriInObject(
-      OntologyConstants.KnoraApiV2Complex.AttachedToProject,
-      stringFormatter.toSmartIriWithErr,
-    )
-
-    val mappingName: String =
-      jsonLDDocument.body.requireStringWithValidation(OntologyConstants.KnoraApiV2Complex.MappingHasName, validationFun)
-
-    CreateMappingRequestMetadataV2(
-      label = label,
-      projectIri = projectIri,
-      mappingName = mappingName,
-    )
-  }
-}
 
 /**
  * Represents the mapping as an XML document.
@@ -98,7 +71,8 @@ case class CreateMappingRequestXMLV2(xml: String) extends StandoffResponderReque
  * @param label      the label describing the mapping.
  * @param projectIri the project the mapping belongs to.
  */
-case class CreateMappingResponseV2(mappingIri: IRI, label: String, projectIri: SmartIri) extends KnoraJsonLDResponseV2 {
+case class CreateMappingResponseV2(mappingIri: IRI, label: String, projectIri: ProjectIri)
+    extends KnoraJsonLDResponseV2 {
 
   def toJsonLDDocument(
     targetSchema: ApiV2Schema,

@@ -12,12 +12,12 @@ import java.util.UUID
 
 import org.knora.webapi.messages.IriConversions.*
 import org.knora.webapi.messages.OntologyConstants
-import org.knora.webapi.messages.StringFormatter
 import org.knora.webapi.messages.util.rdf.JsonLDKeywords
 import org.knora.webapi.messages.v2.responder.standoffmessages.CreateMappingRequestMetadataV2
 import org.knora.webapi.messages.v2.responder.standoffmessages.CreateMappingRequestV2
 import org.knora.webapi.messages.v2.responder.standoffmessages.CreateMappingRequestXMLV2
 import org.knora.webapi.sharedtestdata.SharedTestDataADM2.anythingProjectIri
+import org.knora.webapi.slice.admin.domain.model.KnoraProject.ProjectIri
 import org.knora.webapi.slice.admin.domain.model.User
 
 sealed abstract case class DefineStandoffMapping private (
@@ -25,7 +25,6 @@ sealed abstract case class DefineStandoffMapping private (
   projectIRI: String,
   label: String,
 ) {
-  private implicit val stringFormatter: StringFormatter = StringFormatter.getGeneralInstance
 
   /**
    * Create a JSON-LD serialization of the request. This can be used for e2e tests.
@@ -59,7 +58,7 @@ sealed abstract case class DefineStandoffMapping private (
   ): CreateMappingRequestV2 = {
     val mappingMetadata = CreateMappingRequestMetadataV2(
       label = label,
-      projectIri = projectIRI.toSmartIri,
+      projectIri = ProjectIri.unsafeFrom(projectIRI),
       mappingName = mappingName,
     )
     CreateMappingRequestV2(
