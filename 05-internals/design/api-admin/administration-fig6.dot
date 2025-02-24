@@ -1,0 +1,16 @@
+digraph DefaultObjectAccessPermissions {
+  rankdir="LR"
+
+  doap [label="knora-base:DefaultObjectAccessPermission"]
+  kp [label="knora-base:knoraProject"]
+  ug [label="knora-base:UserGroup"]
+  rc [label="Resource Class Name"]
+  pr [label="Resource Property Name"]
+
+  doap -> kp [ label="knora-base:forProject" ]
+  doap -> ug [ label="knora-base:forGroup" ]
+  doap -> rc [ label="knora-base:forResourceClass" ]
+  doap -> pr [ label="knora-base:forProperty" ]
+
+  doap -> "Default object access permission compact format string" [ label="knora-base:hasPermissions"]
+}

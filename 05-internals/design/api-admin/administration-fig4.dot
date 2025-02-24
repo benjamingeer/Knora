@@ -1,0 +1,12 @@
+digraph G {
+  rankdir="BT"
+
+  oc [label="owl:Class"]
+  p [label="knora-base:Permission"]
+  ap [label ="knora-base:AdministrativePermission"]
+  doap [label ="knora-base:DefaultObjectAccessPermission"]
+
+  p -> oc [label="rdf:type"]
+  ap -> p [label="rdf:subClassOf"]
+  doap -> p [label="rdf:subClassOf"]
+}

@@ -1,0 +1,42 @@
+digraph {
+   rankdir = LR
+
+   {
+       node [color = navy, fillcolor = slateblue4, style = filled, fontcolor = white]
+
+       sub1 [label = "subject no. 1"]
+       sub2 [label = "subject no. 2"]
+       sub3 [label = "subject no. 3"]
+   }
+
+   {
+       node [shape = box, color = firebrick]
+
+       lit1 [label = "literal no. 1"]
+       lit2 [label = "literal no. 2"]
+       lit3 [label = "literal no. 3"]
+   }
+
+   edge [fontsize = 11, color = cyan4]
+
+   sub1 -> lit1 [label = "predicate no. 1"]
+   sub1 -> lit2 [label = "predicate no. 2"]
+   sub1 -> sub2 [label = "predicate no. 3"]
+
+   sub2 -> lit3 [label = "predicate no. 4"]
+   sub2 -> sub3 [label = "predicate no. 5"]
+
+   // Add invisible edges to order the nodes from top to bottom.
+
+   {
+       rank = same
+       lit1 -> lit2 -> sub2 [style = invis]
+       rankdir = TB
+   }
+
+   {
+       rank = same
+       lit3 -> sub3 [style = invis]
+       rankdir = TB
+   }
+}

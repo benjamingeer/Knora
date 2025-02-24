@@ -1,0 +1,3412 @@
+
+<!doctype html>
+<html lang="en" class="no-js">
+  <head>
+    
+      <meta charset="utf-8">
+      <meta name="viewport" content="width=device-width,initial-scale=1">
+      
+      
+      
+      
+        <link rel="prev" href="../custom-standoff/">
+      
+      
+        <link rel="next" href="../../permalinks/">
+      
+      
+      <link rel="icon" href="../../../../assets/icons/logo_bw.svg">
+      <meta name="generator" content="mkdocs-1.5.3, mkdocs-material-9.5.17">
+    
+    
+      
+        <title>TEI XML - DSP-API</title>
+      
+    
+    
+      <link rel="stylesheet" href="../../../../assets/stylesheets/main.bcfcd587.min.css">
+      
+        
+        <link rel="stylesheet" href="../../../../assets/stylesheets/palette.06af60db.min.css">
+      
+      
+
+
+    
+    
+      
+    
+    
+      
+        
+        
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,300i,400,400i,700,700i%7CRoboto+Mono:400,400i,700,700i&display=fallback">
+        <style>:root{--md-text-font:"Roboto";--md-code-font:"Roboto Mono"}</style>
+      
+    
+    
+      <link rel="stylesheet" href="../../../../assets/css/theme.css">
+    
+      <link rel="stylesheet" href="../../../../assets/css/mkdocsoad-v1.0.2.css">
+    
+    <script>__md_scope=new URL("../../../..",location),__md_hash=e=>[...e].reduce((e,_)=>(e<<5)-e+_.charCodeAt(0),0),__md_get=(e,_=localStorage,t=__md_scope)=>JSON.parse(_.getItem(t.pathname+"."+e)),__md_set=(e,_,t=localStorage,a=__md_scope)=>{try{t.setItem(a.pathname+"."+e,JSON.stringify(_))}catch(e){}}</script>
+    
+      
+
+    
+    
+    
+  </head>
+  
+  
+    
+    
+      
+    
+    
+    
+    
+    <body dir="ltr" data-md-color-scheme="default" data-md-color-primary="indigo" data-md-color-accent="indigo">
+  
+    
+    <input class="md-toggle" data-md-toggle="drawer" type="checkbox" id="__drawer" autocomplete="off">
+    <input class="md-toggle" data-md-toggle="search" type="checkbox" id="__search" autocomplete="off">
+    <label class="md-overlay" for="__drawer"></label>
+    <div data-md-component="skip">
+      
+        
+        <a href="#teixml-converting-standoff-to-teixml" class="md-skip">
+          Skip to content
+        </a>
+      
+    </div>
+    <div data-md-component="announce">
+      
+    </div>
+    
+    
+      
+
+  
+
+<header class="md-header md-header--shadow" data-md-component="header">
+  <nav class="md-header__inner md-grid" aria-label="Header">
+    <a href="../../../.." title="DSP-API" class="md-header__button md-logo" aria-label="DSP-API" data-md-component="logo">
+      
+  <img src="../../../../assets/icons/logo_bw.svg" alt="logo">
+
+    </a>
+    <label class="md-header__button md-icon" for="__drawer">
+      
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M3 6h18v2H3V6m0 5h18v2H3v-2m0 5h18v2H3v-2Z"/></svg>
+    </label>
+    <div class="md-header__title" data-md-component="header-title">
+      <div class="md-header__ellipsis">
+        <div class="md-header__topic">
+          <span class="md-ellipsis">
+            DSP-API
+          </span>
+        </div>
+        <div class="md-header__topic" data-md-component="header-topic">
+          <span class="md-ellipsis">
+            
+              TEI XML
+            
+          </span>
+        </div>
+      </div>
+    </div>
+    
+      
+        <form class="md-header__option" data-md-component="palette">
+  
+    
+    
+    
+    <input class="md-option" data-md-color-media="" data-md-color-scheme="default" data-md-color-primary="indigo" data-md-color-accent="indigo"  aria-label="Switch to dark mode"  type="radio" name="__palette" id="__palette_0">
+    
+      <label class="md-header__button md-icon" title="Switch to dark mode" for="__palette_1" hidden>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a4 4 0 0 0-4 4 4 4 0 0 0 4 4 4 4 0 0 0 4-4 4 4 0 0 0-4-4m0 10a6 6 0 0 1-6-6 6 6 0 0 1 6-6 6 6 0 0 1 6 6 6 6 0 0 1-6 6m8-9.31V4h-4.69L12 .69 8.69 4H4v4.69L.69 12 4 15.31V20h4.69L12 23.31 15.31 20H20v-4.69L23.31 12 20 8.69Z"/></svg>
+      </label>
+    
+  
+    
+    
+    
+    <input class="md-option" data-md-color-media="" data-md-color-scheme="slate" data-md-color-primary="indigo" data-md-color-accent="indigo"  aria-label="Switch to light mode"  type="radio" name="__palette" id="__palette_1">
+    
+      <label class="md-header__button md-icon" title="Switch to light mode" for="__palette_0" hidden>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 18c-.89 0-1.74-.2-2.5-.55C11.56 16.5 13 14.42 13 12c0-2.42-1.44-4.5-3.5-5.45C10.26 6.2 11.11 6 12 6a6 6 0 0 1 6 6 6 6 0 0 1-6 6m8-9.31V4h-4.69L12 .69 8.69 4H4v4.69L.69 12 4 15.31V20h4.69L12 23.31 15.31 20H20v-4.69L23.31 12 20 8.69Z"/></svg>
+      </label>
+    
+  
+</form>
+      
+    
+    
+      <script>var media,input,key,value,palette=__md_get("__palette");if(palette&&palette.color){"(prefers-color-scheme)"===palette.color.media&&(media=matchMedia("(prefers-color-scheme: light)"),input=document.querySelector(media.matches?"[data-md-color-media='(prefers-color-scheme: light)']":"[data-md-color-media='(prefers-color-scheme: dark)']"),palette.color.media=input.getAttribute("data-md-color-media"),palette.color.scheme=input.getAttribute("data-md-color-scheme"),palette.color.primary=input.getAttribute("data-md-color-primary"),palette.color.accent=input.getAttribute("data-md-color-accent"));for([key,value]of Object.entries(palette.color))document.body.setAttribute("data-md-color-"+key,value)}</script>
+    
+    
+    
+      <label class="md-header__button md-icon" for="__search">
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.516 6.516 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5Z"/></svg>
+      </label>
+      <div class="md-search" data-md-component="search" role="dialog">
+  <label class="md-search__overlay" for="__search"></label>
+  <div class="md-search__inner" role="search">
+    <form class="md-search__form" name="search">
+      <input type="text" class="md-search__input" name="query" aria-label="Search" placeholder="Search" autocapitalize="off" autocorrect="off" autocomplete="off" spellcheck="false" data-md-component="search-query" required>
+      <label class="md-search__icon md-icon" for="__search">
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.516 6.516 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5Z"/></svg>
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11h12Z"/></svg>
+      </label>
+      <nav class="md-search__options" aria-label="Search">
+        
+        <button type="reset" class="md-search__icon md-icon" title="Clear" aria-label="Clear" tabindex="-1">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M19 6.41 17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12 19 6.41Z"/></svg>
+        </button>
+      </nav>
+      
+        <div class="md-search__suggest" data-md-component="search-suggest"></div>
+      
+    </form>
+    <div class="md-search__output">
+      <div class="md-search__scrollwrap" data-md-scrollfix>
+        <div class="md-search-result" data-md-component="search-result">
+          <div class="md-search-result__meta">
+            Initializing search
+          </div>
+          <ol class="md-search-result__list" role="presentation"></ol>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+    
+    
+  </nav>
+  
+</header>
+    
+    <div class="md-container" data-md-component="container">
+      
+      
+        
+          
+        
+      
+      <main class="md-main" data-md-component="main">
+        <div class="md-main__inner md-grid">
+          
+            
+              
+              <div class="md-sidebar md-sidebar--primary" data-md-component="sidebar" data-md-type="navigation" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+
+
+<nav class="md-nav md-nav--primary" aria-label="Navigation" data-md-level="0">
+  <label class="md-nav__title" for="__drawer">
+    <a href="../../../.." title="DSP-API" class="md-nav__button md-logo" aria-label="DSP-API" data-md-component="logo">
+      
+  <img src="../../../../assets/icons/logo_bw.svg" alt="logo">
+
+    </a>
+    DSP-API
+  </label>
+  
+  <ul class="md-nav__list" data-md-scrollfix>
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_1" >
+        
+          
+          <label class="md-nav__link" for="__nav_1" id="__nav_1_label" tabindex="0">
+            
+  
+  <span class="md-ellipsis">
+    Introduction
+  </span>
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_1_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_1">
+            <span class="md-nav__icon md-icon"></span>
+            Introduction
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../.." class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Overview
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../../01-introduction/what-is-dsp/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    What is DSP?
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../../01-introduction/file-formats/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    File Formats in DSP-API
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../../01-introduction/standoff-rdf/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Standoff/RDF Text Markup
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../../01-introduction/legal-info/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Legal Information for Assets
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../../01-introduction/example-project/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    An Example Project
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_2" >
+        
+          
+          <label class="md-nav__link" for="__nav_2" id="__nav_2_label" tabindex="0">
+            
+  
+  <span class="md-ellipsis">
+    DSP Ontologies
+  </span>
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_2_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_2">
+            <span class="md-nav__icon md-icon"></span>
+            DSP Ontologies
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../../02-dsp-ontologies/introduction/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Introduction
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../../02-dsp-ontologies/knora-base/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    The Knora Base Ontology
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../../02-dsp-ontologies/salsah-gui/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    The SALSAH GUI Ontology
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+    
+  
+  
+  
+    
+    
+    
+    
+    <li class="md-nav__item md-nav__item--active md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_3" checked>
+        
+          
+          <label class="md-nav__link" for="__nav_3" id="__nav_3_label" tabindex="0">
+            
+  
+  <span class="md-ellipsis">
+    DSP-API Endpoints
+  </span>
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_3_label" aria-expanded="true">
+          <label class="md-nav__title" for="__nav_3">
+            <span class="md-nav__icon md-icon"></span>
+            DSP-API Endpoints
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+    
+  
+  
+  
+    
+    
+    
+    
+    <li class="md-nav__item md-nav__item--active md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_3_1" checked>
+        
+          
+          <label class="md-nav__link" for="__nav_3_1" id="__nav_3_1_label" tabindex="0">
+            
+  
+  <span class="md-ellipsis">
+    DSP-API V2
+  </span>
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_3_1_label" aria-expanded="true">
+          <label class="md-nav__title" for="__nav_3_1">
+            <span class="md-nav__icon md-icon"></span>
+            DSP-API V2
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../introduction/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Introduction
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../authentication/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Authentication
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../reading-and-searching-resources/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Reading and Searching Resources
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../reading-user-permissions/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Reading the User's Permissions on Resources and Values
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../getting-lists/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Getting Lists
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../query-language/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Gravsearch - Virtual Graph Search
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../editing-resources/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Creating and Editing Resources
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../editing-values/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Creating and Editing Values
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../ontology-information/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Querying, Creating, and Updating Ontologies
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+    
+  
+  
+  
+    
+    
+    
+    
+    <li class="md-nav__item md-nav__item--active md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_3_1_10" checked>
+        
+          
+          <label class="md-nav__link" for="__nav_3_1_10" id="__nav_3_1_10_label" tabindex="0">
+            
+  
+  <span class="md-ellipsis">
+    Textual Data in DSP-API
+  </span>
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="3" aria-labelledby="__nav_3_1_10_label" aria-expanded="true">
+          <label class="md-nav__title" for="__nav_3_1_10">
+            <span class="md-nav__icon md-icon"></span>
+            Textual Data in DSP-API
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../overview/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Overview
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../standard-standoff/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Standard Standoff Markup
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../custom-standoff/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Custom Standoff Mapping
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+    
+  
+  
+  
+    <li class="md-nav__item md-nav__item--active">
+      
+      <input class="md-nav__toggle md-toggle" type="checkbox" id="__toc">
+      
+      
+        
+      
+      
+        <label class="md-nav__link md-nav__link--active" for="__toc">
+          
+  
+  <span class="md-ellipsis">
+    TEI XML
+  </span>
+  
+
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <a href="./" class="md-nav__link md-nav__link--active">
+        
+  
+  <span class="md-ellipsis">
+    TEI XML
+  </span>
+  
+
+      </a>
+      
+        
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#general" class="md-nav__link">
+    <span class="md-ellipsis">
+      General
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#standard-standoff-to-tei-conversion" class="md-nav__link">
+    <span class="md-ellipsis">
+      Standard Standoff to TEI Conversion
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#custom-conversion" class="md-nav__link">
+    <span class="md-ellipsis">
+      Custom Conversion
+    </span>
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+      
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../permalinks/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Permalinks
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../knora-iris/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    IRIs
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_3_2" >
+        
+          
+          <label class="md-nav__link" for="__nav_3_2" id="__nav_3_2_label" tabindex="0">
+            
+  
+  <span class="md-ellipsis">
+    Admin API
+  </span>
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_3_2_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_3_2">
+            <span class="md-nav__icon md-icon"></span>
+            Admin API
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../api-admin/introduction/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Introduction
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../api-admin/overview/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Overview
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../api-admin/users/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Users Endpoint
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../api-admin/projects/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Projects Endpoint
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../api-admin/groups/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Groups Endpoint
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../api-admin/lists/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Lists Endpoint
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../api-admin/permissions/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Permissions Endpoint
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../api-admin/stores/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Stores Endpoint
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../api-admin/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    OpenApi Documentation
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_3_3" >
+        
+          
+          <label class="md-nav__link" for="__nav_3_3" id="__nav_3_3_label" tabindex="0">
+            
+  
+  <span class="md-ellipsis">
+    Util API
+  </span>
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_3_3_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_3_3">
+            <span class="md-nav__icon md-icon"></span>
+            Util API
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../api-util/version/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Version
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_3_4" >
+        
+          
+          <label class="md-nav__link" for="__nav_3_4" id="__nav_3_4_label" tabindex="0">
+            
+  
+  <span class="md-ellipsis">
+    Instrumentation API
+  </span>
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_3_4_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_3_4">
+            <span class="md-nav__icon md-icon"></span>
+            Instrumentation API
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../instrumentation/introduction/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Introduction
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../instrumentation/health/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Health Endpoint
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../instrumentation/metrics/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Metrics Endpoint
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_4" >
+        
+          
+          <label class="md-nav__link" for="__nav_4" id="__nav_4_label" tabindex="0">
+            
+  
+  <span class="md-ellipsis">
+    Publishing and Deployment
+  </span>
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_4_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_4">
+            <span class="md-nav__icon md-icon"></span>
+            Publishing and Deployment
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../../04-publishing-deployment/publishing/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Publishing
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../../04-publishing-deployment/configuration/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Configuration
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_5" >
+        
+          
+          <label class="md-nav__link" for="__nav_5" id="__nav_5_label" tabindex="0">
+            
+  
+  <span class="md-ellipsis">
+    DSP Internals
+  </span>
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_5_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_5">
+            <span class="md-nav__icon md-icon"></span>
+            DSP Internals
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    
+    
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_5_1" >
+        
+          
+          <label class="md-nav__link" for="__nav_5_1" id="__nav_5_1_label" tabindex="0">
+            
+  
+  <span class="md-ellipsis">
+    Design
+  </span>
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_5_1_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_5_1">
+            <span class="md-nav__icon md-icon"></span>
+            Design
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    
+    
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_5_1_1" >
+        
+          
+          <label class="md-nav__link" for="__nav_5_1_1" id="__nav_5_1_1_label" tabindex="0">
+            
+  
+  <span class="md-ellipsis">
+    Architectural Decision Records (ADR)
+  </span>
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="3" aria-labelledby="__nav_5_1_1_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_5_1_1">
+            <span class="md-nav__icon md-icon"></span>
+            Architectural Decision Records (ADR)
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../../05-internals/design/adr/ADR-0001-record-architecture-decisions/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    0001 Record Architectural Decisions
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../../05-internals/design/adr/ADR-0002-change-cache-service-manager-from-akka-actor-to-zlayer/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    0002 Change Cache Service Manager from Akka-Actor to ZLayer
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../../05-internals/design/adr/ADR-0003-change-iiif-service-manager-and-sipi-implementation-to-zlayer/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    0003 Change IIIF Service Manager and Sipi implementation to zlayer
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../../05-internals/design/adr/ADR-0004-change-triplestore-service-manager-and-fuseki-implementation-to-zlayer/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    0004 Change Triplestore Service Manager and Fuseki implementation to ZLayer
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../../05-internals/design/adr/ADR-0005-change-respondermanager-to-a-simple-case-class/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    0005 Change ResponderManager to a simple case class
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../../05-internals/design/adr/ADR-0006-use-zio-http/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    0006 Gradually Replace Akka-HTTP with ZIO-HTTP
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../../05-internals/design/adr/ADR-0007-zio-fication-of-responders/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    0007 ZIO-fication of Responders
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../../05-internals/design/adr/ADR-0008-replace-akka-with-pekko/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    0008 Replace Akka with Pekko
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_5_1_2" >
+        
+          
+          <label class="md-nav__link" for="__nav_5_1_2" id="__nav_5_1_2_label" tabindex="0">
+            
+  
+  <span class="md-ellipsis">
+    DSP-API Design Principles
+  </span>
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="3" aria-labelledby="__nav_5_1_2_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_5_1_2">
+            <span class="md-nav__icon md-icon"></span>
+            DSP-API Design Principles
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../../05-internals/design/principles/design-overview/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Design Overview
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../../05-internals/design/principles/store-module/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Store Module
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../../05-internals/design/principles/triplestore-updates/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Triplestore Updates
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../../05-internals/design/principles/consistency-checking/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Consistency Checking
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../../05-internals/design/principles/authentication/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Authentication
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../../05-internals/design/principles/rdf-api/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    RDF Processing API
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_5_1_3" >
+        
+          
+          <label class="md-nav__link" for="__nav_5_1_3" id="__nav_5_1_3_label" tabindex="0">
+            
+  
+  <span class="md-ellipsis">
+    DSP-API V2 Design
+  </span>
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="3" aria-labelledby="__nav_5_1_3_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_5_1_3">
+            <span class="md-nav__icon md-icon"></span>
+            DSP-API V2 Design
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../../05-internals/design/api-v2/overview/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    API v2 Design Overview
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../../05-internals/design/api-v2/ontology-schemas/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Ontology Schemas
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../../05-internals/design/api-v2/smart-iris/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Smart IRIs
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../../05-internals/design/api-v2/content-wrappers/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Content Wrappers
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../../05-internals/design/api-v2/how-to-add-a-route/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    How to Add an API v2 Route
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../../05-internals/design/api-v2/json-ld/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    JSON-LD Parsing and Formatting
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../../05-internals/design/api-v2/ontology-management/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Ontology Management
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../../05-internals/design/api-v2/sipi/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    DSP-API and Sipi
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../../05-internals/design/api-v2/gravsearch/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Gravsearch Design
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../../05-internals/design/api-v2/standoff/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Standoff Markup
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../../05-internals/design/api-v2/ark/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Archival Resource Key (ARK)
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../../05-internals/design/api-v2/query-design/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    SPARQL Query Design
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../../05-internals/design/api-admin/administration/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Admin API Design
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_5_1_5" >
+        
+          
+          <label class="md-nav__link" for="__nav_5_1_5" id="__nav_5_1_5_label" tabindex="0">
+            
+  
+  <span class="md-ellipsis">
+    DSP Domain
+  </span>
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="3" aria-labelledby="__nav_5_1_5_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_5_1_5">
+            <span class="md-nav__icon md-icon"></span>
+            DSP Domain
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../../05-internals/design/domain/domain-entities-and-relations/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Domain Entities and Relations
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../../05-internals/design/domain/system-instances/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    System Instances
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../../05-internals/design/domain/class-and-property-hierarchies/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Class and Property Hierarchies
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_5_2" >
+        
+          
+          <label class="md-nav__link" for="__nav_5_2" id="__nav_5_2_label" tabindex="0">
+            
+  
+  <span class="md-ellipsis">
+    Development
+  </span>
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_5_2_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_5_2">
+            <span class="md-nav__icon md-icon"></span>
+            Development
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../../05-internals/development/overview/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Overview
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../../05-internals/development/building-and-running/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Build and Running
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../../05-internals/development/vscode-config/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Setup Visual Studio Code for development of DSP-API
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../../05-internals/development/testing/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Testing
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../../05-internals/development/docker-cheat-sheet/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Docker Cheat Sheet
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../../05-internals/development/docker-compose/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Starting the DSP-Stack inside Docker Container
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../../05-internals/development/updating-repositories/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Updating Repositories
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../../05-internals/development/third-party/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Third-Party Dependencies
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_6" >
+        
+          
+          <label class="md-nav__link" for="__nav_6" id="__nav_6_label" tabindex="0">
+            
+  
+  <span class="md-ellipsis">
+    SIPI
+  </span>
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_6_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_6">
+            <span class="md-nav__icon md-icon"></span>
+            SIPI
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../../06-sipi/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Overview
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../../06-sipi/sipi-and-dsp-api/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Interaction between Sipi and DSP-API
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_7" >
+        
+          
+          <label class="md-nav__link" for="__nav_7" id="__nav_7_label" tabindex="0">
+            
+  
+  <span class="md-ellipsis">
+    Lucene
+  </span>
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_7_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_7">
+            <span class="md-nav__icon md-icon"></span>
+            Lucene
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../../07-lucene/lucene-query-parser-syntax/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Lucene Query Parser Syntax
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../../08-faq/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Frequently Asked Questions
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_9" >
+        
+          
+          <label class="md-nav__link" for="__nav_9" id="__nav_9_label" tabindex="0">
+            
+  
+  <span class="md-ellipsis">
+    Release Notes
+  </span>
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_9_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_9">
+            <span class="md-nav__icon md-icon"></span>
+            Release Notes
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../../09-release-notes/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Changelog
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../../10-migration-guides/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Migration Guides and Deprecations
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+    
+  </ul>
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+            
+              
+              <div class="md-sidebar md-sidebar--secondary" data-md-component="sidebar" data-md-type="toc" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#general" class="md-nav__link">
+    <span class="md-ellipsis">
+      General
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#standard-standoff-to-tei-conversion" class="md-nav__link">
+    <span class="md-ellipsis">
+      Standard Standoff to TEI Conversion
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#custom-conversion" class="md-nav__link">
+    <span class="md-ellipsis">
+      Custom Conversion
+    </span>
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+          
+          
+            <div class="md-content" data-md-component="content">
+              <article class="md-content__inner md-typeset">
+                
+                  
+
+
+<!---
+ * Copyright © 2021 - 2025 Swiss National Data and Service Center for the Humanities and/or DaSCH Service Platform contributors.
+ * SPDX-License-Identifier: Apache-2.0
+-->
+
+<h1 id="teixml-converting-standoff-to-teixml">TEI/XML: Converting Standoff to TEI/XML</h1>
+<h2 id="general">General</h2>
+<p>DSP-API offers a way to convert standoff markup to TEI/XML.
+The conversion is based on the assumption that a whole resource is to be turned into a TEI document.
+There is a basic distinction between the body and the header of a TEI document.
+The resource's property that contains the text with standoff markup is mapped to the TEI document's body.
+Other of the resource's property may be mapped to the TEI header.</p>
+<h2 id="standard-standoff-to-tei-conversion">Standard Standoff to TEI Conversion</h2>
+<p>DSP-API offers a built-in conversion form standard standoff entities (defined in the <code>standoff</code> ontology) tags to TEI.</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>As TEI provides a wide range of Elements and Attributes 
+which can have different meaning depending on the markup practices of a project,
+whereas DSP standard standoff has a very limited tagset,
+this conversion is oppinionated by necessity
+and may not be appropriate for all projects.</p>
+</div>
+<p>In order to obtain a resource as a TEI document, the following request has to be performed. 
+Please note that the URL parameters have to be URL-encoded.</p>
+<div class="highlight"><pre><span></span><code>HTTP GET to http://host/v2/tei/resourceIri?textProperty=textPropertyIri
+</code></pre></div>
+<p>In addition to the resource's Iri, the Iri of the property containing the text with standoff has to be submitted. 
+This will be converted to the TEI body. 
+Please note that the resource can only have one instance of this property and the text must have standoff markup.</p>
+<p>The test data contain the resource <code>http://rdfh.ch/0001/thing_with_richtext_with_markup</code> 
+with the text property <code>http://0.0.0.0:3333/ontology/0001/anything/v2#hasRichtext</code> 
+that can be converted to TEI as follows:</p>
+<div class="highlight"><pre><span></span><code>HTTP GET to http://host/v2/tei/http%3A%2F%2Frdfh.ch%2F0001%2Fthing_with_richtext_with_markup?textProperty=http%3A%2F%2F0.0.0.0%3A3333%2Fontology%2F0001%2Fanything%2Fv2%23hasRichtext
+</code></pre></div>
+<p>The response to this request is a TEI XML document:</p>
+<div class="highlight"><pre><span></span><code><span class="cp">&lt;?xml version=&quot;1.0&quot; encoding=&quot;UTF-8&quot;?&gt;</span>
+<span class="nt">&lt;TEI</span><span class="w"> </span><span class="na">xmlns=</span><span class="s">&quot;http://www.tei-c.org/ns/1.0&quot;</span><span class="w"> </span><span class="na">version=</span><span class="s">&quot;3.3.0&quot;</span><span class="nt">&gt;</span>
+<span class="w">  </span><span class="nt">&lt;teiHeader&gt;</span>
+<span class="w">    </span><span class="nt">&lt;fileDesc&gt;</span>
+<span class="w">      </span><span class="nt">&lt;titleStmt&gt;</span>
+<span class="w">        </span><span class="nt">&lt;title&gt;</span>test<span class="w"> </span>thing<span class="w"> </span>with<span class="w"> </span>markup<span class="nt">&lt;/title&gt;</span>
+<span class="w">      </span><span class="nt">&lt;/titleStmt&gt;</span>
+<span class="w">      </span><span class="nt">&lt;publicationStmt&gt;</span>
+<span class="w">        </span><span class="nt">&lt;p&gt;</span>
+<span class="w">             </span>This<span class="w"> </span>is<span class="w"> </span>the<span class="w"> </span>TEI/XML<span class="w"> </span>representation<span class="w"> </span>of<span class="w"> </span>a<span class="w"> </span>resource<span class="w"> </span>identified<span class="w"> </span>by<span class="w"> </span>the<span class="w"> </span>Iri<span class="w"> </span>http://rdfh.ch/0001/thing_with_richtext_with_markup.
+<span class="w">         </span><span class="nt">&lt;/p&gt;</span>
+<span class="w">      </span><span class="nt">&lt;/publicationStmt&gt;</span>
+<span class="w">      </span><span class="nt">&lt;sourceDesc&gt;</span>
+<span class="w">        </span><span class="nt">&lt;p&gt;</span>Representation<span class="w"> </span>of<span class="w"> </span>the<span class="w"> </span>resource&#39;s<span class="w"> </span>text<span class="w"> </span>as<span class="w"> </span>TEI/XML<span class="nt">&lt;/p&gt;</span>
+<span class="w">      </span><span class="nt">&lt;/sourceDesc&gt;</span>
+<span class="w">    </span><span class="nt">&lt;/fileDesc&gt;</span>
+<span class="w">  </span><span class="nt">&lt;/teiHeader&gt;</span>
+<span class="w">  </span><span class="nt">&lt;text&gt;</span>
+<span class="w">    </span><span class="nt">&lt;body&gt;</span>
+<span class="w">      </span><span class="nt">&lt;p&gt;</span>
+<span class="w">        </span>This<span class="w"> </span>is<span class="w"> </span>a<span class="w"> </span>test<span class="w"> </span>that<span class="w"> </span>contains<span class="w"> </span>marked<span class="w"> </span>up<span class="w"> </span>elements.<span class="w"> </span>
+<span class="w">        </span>This<span class="w"> </span>is<span class="w"> </span><span class="nt">&lt;hi</span><span class="w"> </span><span class="na">rend=</span><span class="s">&quot;italic&quot;</span><span class="nt">&gt;</span>interesting<span class="w"> </span>text<span class="nt">&lt;/hi&gt;</span><span class="w"> </span>in<span class="w"> </span>italics.
+<span class="w">        </span>This<span class="w"> </span>is<span class="w"> </span><span class="nt">&lt;hi</span><span class="w"> </span><span class="na">rend=</span><span class="s">&quot;italic&quot;</span><span class="nt">&gt;</span>boring<span class="w"> </span>text<span class="nt">&lt;/hi&gt;</span><span class="w"> </span>in<span class="w"> </span>italics.
+<span class="w">      </span><span class="nt">&lt;/p&gt;</span>
+<span class="w">    </span><span class="nt">&lt;/body&gt;</span>
+<span class="w">  </span><span class="nt">&lt;/text&gt;</span>
+<span class="nt">&lt;/TEI&gt;</span><span class="w">        </span>
+</code></pre></div>
+<p>The body of the TEI document contains the standoff markup as XML. 
+The header contains contains some basic metadata about the resource such as the <code>rdfs:label</code> an its IRI. 
+However, this might not be sufficient for more advanced use cases like digital edition projects. 
+In that case, a custom conversion has to be performed (see below).</p>
+<h2 id="custom-conversion">Custom Conversion</h2>
+<p>If a project defines its own standoff entities, a custom conversion can be provided (body of the TEI document). 
+Also for the TEI header, a custom conversion can be provided.</p>
+<p>For the custom conversion, additional configuration is required.</p>
+<p>TEI body:</p>
+<ul>
+<li>additional mapping from standoff to XML (URL parameter <code>mappingIri</code>)</li>
+<li>XSL transformation to turn the XML into a valid TEI body (referred to by the mapping).</li>
+</ul>
+<p>The mapping has to refer to a <code>defaultXSLTransformation</code> that transforms the XML that was created from standoff markup 
+(see <a href="../custom-standoff/">XML To Standoff Mapping</a>). 
+This step is necessary because the mapping assumes a one to one relation 
+between standoff classes and properties and XML elements and attributes.
+For example, we may want to convert a <code>standoff:StandoffItalicTag</code> into TEI/XML. 
+TEI expresses this as <code>&lt;hi rend="italic"&gt;...&lt;/hi&gt;</code>. 
+In the mapping, the <code>standoff:StandoffItalicTag</code> may be mapped to a temporary XML element 
+that is going to be converted to <code>&lt;hi rend="italic"&gt;...&lt;/hi&gt;</code> in a further step by the XSLT. </p>
+<p>For sample data, see <code>webapi/_test_data/test_route/texts/beol/BEOLTEIMapping.xml</code> (mapping) 
+and <code>webapi/_test_data/test_route/texts/beol/standoffToTEI.xsl</code>. 
+The standoff entities are defined in <code>beol-onto.ttl</code>.</p>
+<p>TEI header:</p>
+<ul>
+<li>Gravsearch template to query the resources metadata, results are serialized to RDF/XML (URL parameter <code>gravsearchTemplateIri</code>)</li>
+<li>XSL transformation to turn that RDF/XML into a valid TEI header (URL parameter <code>teiHeaderXSLTIri</code>)</li>
+</ul>
+<p>The Gravsearch template is expected to be of type <code>knora-base:TextRepresentation</code> 
+and to contain a placeholder <code>$resourceIri</code> that is to be replaced by the actual resource Iri.
+The Gravsearch template is expected to contain a query involving the text property (URL parameter <code>textProperty</code>) 
+and more properties that are going to be mapped to the TEI header. 
+The Gravsearch template is a simple text file with the files extension <code>.txt</code>.</p>
+<p>A Gravsearch template may look like this (see <code>test_data/test_route/texts/beol/gravsearch.txt</code>):</p>
+<div class="highlight"><pre><span></span><code>PREFIX beol: &lt;http://0.0.0.0:3333/ontology/0801/beol/simple/v2#&gt;
+PREFIX knora-api: &lt;http://api.knora.org/ontology/knora-api/simple/v2#&gt;
+PREFIX xsd: &lt;http://www.w3.org/2001/XMLSchema#&gt;
+
+    CONSTRUCT {
+        ?letter knora-api:isMainResource true .
+
+        ?letter beol:creationDate ?date .
+
+        ?letter beol:hasText ?text .
+
+        ?letter beol:hasAuthor ?person1 .
+
+        ?person1 beol:hasFamilyName ?name1 .
+
+        ?person1 beol:hasGivenName ?givenName1 .
+
+        ?person1 beol:hasIAFIdentifier ?iaf1 .
+
+        ?letter beol:hasRecipient ?person2 .
+
+        ?person2 beol:hasFamilyName ?name2 .
+
+        ?person2 beol:hasGivenName ?givenName2 .
+
+        ?person2 beol:hasIAFIdentifier ?iaf2 .
+
+
+    } WHERE {
+        BIND(&lt;$resourceIri&gt; as ?letter)
+        ?letter a knora-api:Resource .
+        ?letter a beol:letter .
+
+        ?letter beol:creationDate ?date .
+
+        beol:creationDate knora-api:objectType knora-api:Date .
+        ?date a knora-api:Date .
+
+        ?letter beol:hasText ?text .
+
+        beol:hasText knora-api:objectType xsd:string .
+
+        ?text a xsd:string .
+
+        ?letter beol:hasAuthor ?person1 .
+
+        ?person1 beol:hasFamilyName ?name1 .
+
+        ?person1 beol:hasGivenName ?givenName1 .
+
+        ?person1 beol:hasIAFIdentifier ?iaf1 .
+
+        ?name1 a xsd:string .
+
+        ?givenName1 a xsd:string .
+
+        ?iaf1 a xsd:string .
+
+        ?person2 beol:hasFamilyName ?name2 .
+
+        ?person2 beol:hasGivenName ?givenName2 .
+
+        ?person2 beol:hasIAFIdentifier ?iaf2 .
+
+        ?name2 a xsd:string .
+
+        ?givenName2 a xsd:string .
+
+        ?iaf2 a xsd:string .
+
+        beol:hasGivenName knora-api:objectType xsd:string .
+        beol:hasFamilyName knora-api:objectType xsd:string .
+        beol:hasIAFIdentifier knora-api:objectType xsd:string .
+
+        beol:hasAuthor knora-api:objectType knora-api:Resource .
+
+        ?letter beol:hasRecipient ?person2 .
+
+        beol:hasRecipient knora-api:objectType knora-api:Resource .
+
+        ?person1 a knora-api:Resource .
+        ?person2 a knora-api:Resource .
+
+    }
+</code></pre></div>
+<p>Note the placeholder <code>BIND(&lt;$resourceIri&gt; as ?letter)</code> that is going to be replaced 
+by the Iri of the resource the request is performed for.
+The query asks for information about the letter's text <code>beol:hasText</code> and information about its author and recipient. 
+This information is converted to the TEI header in the format required by <a href="https://correspsearch.net">correspSearch</a>.</p>
+<p>To write the XSLT, do the Gravsearch query and request the data as RDF/XML using content negotiation 
+(see <a href="../../introduction/">Introduction</a>).</p>
+<p>The Gravsearch query's result may look like this (<code>RDF/XML</code>):</p>
+<div class="highlight"><pre><span></span><code><span class="cp">&lt;?xml version=&quot;1.0&quot; encoding=&quot;UTF-8&quot;?&gt;</span>
+<span class="nt">&lt;rdf:RDF</span>
+<span class="w">    </span><span class="na">xmlns:rdf=</span><span class="s">&quot;http://www.w3.org/1999/02/22-rdf-syntax-ns#&quot;</span>
+<span class="w">    </span><span class="na">xmlns:rdfs=</span><span class="s">&quot;http://www.w3.org/2000/01/rdf-schema#&quot;</span>
+<span class="w">    </span><span class="na">xmlns:knora-api=</span><span class="s">&quot;http://api.knora.org/ontology/knora-api/v2#&quot;</span>
+<span class="w">    </span><span class="na">xmlns:beol=</span><span class="s">&quot;http://0.0.0.0:3333/ontology/0801/beol/v2#&quot;</span><span class="nt">&gt;</span>
+<span class="nt">&lt;beol:letter</span><span class="w"> </span><span class="na">rdf:about=</span><span class="s">&quot;http://rdfh.ch/0801/MbZdHVcsR_Ky5pZoytaiBA&quot;</span><span class="nt">&gt;</span>
+<span class="w">    </span><span class="nt">&lt;beol:creationDate</span><span class="w"> </span><span class="na">rdf:resource=</span><span class="s">&quot;http://rdfh.ch/0801/MbZdHVcsR_Ky5pZoytaiBA/values/Ob_1YRO_QmaDxTRI64vGOQ&quot;</span><span class="nt">/&gt;</span>
+<span class="w">    </span><span class="nt">&lt;beol:hasAuthorValue</span><span class="w"> </span><span class="na">rdf:resource=</span><span class="s">&quot;http://rdfh.ch/0801/MbZdHVcsR_Ky5pZoytaiBA/values/zt4a3XoESTq9To4mSN8Dug&quot;</span><span class="nt">/&gt;</span>
+<span class="w">    </span><span class="nt">&lt;beol:hasRecipientValue</span><span class="w"> </span><span class="na">rdf:resource=</span><span class="s">&quot;http://rdfh.ch/0801/MbZdHVcsR_Ky5pZoytaiBA/values/pVerHO_FRXePZQT9kgEp_Q&quot;</span><span class="nt">/&gt;</span>
+<span class="w">    </span><span class="nt">&lt;rdfs:label</span><span class="w"> </span><span class="na">rdf:datatype=</span><span class="s">&quot;http://www.w3.org/2001/XMLSchema#string&quot;</span><span class="nt">&gt;</span>Testletter<span class="nt">&lt;/rdfs:label&gt;</span>
+<span class="nt">&lt;/beol:letter&gt;</span>
+<span class="nt">&lt;knora-api:DateValue</span><span class="w"> </span><span class="na">rdf:about=</span><span class="s">&quot;http://rdfh.ch/0801/MbZdHVcsR_Ky5pZoytaiBA/values/Ob_1YRO_QmaDxTRI64vGOQ&quot;</span><span class="nt">&gt;</span>
+<span class="w">    </span><span class="nt">&lt;knora-api:dateValueHasCalendar</span><span class="w"> </span><span class="na">rdf:datatype=</span><span class="s">&quot;http://www.w3.org/2001/XMLSchema#string&quot;</span><span class="nt">&gt;</span>GREGORIAN<span class="nt">&lt;/knora-api:dateValueHasCalendar&gt;</span>
+<span class="w">    </span><span class="nt">&lt;knora-api:dateValueHasEndDay</span><span class="w"> </span><span class="na">rdf:datatype=</span><span class="s">&quot;http://www.w3.org/2001/XMLSchema#integer&quot;</span><span class="nt">&gt;</span>10<span class="nt">&lt;/knora-api:dateValueHasEndDay&gt;</span>
+<span class="w">    </span><span class="nt">&lt;knora-api:dateValueHasEndEra</span><span class="w"> </span><span class="na">rdf:datatype=</span><span class="s">&quot;http://www.w3.org/2001/XMLSchema#string&quot;</span><span class="nt">&gt;</span>CE<span class="nt">&lt;/knora-api:dateValueHasEndEra&gt;</span>
+<span class="w">    </span><span class="nt">&lt;knora-api:dateValueHasEndMonth</span><span class="w"> </span><span class="na">rdf:datatype=</span><span class="s">&quot;http://www.w3.org/2001/XMLSchema#integer&quot;</span><span class="nt">&gt;</span>6<span class="nt">&lt;/knora-api:dateValueHasEndMonth&gt;</span>
+<span class="w">    </span><span class="nt">&lt;knora-api:dateValueHasEndYear</span><span class="w"> </span><span class="na">rdf:datatype=</span><span class="s">&quot;http://www.w3.org/2001/XMLSchema#integer&quot;</span><span class="nt">&gt;</span>1703<span class="nt">&lt;/knora-api:dateValueHasEndYear&gt;</span>
+<span class="w">    </span><span class="nt">&lt;knora-api:dateValueHasStartDay</span><span class="w"> </span><span class="na">rdf:datatype=</span><span class="s">&quot;http://www.w3.org/2001/XMLSchema#integer&quot;</span><span class="nt">&gt;</span>10<span class="nt">&lt;/knora-api:dateValueHasStartDay&gt;</span>
+<span class="w">    </span><span class="nt">&lt;knora-api:dateValueHasStartEra</span><span class="w"> </span><span class="na">rdf:datatype=</span><span class="s">&quot;http://www.w3.org/2001/XMLSchema#string&quot;</span><span class="nt">&gt;</span>CE<span class="nt">&lt;/knora-api:dateValueHasStartEra&gt;</span>
+<span class="w">    </span><span class="nt">&lt;knora-api:dateValueHasStartMonth</span><span class="w"> </span><span class="na">rdf:datatype=</span><span class="s">&quot;http://www.w3.org/2001/XMLSchema#integer&quot;</span><span class="nt">&gt;</span>6<span class="nt">&lt;/knora-api:dateValueHasStartMonth&gt;</span>
+<span class="w">    </span><span class="nt">&lt;knora-api:dateValueHasStartYear</span><span class="w"> </span><span class="na">rdf:datatype=</span><span class="s">&quot;http://www.w3.org/2001/XMLSchema#integer&quot;</span><span class="nt">&gt;</span>1703<span class="nt">&lt;/knora-api:dateValueHasStartYear&gt;</span>
+<span class="w">    </span><span class="nt">&lt;knora-api:valueAsString</span><span class="w"> </span><span class="na">rdf:datatype=</span><span class="s">&quot;http://www.w3.org/2001/XMLSchema#string&quot;</span><span class="nt">&gt;</span>GREGORIAN:1703-06-10<span class="w"> </span>CE<span class="nt">&lt;/knora-api:valueAsString&gt;</span>
+<span class="nt">&lt;/knora-api:DateValue&gt;</span>
+<span class="nt">&lt;knora-api:LinkValue</span><span class="w"> </span><span class="na">rdf:about=</span><span class="s">&quot;http://rdfh.ch/0801/MbZdHVcsR_Ky5pZoytaiBA/values/zt4a3XoESTq9To4mSN8Dug&quot;</span><span class="nt">&gt;</span>
+<span class="w">    </span><span class="nt">&lt;knora-api:linkValueHasTarget&gt;</span>
+<span class="w">        </span><span class="nt">&lt;beol:person</span><span class="w"> </span><span class="na">rdf:about=</span><span class="s">&quot;http://rdfh.ch/0801/_9LEnLM7TFuPRjTshOTJpQ&quot;</span><span class="nt">&gt;</span>
+<span class="w">            </span><span class="nt">&lt;beol:hasFamilyName</span><span class="w"> </span><span class="na">rdf:resource=</span><span class="s">&quot;http://rdfh.ch/0801/_9LEnLM7TFuPRjTshOTJpQ/values/NG42jDqSTz2U35N6sJ8cqg&quot;</span><span class="nt">/&gt;</span>
+<span class="w">            </span><span class="nt">&lt;beol:hasGivenName</span><span class="w"> </span><span class="na">rdf:resource=</span><span class="s">&quot;http://rdfh.ch/0801/_9LEnLM7TFuPRjTshOTJpQ/values/W2lVG1mvQU2MauAvCGB13w&quot;</span><span class="nt">/&gt;</span>
+<span class="w">            </span><span class="nt">&lt;beol:hasIAFIdentifier</span><span class="w"> </span><span class="na">rdf:resource=</span><span class="s">&quot;http://rdfh.ch/0801/_9LEnLM7TFuPRjTshOTJpQ/values/N2TVtntdToqJQpdZhYPc5g&quot;</span><span class="nt">/&gt;</span>
+<span class="w">            </span><span class="nt">&lt;rdfs:label</span><span class="w"> </span><span class="na">rdf:datatype=</span><span class="s">&quot;http://www.w3.org/2001/XMLSchema#string&quot;</span><span class="nt">&gt;</span>Johann<span class="w"> </span>Jacob<span class="w"> </span>Scheuchzer<span class="nt">&lt;/rdfs:label&gt;</span>
+<span class="w">        </span><span class="nt">&lt;/beol:person&gt;</span>
+<span class="w">    </span><span class="nt">&lt;/knora-api:linkValueHasTarget&gt;</span>
+<span class="nt">&lt;/knora-api:LinkValue&gt;</span>
+<span class="nt">&lt;knora-api:TextValue</span><span class="w"> </span><span class="na">rdf:about=</span><span class="s">&quot;http://rdfh.ch/0801/_9LEnLM7TFuPRjTshOTJpQ/values/NG42jDqSTz2U35N6sJ8cqg&quot;</span><span class="nt">&gt;</span>
+<span class="w">    </span><span class="nt">&lt;knora-api:valueAsString</span><span class="w"> </span><span class="na">rdf:datatype=</span><span class="s">&quot;http://www.w3.org/2001/XMLSchema#string&quot;</span><span class="nt">&gt;</span>Scheuchzer<span class="nt">&lt;/knora-api:valueAsString&gt;</span>
+<span class="nt">&lt;/knora-api:TextValue&gt;</span>
+<span class="nt">&lt;knora-api:TextValue</span><span class="w"> </span><span class="na">rdf:about=</span><span class="s">&quot;http://rdfh.ch/0801/_9LEnLM7TFuPRjTshOTJpQ/values/W2lVG1mvQU2MauAvCGB13w&quot;</span><span class="nt">&gt;</span>
+<span class="w">    </span><span class="nt">&lt;knora-api:valueAsString</span><span class="w"> </span><span class="na">rdf:datatype=</span><span class="s">&quot;http://www.w3.org/2001/XMLSchema#string&quot;</span><span class="nt">&gt;</span>Johann<span class="w"> </span>Jacob<span class="nt">&lt;/knora-api:valueAsString&gt;</span>
+<span class="nt">&lt;/knora-api:TextValue&gt;</span>
+<span class="nt">&lt;knora-api:TextValue</span><span class="w"> </span><span class="na">rdf:about=</span><span class="s">&quot;http://rdfh.ch/0801/_9LEnLM7TFuPRjTshOTJpQ/values/N2TVtntdToqJQpdZhYPc5g&quot;</span><span class="nt">&gt;</span>
+<span class="w">    </span><span class="nt">&lt;knora-api:valueAsString</span><span class="w"> </span><span class="na">rdf:datatype=</span><span class="s">&quot;http://www.w3.org/2001/XMLSchema#string&quot;</span><span class="nt">&gt;</span>(DE-588)118607308<span class="nt">&lt;/knora-api:valueAsString&gt;</span>
+<span class="nt">&lt;/knora-api:TextValue&gt;</span>
+<span class="nt">&lt;knora-api:LinkValue</span><span class="w"> </span><span class="na">rdf:about=</span><span class="s">&quot;http://rdfh.ch/0801/MbZdHVcsR_Ky5pZoytaiBA/values/pVerHO_FRXePZQT9kgEp_Q&quot;</span><span class="nt">&gt;</span>
+<span class="w">    </span><span class="nt">&lt;knora-api:linkValueHasTarget&gt;</span>
+<span class="w">        </span><span class="nt">&lt;beol:person</span><span class="w"> </span><span class="na">rdf:about=</span><span class="s">&quot;http://rdfh.ch/0801/JaQwPsYEQJ6GQrAgKC0Gkw&quot;</span><span class="nt">&gt;</span>
+<span class="w">            </span><span class="nt">&lt;beol:hasFamilyName</span><span class="w"> </span><span class="na">rdf:resource=</span><span class="s">&quot;http://rdfh.ch/0801/JaQwPsYEQJ6GQrAgKC0Gkw/values/k1Exqf93SsWi7LWK9ozXkw&quot;</span><span class="nt">/&gt;</span>
+<span class="w">            </span><span class="nt">&lt;beol:hasGivenName</span><span class="w"> </span><span class="na">rdf:resource=</span><span class="s">&quot;http://rdfh.ch/0801/JaQwPsYEQJ6GQrAgKC0Gkw/values/gkqK5Ij_R7mtO59xfSDGJA&quot;</span><span class="nt">/&gt;</span>
+<span class="w">            </span><span class="nt">&lt;beol:hasIAFIdentifier</span><span class="w"> </span><span class="na">rdf:resource=</span><span class="s">&quot;http://rdfh.ch/0801/JaQwPsYEQJ6GQrAgKC0Gkw/values/C-Dl15S-SV63L1KCCPFfew&quot;</span><span class="nt">/&gt;</span>
+<span class="w">            </span><span class="nt">&lt;rdfs:label</span><span class="w"> </span><span class="na">rdf:datatype=</span><span class="s">&quot;http://www.w3.org/2001/XMLSchema#string&quot;</span><span class="nt">&gt;</span>Jacob<span class="w"> </span>Hermann<span class="nt">&lt;/rdfs:label&gt;</span>
+<span class="w">        </span><span class="nt">&lt;/beol:person&gt;</span>
+<span class="w">    </span><span class="nt">&lt;/knora-api:linkValueHasTarget&gt;</span>
+<span class="nt">&lt;/knora-api:LinkValue&gt;</span>
+<span class="nt">&lt;knora-api:TextValue</span><span class="w"> </span><span class="na">rdf:about=</span><span class="s">&quot;http://rdfh.ch/0801/JaQwPsYEQJ6GQrAgKC0Gkw/values/k1Exqf93SsWi7LWK9ozXkw&quot;</span><span class="nt">&gt;</span>
+<span class="w">    </span><span class="nt">&lt;knora-api:valueAsString</span><span class="w"> </span><span class="na">rdf:datatype=</span><span class="s">&quot;http://www.w3.org/2001/XMLSchema#string&quot;</span><span class="nt">&gt;</span>Hermann<span class="nt">&lt;/knora-api:valueAsString&gt;</span>
+<span class="nt">&lt;/knora-api:TextValue&gt;</span>
+<span class="nt">&lt;knora-api:TextValue</span><span class="w"> </span><span class="na">rdf:about=</span><span class="s">&quot;http://rdfh.ch/0801/JaQwPsYEQJ6GQrAgKC0Gkw/values/gkqK5Ij_R7mtO59xfSDGJA&quot;</span><span class="nt">&gt;</span>
+<span class="w">    </span><span class="nt">&lt;knora-api:valueAsString</span><span class="w"> </span><span class="na">rdf:datatype=</span><span class="s">&quot;http://www.w3.org/2001/XMLSchema#string&quot;</span><span class="nt">&gt;</span>Jacob<span class="nt">&lt;/knora-api:valueAsString&gt;</span>
+<span class="nt">&lt;/knora-api:TextValue&gt;</span>
+<span class="nt">&lt;knora-api:TextValue</span><span class="w"> </span><span class="na">rdf:about=</span><span class="s">&quot;http://rdfh.ch/0801/JaQwPsYEQJ6GQrAgKC0Gkw/values/C-Dl15S-SV63L1KCCPFfew&quot;</span><span class="nt">&gt;</span>
+<span class="w">    </span><span class="nt">&lt;knora-api:valueAsString</span><span class="w"> </span><span class="na">rdf:datatype=</span><span class="s">&quot;http://www.w3.org/2001/XMLSchema#string&quot;</span><span class="nt">&gt;</span>(DE-588)119112450<span class="nt">&lt;/knora-api:valueAsString&gt;</span>
+<span class="nt">&lt;/knora-api:TextValue&gt;</span>
+
+<span class="nt">&lt;/rdf:RDF&gt;</span>
+</code></pre></div>
+<p>In order to convert the metadata (not the actual standoff markup), 
+a <code>knora-base:knora-base:XSLTransformation</code> has to be provided. 
+For our example, it looks like this (see <code>test_data/test_route/texts/beol/header.xsl</code>):</p>
+<div class="highlight"><pre><span></span><code><span class="cp">&lt;?xml version=&quot;1.0&quot; encoding=&quot;UTF-8&quot;?&gt;</span>
+<span class="nt">&lt;xsl:transform</span><span class="w"> </span><span class="na">xmlns:xsl=</span><span class="s">&quot;http://www.w3.org/1999/XSL/Transform&quot;</span>
+<span class="w">               </span><span class="na">xmlns:xs=</span><span class="s">&quot;http://www.w3.org/2001/XMLSchema&quot;</span>
+<span class="w">               </span><span class="na">xmlns:rdf=</span><span class="s">&quot;http://www.w3.org/1999/02/22-rdf-syntax-ns#&quot;</span>
+<span class="w">               </span><span class="na">xmlns:rdfs1=</span><span class="s">&quot;http://www.w3.org/2000/01/rdf-schema#&quot;</span>
+<span class="w">               </span><span class="na">xmlns:beol=</span><span class="s">&quot;http://0.0.0.0:3333/ontology/0801/beol/v2#&quot;</span>
+<span class="w">               </span><span class="na">xmlns:knora-api=</span><span class="s">&quot;http://api.knora.org/ontology/knora-api/v2#&quot;</span>
+<span class="w">               </span><span class="na">exclude-result-prefixes=</span><span class="s">&quot;rdf beol knora-api xs rdfs1&quot;</span><span class="w"> </span><span class="na">version=</span><span class="s">&quot;2.0&quot;</span><span class="nt">&gt;</span>
+
+<span class="w">    </span><span class="nt">&lt;xsl:output</span><span class="w"> </span><span class="na">method=</span><span class="s">&quot;xml&quot;</span><span class="w"> </span><span class="na">omit-xml-declaration=</span><span class="s">&quot;yes&quot;</span><span class="w"> </span><span class="na">encoding=</span><span class="s">&quot;utf-8&quot;</span><span class="w"> </span><span class="na">indent=</span><span class="s">&quot;yes&quot;</span><span class="nt">/&gt;</span>
+
+<span class="w">    </span><span class="cm">&lt;!-- make IAF id a URL --&gt;</span>
+<span class="w">    </span><span class="nt">&lt;xsl:function</span><span class="w"> </span><span class="na">name=</span><span class="s">&quot;knora-api:iaf&quot;</span><span class="w"> </span><span class="na">as=</span><span class="s">&quot;xs:anyURI&quot;</span><span class="nt">&gt;</span>
+<span class="w">        </span><span class="nt">&lt;xsl:param</span><span class="w"> </span><span class="na">name=</span><span class="s">&quot;input&quot;</span><span class="w"> </span><span class="na">as=</span><span class="s">&quot;xs:string&quot;</span><span class="nt">/&gt;</span>
+<span class="w">        </span><span class="nt">&lt;xsl:value-of</span><span class="w"> </span><span class="na">select=</span><span class="s">&quot;replace($input, &#39;\(DE-588\)&#39;, &#39;http://d-nb.info/gnd/&#39;)&quot;</span><span class="nt">/&gt;</span>
+<span class="w">    </span><span class="nt">&lt;/xsl:function&gt;</span>
+
+<span class="w">    </span><span class="cm">&lt;!-- make a standard date (Gregorian calendar assumed) --&gt;</span>
+<span class="w">    </span><span class="nt">&lt;xsl:function</span><span class="w"> </span><span class="na">name=</span><span class="s">&quot;knora-api:dateformat&quot;</span><span class="w"> </span><span class="na">as=</span><span class="s">&quot;element()*&quot;</span><span class="nt">&gt;</span>
+<span class="w">        </span><span class="nt">&lt;xsl:param</span><span class="w"> </span><span class="na">name=</span><span class="s">&quot;input&quot;</span><span class="w"> </span><span class="na">as=</span><span class="s">&quot;element()*&quot;</span><span class="nt">/&gt;</span>
+
+<span class="w">        </span><span class="nt">&lt;xsl:choose&gt;</span>
+<span class="w">            </span><span class="nt">&lt;xsl:when</span><span class="w"> </span><span class="na">test=</span><span class="s">&quot;$input/knora-api:dateValueHasStartYear/text() = $input/knora-api:dateValueHasEndYear/text() and $input/knora-api:dateValueHasStartMonth/text() = $input/knora-api:dateValueHasEndMonth/text() and $input/knora-api:dateValueHasStartDay/text() = $input/knora-api:dateValueHasEndDay/text()&quot;</span><span class="nt">&gt;</span>
+<span class="w">                </span><span class="cm">&lt;!-- no period, day precision --&gt;</span>
+<span class="w">                </span><span class="nt">&lt;date&gt;</span>
+<span class="w">                    </span><span class="nt">&lt;xsl:attribute</span><span class="w"> </span><span class="na">name=</span><span class="s">&quot;when&quot;</span><span class="nt">&gt;</span>
+<span class="w">                        </span><span class="nt">&lt;xsl:value-of</span><span class="w"> </span><span class="na">select=</span><span class="s">&quot;format-number($input/knora-api:dateValueHasStartYear/text(), &#39;0000&#39;)&quot;</span><span class="nt">/&gt;</span>-<span class="nt">&lt;xsl:value-of</span><span class="w"> </span><span class="na">select=</span><span class="s">&quot;format-number($input/knora-api:dateValueHasStartMonth/text(), &#39;00&#39;)&quot;</span><span class="nt">/&gt;</span>-<span class="nt">&lt;xsl:value-of</span><span class="w"> </span><span class="na">select=</span><span class="s">&quot;format-number($input/knora-api:dateValueHasStartMonth/text(), &#39;00&#39;)&quot;</span><span class="nt">/&gt;</span>
+<span class="w">                    </span><span class="nt">&lt;/xsl:attribute&gt;</span>
+<span class="w">                </span><span class="nt">&lt;/date&gt;</span>
+
+<span class="w">            </span><span class="nt">&lt;/xsl:when&gt;</span>
+<span class="w">            </span><span class="nt">&lt;xsl:otherwise&gt;</span>
+<span class="w">                </span><span class="cm">&lt;!-- period --&gt;</span>
+<span class="w">                </span><span class="nt">&lt;date&gt;</span>
+<span class="w">                    </span><span class="nt">&lt;xsl:attribute</span><span class="w"> </span><span class="na">name=</span><span class="s">&quot;notBefore&quot;</span><span class="nt">&gt;</span>
+<span class="w">                        </span><span class="nt">&lt;xsl:value-of</span><span class="w"> </span><span class="na">select=</span><span class="s">&quot;format-number($input/knora-api:dateValueHasStartYear/text(), &#39;0000&#39;)&quot;</span><span class="nt">/&gt;</span>-<span class="nt">&lt;xsl:value-of</span><span class="w"> </span><span class="na">select=</span><span class="s">&quot;format-number($input/knora-api:dateValueHasStartMonth/text(), &#39;00&#39;)&quot;</span><span class="nt">/&gt;</span>-<span class="nt">&lt;xsl:value-of</span><span class="w"> </span><span class="na">select=</span><span class="s">&quot;format-number($input/knora-api:dateValueHasStartDay/text(), &#39;00&#39;)&quot;</span><span class="nt">/&gt;</span>
+<span class="w">                    </span><span class="nt">&lt;/xsl:attribute&gt;</span>
+
+<span class="w">                    </span><span class="nt">&lt;xsl:attribute</span><span class="w"> </span><span class="na">name=</span><span class="s">&quot;notAfter&quot;</span><span class="nt">&gt;</span>
+<span class="w">                        </span><span class="nt">&lt;xsl:value-of</span><span class="w"> </span><span class="na">select=</span><span class="s">&quot;format-number($input/knora-api:dateValueHasEndYear/text(), &#39;0000&#39;)&quot;</span><span class="nt">/&gt;</span>-<span class="nt">&lt;xsl:value-of</span><span class="w"> </span><span class="na">select=</span><span class="s">&quot;format-number($input/knora-api:dateValueHasEndMonth/text(), &#39;00&#39;)&quot;</span><span class="nt">/&gt;</span>-<span class="nt">&lt;xsl:value-of</span><span class="w"> </span><span class="na">select=</span><span class="s">&quot;format-number($input/knora-api:dateValueHasEndDay/text(), &#39;00&#39;)&quot;</span><span class="nt">/&gt;</span>
+<span class="w">                    </span><span class="nt">&lt;/xsl:attribute&gt;</span>
+<span class="w">                </span><span class="nt">&lt;/date&gt;</span>
+
+<span class="w">            </span><span class="nt">&lt;/xsl:otherwise&gt;</span>
+<span class="w">        </span><span class="nt">&lt;/xsl:choose&gt;</span>
+
+
+<span class="w">    </span><span class="nt">&lt;/xsl:function&gt;</span>
+
+<span class="w">    </span><span class="nt">&lt;xsl:template</span><span class="w"> </span><span class="na">match=</span><span class="s">&quot;rdf:RDF&quot;</span><span class="nt">&gt;</span>
+<span class="w">        </span><span class="nt">&lt;xsl:variable</span><span class="w"> </span><span class="na">name=</span><span class="s">&quot;resourceIri&quot;</span><span class="w"> </span><span class="na">select=</span><span class="s">&quot;beol:letter/@rdf:about&quot;</span><span class="nt">/&gt;</span>
+<span class="w">        </span><span class="nt">&lt;xsl:variable</span><span class="w"> </span><span class="na">name=</span><span class="s">&quot;label&quot;</span><span class="w"> </span><span class="na">select=</span><span class="s">&quot;beol:letter/rdfs1:label/text()&quot;</span><span class="nt">/&gt;</span>
+
+
+<span class="w">        </span><span class="nt">&lt;teiHeader&gt;</span>
+<span class="w">            </span><span class="nt">&lt;fileDesc&gt;</span>
+<span class="w">                </span><span class="nt">&lt;titleStmt&gt;</span>
+<span class="w">                    </span><span class="nt">&lt;title&gt;</span>
+<span class="w">                        </span><span class="nt">&lt;xsl:value-of</span><span class="w"> </span><span class="na">select=</span><span class="s">&quot;$label&quot;</span><span class="nt">/&gt;</span>
+<span class="w">                    </span><span class="nt">&lt;/title&gt;</span>
+<span class="w">                </span><span class="nt">&lt;/titleStmt&gt;</span>
+<span class="w">                </span><span class="nt">&lt;publicationStmt&gt;</span>
+<span class="w">                    </span><span class="nt">&lt;p&gt;</span><span class="w"> </span>This<span class="w"> </span>is<span class="w"> </span>the<span class="w"> </span>TEI/XML<span class="w"> </span>representation<span class="w"> </span>of<span class="w"> </span>the<span class="w"> </span>resource<span class="w"> </span>identified<span class="w"> </span>by<span class="w"> </span>the<span class="w"> </span>Iri
+<span class="w">                        </span><span class="nt">&lt;xsl:value-of</span><span class="w"> </span><span class="na">select=</span><span class="s">&quot;$resourceIri&quot;</span><span class="nt">/&gt;</span>.<span class="w"> </span><span class="nt">&lt;/p&gt;</span>
+<span class="w">                </span><span class="nt">&lt;/publicationStmt&gt;</span>
+<span class="w">                </span><span class="nt">&lt;sourceDesc&gt;</span>
+<span class="w">                    </span><span class="nt">&lt;p&gt;</span>Representation<span class="w"> </span>of<span class="w"> </span>the<span class="w"> </span>resource&#39;s<span class="w"> </span>text<span class="w"> </span>as<span class="w"> </span>TEI/XML<span class="nt">&lt;/p&gt;</span>
+<span class="w">                </span><span class="nt">&lt;/sourceDesc&gt;</span>
+<span class="w">            </span><span class="nt">&lt;/fileDesc&gt;</span>
+<span class="w">            </span><span class="nt">&lt;profileDesc&gt;</span>
+
+<span class="w">                </span><span class="nt">&lt;correspDesc&gt;</span>
+<span class="w">                    </span><span class="nt">&lt;xsl:attribute</span><span class="w"> </span><span class="na">name=</span><span class="s">&quot;ref&quot;</span><span class="nt">&gt;</span>
+<span class="w">                        </span><span class="nt">&lt;xsl:value-of</span><span class="w"> </span><span class="na">select=</span><span class="s">&quot;$resourceIri&quot;</span><span class="nt">/&gt;</span>
+<span class="w">                    </span><span class="nt">&lt;/xsl:attribute&gt;</span>
+<span class="w">                    </span><span class="nt">&lt;xsl:apply-templates/&gt;</span>
+<span class="w">                </span><span class="nt">&lt;/correspDesc&gt;</span>
+<span class="w">            </span><span class="nt">&lt;/profileDesc&gt;</span>
+<span class="w">        </span><span class="nt">&lt;/teiHeader&gt;</span>
+<span class="w">    </span><span class="nt">&lt;/xsl:template&gt;</span>
+
+<span class="w">    </span><span class="nt">&lt;xsl:template</span><span class="w"> </span><span class="na">match=</span><span class="s">&quot;beol:letter/beol:hasAuthorValue&quot;</span><span class="nt">&gt;</span>
+<span class="w">        </span><span class="nt">&lt;xsl:variable</span><span class="w"> </span><span class="na">name=</span><span class="s">&quot;authorValue&quot;</span><span class="w"> </span><span class="na">select=</span><span class="s">&quot;@rdf:resource&quot;</span><span class="nt">/&gt;</span>
+
+<span class="w">        </span><span class="nt">&lt;xsl:variable</span><span class="w"> </span><span class="na">name=</span><span class="s">&quot;authorIAFValue&quot;</span>
+<span class="w">                      </span><span class="na">select=</span><span class="s">&quot;//knora-api:LinkValue[@rdf:about=$authorValue]//beol:hasIAFIdentifier/@rdf:resource&quot;</span><span class="nt">/&gt;</span>
+<span class="w">        </span><span class="nt">&lt;xsl:variable</span><span class="w"> </span><span class="na">name=</span><span class="s">&quot;authorFamilyNameValue&quot;</span>
+<span class="w">                      </span><span class="na">select=</span><span class="s">&quot;//knora-api:LinkValue[@rdf:about=$authorValue]//beol:hasFamilyName/@rdf:resource&quot;</span><span class="nt">/&gt;</span>
+<span class="w">        </span><span class="nt">&lt;xsl:variable</span><span class="w"> </span><span class="na">name=</span><span class="s">&quot;authorGivenNameValue&quot;</span>
+<span class="w">                      </span><span class="na">select=</span><span class="s">&quot;//knora-api:LinkValue[@rdf:about=$authorValue]//beol:hasGivenName/@rdf:resource&quot;</span><span class="nt">/&gt;</span>
+
+<span class="w">        </span><span class="nt">&lt;correspAction</span><span class="w"> </span><span class="na">type=</span><span class="s">&quot;sent&quot;</span><span class="nt">&gt;</span>
+
+<span class="w">            </span><span class="nt">&lt;xsl:variable</span><span class="w"> </span><span class="na">name=</span><span class="s">&quot;authorIAFText&quot;</span>
+<span class="w">                          </span><span class="na">select=</span><span class="s">&quot;//knora-api:TextValue[@rdf:about=$authorIAFValue]/knora-api:valueAsString/text()&quot;</span><span class="nt">/&gt;</span>
+<span class="w">            </span><span class="nt">&lt;xsl:variable</span><span class="w"> </span><span class="na">name=</span><span class="s">&quot;authorFamilyNameText&quot;</span>
+<span class="w">                          </span><span class="na">select=</span><span class="s">&quot;//knora-api:TextValue[@rdf:about=$authorFamilyNameValue]/knora-api:valueAsString/text()&quot;</span><span class="nt">/&gt;</span>
+<span class="w">            </span><span class="nt">&lt;xsl:variable</span><span class="w"> </span><span class="na">name=</span><span class="s">&quot;authorGivenNameText&quot;</span>
+<span class="w">                          </span><span class="na">select=</span><span class="s">&quot;//knora-api:TextValue[@rdf:about=$authorGivenNameValue]/knora-api:valueAsString/text()&quot;</span><span class="nt">/&gt;</span>
+
+<span class="w">            </span><span class="nt">&lt;persName&gt;</span>
+<span class="w">                </span><span class="nt">&lt;xsl:attribute</span><span class="w"> </span><span class="na">name=</span><span class="s">&quot;ref&quot;</span><span class="nt">&gt;&lt;xsl:value-of</span><span class="w"> </span><span class="na">select=</span><span class="s">&quot;knora-api:iaf($authorIAFText)&quot;</span>
+<span class="w">                </span><span class="nt">/&gt;&lt;/xsl:attribute&gt;</span>
+<span class="w">                </span><span class="nt">&lt;xsl:value-of</span><span class="w"> </span><span class="na">select=</span><span class="s">&quot;$authorFamilyNameText&quot;</span><span class="nt">/&gt;</span>,<span class="w"> </span><span class="nt">&lt;xsl:value-of</span>
+<span class="w">                    </span><span class="na">select=</span><span class="s">&quot;$authorGivenNameText&quot;</span><span class="nt">/&gt;</span>
+<span class="w">            </span><span class="nt">&lt;/persName&gt;</span>
+
+<span class="w">            </span><span class="nt">&lt;xsl:variable</span><span class="w"> </span><span class="na">name=</span><span class="s">&quot;dateValue&quot;</span><span class="w"> </span><span class="na">select=</span><span class="s">&quot;//beol:creationDate/@rdf:resource&quot;</span><span class="nt">/&gt;</span>
+
+<span class="w">            </span><span class="nt">&lt;xsl:variable</span><span class="w"> </span><span class="na">name=</span><span class="s">&quot;dateObj&quot;</span>
+<span class="w">                          </span><span class="na">select=</span><span class="s">&quot;//knora-api:DateValue[@rdf:about=$dateValue]&quot;</span><span class="nt">/&gt;</span>
+
+<span class="w">            </span><span class="nt">&lt;xsl:copy-of</span><span class="w"> </span><span class="na">select=</span><span class="s">&quot;knora-api:dateformat($dateObj)&quot;</span><span class="nt">/&gt;</span>
+
+<span class="w">        </span><span class="nt">&lt;/correspAction&gt;</span>
+<span class="w">    </span><span class="nt">&lt;/xsl:template&gt;</span>
+
+<span class="w">    </span><span class="nt">&lt;xsl:template</span><span class="w"> </span><span class="na">match=</span><span class="s">&quot;beol:letter/beol:hasRecipientValue&quot;</span><span class="nt">&gt;</span>
+<span class="w">        </span><span class="nt">&lt;xsl:variable</span><span class="w"> </span><span class="na">name=</span><span class="s">&quot;recipientValue&quot;</span><span class="w"> </span><span class="na">select=</span><span class="s">&quot;@rdf:resource&quot;</span><span class="nt">/&gt;</span>
+
+<span class="w">        </span><span class="nt">&lt;xsl:variable</span><span class="w"> </span><span class="na">name=</span><span class="s">&quot;recipientIAFValue&quot;</span>
+<span class="w">                      </span><span class="na">select=</span><span class="s">&quot;//knora-api:LinkValue[@rdf:about=$recipientValue]//beol:hasIAFIdentifier/@rdf:resource&quot;</span><span class="nt">/&gt;</span>
+<span class="w">        </span><span class="nt">&lt;xsl:variable</span><span class="w"> </span><span class="na">name=</span><span class="s">&quot;recipientFamilyNameValue&quot;</span>
+<span class="w">                      </span><span class="na">select=</span><span class="s">&quot;//knora-api:LinkValue[@rdf:about=$recipientValue]//beol:hasFamilyName/@rdf:resource&quot;</span><span class="nt">/&gt;</span>
+<span class="w">        </span><span class="nt">&lt;xsl:variable</span><span class="w"> </span><span class="na">name=</span><span class="s">&quot;recipientGivenNameValue&quot;</span>
+<span class="w">                      </span><span class="na">select=</span><span class="s">&quot;//knora-api:LinkValue[@rdf:about=$recipientValue]//beol:hasGivenName/@rdf:resource&quot;</span><span class="nt">/&gt;</span>
+
+<span class="w">        </span><span class="nt">&lt;correspAction</span><span class="w"> </span><span class="na">type=</span><span class="s">&quot;received&quot;</span><span class="nt">&gt;</span>
+
+<span class="w">            </span><span class="nt">&lt;xsl:variable</span><span class="w"> </span><span class="na">name=</span><span class="s">&quot;recipientIAFText&quot;</span>
+<span class="w">                          </span><span class="na">select=</span><span class="s">&quot;//knora-api:TextValue[@rdf:about=$recipientIAFValue]/knora-api:valueAsString/text()&quot;</span><span class="nt">/&gt;</span>
+<span class="w">            </span><span class="nt">&lt;xsl:variable</span><span class="w"> </span><span class="na">name=</span><span class="s">&quot;recipientFamilyNameText&quot;</span>
+<span class="w">                          </span><span class="na">select=</span><span class="s">&quot;//knora-api:TextValue[@rdf:about=$recipientFamilyNameValue]/knora-api:valueAsString/text()&quot;</span><span class="nt">/&gt;</span>
+<span class="w">            </span><span class="nt">&lt;xsl:variable</span><span class="w"> </span><span class="na">name=</span><span class="s">&quot;recipientGivenNameText&quot;</span>
+<span class="w">                          </span><span class="na">select=</span><span class="s">&quot;//knora-api:TextValue[@rdf:about=$recipientGivenNameValue]/knora-api:valueAsString/text()&quot;</span><span class="nt">/&gt;</span>
+
+<span class="w">            </span><span class="nt">&lt;persName&gt;</span>
+<span class="w">                </span><span class="nt">&lt;xsl:attribute</span><span class="w"> </span><span class="na">name=</span><span class="s">&quot;ref&quot;</span><span class="nt">&gt;&lt;xsl:value-of</span><span class="w"> </span><span class="na">select=</span><span class="s">&quot;knora-api:iaf($recipientIAFText)&quot;</span>
+<span class="w">                </span><span class="nt">/&gt;&lt;/xsl:attribute&gt;</span>
+<span class="w">                </span><span class="nt">&lt;xsl:value-of</span><span class="w"> </span><span class="na">select=</span><span class="s">&quot;$recipientFamilyNameText&quot;</span><span class="nt">/&gt;</span>,<span class="w"> </span><span class="nt">&lt;xsl:value-of</span>
+<span class="w">                    </span><span class="na">select=</span><span class="s">&quot;$recipientGivenNameText&quot;</span><span class="nt">/&gt;</span>
+<span class="w">            </span><span class="nt">&lt;/persName&gt;</span>
+
+<span class="w">        </span><span class="nt">&lt;/correspAction&gt;</span>
+<span class="w">    </span><span class="nt">&lt;/xsl:template&gt;</span>
+
+<span class="w">    </span><span class="cm">&lt;!-- ignore text if there is no template for the element containing it --&gt;</span>
+<span class="w">    </span><span class="nt">&lt;xsl:template</span><span class="w"> </span><span class="na">match=</span><span class="s">&quot;text()&quot;</span><span class="nt">&gt;</span><span class="w"> </span><span class="nt">&lt;/xsl:template&gt;</span>
+
+
+<span class="nt">&lt;/xsl:transform&gt;</span>
+</code></pre></div>
+<p>You can use the functions <code>knora-api:iaf</code> and <code>knora-api:dateformat</code> in your own XSLT in case you want to support <code>correspSearch</code>.</p>
+<p>The complete request looks like this:</p>
+<div class="highlight"><pre><span></span><code>HTTP GET request to http://host/v2/tei/resourceIri&amp;textProperty=textPropertyIri&amp;mappingIri=mappingIri&amp;gravsearchTemplateIri=gravsearchTemplateIri&amp;teiHeaderXSLTIri=teiHeaderXSLTIri
+</code></pre></div>
+
+
+
+
+
+
+
+  
+    
+  
+  
+
+
+  <aside class="md-source-file">
+    
+      
+  <span class="md-source-file__fact">
+    <span class="md-icon" title="Last update">
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M21 13.1c-.1 0-.3.1-.4.2l-1 1 2.1 2.1 1-1c.2-.2.2-.6 0-.8l-1.3-1.3c-.1-.1-.2-.2-.4-.2m-1.9 1.8-6.1 6V23h2.1l6.1-6.1-2.1-2M12.5 7v5.2l4 2.4-1 1L11 13V7h1.5M11 21.9c-5.1-.5-9-4.8-9-9.9C2 6.5 6.5 2 12 2c5.3 0 9.6 4.1 10 9.3-.3-.1-.6-.2-1-.2s-.7.1-1 .2C19.6 7.2 16.2 4 12 4c-4.4 0-8 3.6-8 8 0 4.1 3.1 7.5 7.1 7.9l-.1.2v1.8Z"/></svg>
+    </span>
+    <span class="git-revision-date-localized-plugin git-revision-date-localized-plugin-date">February 20, 2025</span>
+  </span>
+
+    
+    
+    
+    
+  </aside>
+
+
+
+
+
+                
+              </article>
+            </div>
+          
+          
+<script>var target=document.getElementById(location.hash.slice(1));target&&target.name&&(target.checked=target.name.startsWith("__tabbed_"))</script>
+        </div>
+        
+          <button type="button" class="md-top md-icon" data-md-component="top" hidden>
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M13 20h-2V8l-5.5 5.5-1.42-1.42L12 4.16l7.92 7.92-1.42 1.42L13 8v12Z"/></svg>
+  Back to top
+</button>
+        
+      </main>
+      
+        <footer class="md-footer">
+  
+  <div class="md-footer-meta md-typeset">
+    <div class="md-footer-meta__inner md-grid">
+      <div class="md-copyright">
+  
+  
+    Made with
+    <a href="https://squidfunk.github.io/mkdocs-material/" target="_blank" rel="noopener">
+      Material for MkDocs
+    </a>
+  
+</div>
+      
+    </div>
+  </div>
+</footer>
+      
+    </div>
+    <div class="md-dialog" data-md-component="dialog">
+      <div class="md-dialog__inner md-typeset"></div>
+    </div>
+    
+    
+    <script id="__config" type="application/json">{"base": "../../../..", "features": ["navigation.instant", "navigation.tracking", "navigation.top", "search.suggest", "version"], "search": "../../../../assets/javascripts/workers/search.b8dbb3d2.min.js", "translations": {"clipboard.copied": "Copied to clipboard", "clipboard.copy": "Copy to clipboard", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.placeholder": "Type to start searching", "search.result.term.missing": "Missing", "select.version": "Select version"}}</script>
+    
+    
+      <script src="../../../../assets/javascripts/bundle.1e8ae164.min.js"></script>
+      
+    
+  </body>
+</html>

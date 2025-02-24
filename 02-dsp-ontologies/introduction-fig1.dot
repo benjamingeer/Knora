@@ -1,0 +1,10 @@
+digraph {
+   rankdir = LR
+
+   node [style = filled, fontcolor = white]
+
+   subject [color = navy, fillcolor = slateblue4]
+   object [color = tomato3, fillcolor = tomato2]
+
+   subject -> object [label = "predicate", fontsize = 11, color = cyan4]
+}

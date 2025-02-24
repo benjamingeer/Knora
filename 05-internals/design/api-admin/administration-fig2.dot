@@ -1,0 +1,18 @@
+digraph G {
+  a [label="Start"];
+
+  b [label="Get all groups for user"];
+  c [label="Get all permissions attached to Resource/Value"];
+  d [label="Calculate max permission user has on Resource/Value through group membership"];
+  e [label="Decide if user is allowed to perform operation"];
+
+  z [label="End"];
+
+  a -> b;
+  a -> c;
+  b -> d;
+  c -> d;
+  d -> e;
+
+  e -> z;
+}
