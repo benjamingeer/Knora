@@ -24,7 +24,6 @@ import org.knora.webapi.core.MessageRelay
 import org.knora.webapi.messages.SmartIri
 import org.knora.webapi.messages.StringFormatter
 import org.knora.webapi.messages.ValuesValidator
-import org.knora.webapi.messages.ValuesValidator.arkTimestampToInstant
 import org.knora.webapi.messages.ValuesValidator.xsdDateTimeStampToInstant
 import org.knora.webapi.messages.v2.responder.resourcemessages.*
 import org.knora.webapi.messages.v2.responder.valuemessages.*
@@ -76,7 +75,6 @@ final case class ResourcesRouteV2(appConfig: AppConfig)(
       getResourceHistory() ~
       getResourceHistoryEvents() ~
       getProjectResourceAndValueHistory() ~
-      getResources() ~
       getResourcesPreview() ~
       getResourcesTei() ~
       getResourcesGraph() ~
@@ -260,29 +258,6 @@ final case class ResourcesRouteV2(appConfig: AppConfig)(
         RouteUtilV2.runRdfRouteZ(requestTask, requestContext)
       }
     }
-
-  private def getResources(): Route = path(resourcesBasePath / Segments) { (resIris: Seq[String]) =>
-    get { requestContext =>
-      val targetSchemaTask      = RouteUtilV2.getOntologySchema(requestContext)
-      val schemaOptionsTask     = RouteUtilV2.getSchemaOptions(requestContext)
-      val params: Map[IRI, IRI] = requestContext.request.uri.query().toMap
-      val versionDateParser     = (s: String) => xsdDateTimeStampToInstant(s).orElse(arkTimestampToInstant(s))
-      val requestTask = for {
-        resourceIris   <- getResourceIris(resIris)
-        versionDate    <- getInstantFromParams(params, "version", "version date", versionDateParser)
-        targetSchema   <- targetSchemaTask
-        requestingUser <- ZIO.serviceWithZIO[Authenticator](_.getUserADM(requestContext))
-        schemaOptions  <- schemaOptionsTask
-      } yield ResourcesGetRequestV2(
-        resourceIris,
-        versionDate = versionDate,
-        targetSchema = targetSchema,
-        schemaOptions = schemaOptions,
-        requestingUser = requestingUser,
-      )
-      RouteUtilV2.runRdfRouteZ(requestTask, requestContext, targetSchemaTask, schemaOptionsTask.map(Some(_)))
-    }
-  }
 
   private def getResourceIris(resIris: Seq[IRI]): IO[BadRequestException, Seq[IRI]] =
     ZIO

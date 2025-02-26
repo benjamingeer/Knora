@@ -5,12 +5,16 @@
 
 package org.knora.webapi.slice.resources.api.model
 
+import sttp.tapir.Codec
+import sttp.tapir.CodecFormat.TextPlain
+import sttp.tapir.model.Delimited
 import zio.json.JsonCodec
 
 import java.time.Instant
 import java.util.UUID
 import scala.util.Try
 
+import dsp.valueobjects.Iri
 import dsp.valueobjects.UuidUtil
 import org.knora.webapi.messages.ValuesValidator
 import org.knora.webapi.slice.admin.api.Codecs.*
@@ -27,16 +31,26 @@ object ValueUuid extends WithFrom[String, ValueUuid] {
     Try(UuidUtil.decode(str)).toEither.left.map(_.getMessage).map(ValueUuid(_))
 }
 
-final case class ValueVersionDate private (value: Instant) extends Value[Instant]
-object ValueVersionDate extends WithFrom[String, ValueVersionDate] {
+final case class VersionDate private (value: Instant) extends Value[Instant]
+object VersionDate extends WithFrom[String, VersionDate] {
 
-  given JsonCodec[ValueVersionDate]              = JsonCodec[String].transformOrFail(from, _.value.toString)
-  given TapirCodec.StringCodec[ValueVersionDate] = TapirCodec.stringCodec(from, _.value.toString)
+  given JsonCodec[VersionDate]              = JsonCodec[String].transformOrFail(from, _.value.toString)
+  given TapirCodec.StringCodec[VersionDate] = TapirCodec.stringCodec(from, _.value.toString)
 
-  override def from(str: String): Either[String, ValueVersionDate] =
+  override def from(str: String): Either[String, VersionDate] =
     ValuesValidator
       .xsdDateTimeStampToInstant(str)
       .orElse(ValuesValidator.arkTimestampToInstant(str))
-      .map(ValueVersionDate(_))
+      .map(VersionDate(_))
       .toRight(s"Invalid value version date: $str")
+}
+
+final case class ResourceIri(value: String)
+object ResourceIri {
+
+  def from(str: String): Either[String, ResourceIri] =
+    if Iri.isIri(str) then Right(ResourceIri(str)) else Left(s"Invalid IRI: $str")
+
+  given TapirCodec.StringCodec[ResourceIri]                   = TapirCodec.stringCodec(ResourceIri.from, _.value)
+  given Codec[String, Delimited[",", ResourceIri], TextPlain] = Codec.delimited
 }

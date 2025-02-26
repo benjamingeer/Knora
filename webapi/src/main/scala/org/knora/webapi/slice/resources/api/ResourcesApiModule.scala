@@ -16,13 +16,14 @@ import org.knora.webapi.slice.common.api.BaseEndpoints
 import org.knora.webapi.slice.common.api.HandlerMapper
 import org.knora.webapi.slice.common.api.KnoraResponseRenderer
 import org.knora.webapi.slice.common.api.TapirToPekkoInterpreter
+import org.knora.webapi.slice.resources.api.service.ResourcesRestService
 import org.knora.webapi.slice.resources.api.service.ValuesRestService
 
 object ResourcesApiModule
     extends URModule[
       ApiComplexV2JsonLdRequestParser & BaseEndpoints & HandlerMapper & KnoraResponseRenderer & ResourcesResponderV2 &
         TapirToPekkoInterpreter & ValuesResponderV2,
-      ResourcesApiRoutes & ValuesEndpoints,
+      ResourcesApiRoutes & ValuesEndpoints & ResourcesEndpoints,
     ] { self =>
 
   override def layer: URLayer[self.Dependencies, self.Provided] =
@@ -30,6 +31,9 @@ object ResourcesApiModule
       ValuesEndpointsHandler.layer,
       ValuesEndpoints.layer,
       ValuesRestService.layer,
+      ResourcesEndpoints.layer,
+      ResourcesEndpointsHandler.layer,
+      ResourcesRestService.layer,
       ResourcesApiRoutes.layer,
     )
 }
