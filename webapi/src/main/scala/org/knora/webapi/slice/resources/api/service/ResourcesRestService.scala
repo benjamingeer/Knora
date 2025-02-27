@@ -12,9 +12,20 @@ import org.knora.webapi.slice.admin.domain.model.User
 import org.knora.webapi.slice.common.api.KnoraResponseRenderer
 import org.knora.webapi.slice.common.api.KnoraResponseRenderer.FormatOptions
 import org.knora.webapi.slice.common.api.KnoraResponseRenderer.RenderedResponse
+import org.knora.webapi.slice.resources.api.model.IriDto
 import org.knora.webapi.slice.resources.api.model.VersionDate
 
 final case class ResourcesRestService(resourcesService: ResourcesResponderV2, renderer: KnoraResponseRenderer) {
+
+  def getResourceHistory(user: User)(
+    resourceIri: IriDto,
+    formatOptions: FormatOptions,
+    startDate: Option[VersionDate],
+    endDate: Option[VersionDate],
+  ): Task[(RenderedResponse, MediaType)] =
+    resourcesService
+      .getResourceHistory(resourceIri.value, startDate, endDate, user)
+      .flatMap(renderer.render(_, formatOptions))
 
   def getResources(user: User)(
     resourceIris: List[String],

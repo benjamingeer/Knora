@@ -12,8 +12,6 @@ import org.apache.pekko.http.scaladsl.server.Route
 import zio.*
 import zio.ZIO
 
-import java.time.Instant
-
 import dsp.errors.BadRequestException
 import dsp.valueobjects.Iri
 import org.knora.webapi.*
@@ -24,7 +22,6 @@ import org.knora.webapi.core.MessageRelay
 import org.knora.webapi.messages.SmartIri
 import org.knora.webapi.messages.StringFormatter
 import org.knora.webapi.messages.ValuesValidator
-import org.knora.webapi.messages.ValuesValidator.xsdDateTimeStampToInstant
 import org.knora.webapi.messages.v2.responder.resourcemessages.*
 import org.knora.webapi.messages.v2.responder.valuemessages.*
 import org.knora.webapi.responders.v2.SearchResponderV2
@@ -72,7 +69,6 @@ final case class ResourcesRouteV2(appConfig: AppConfig)(
       createResource() ~
       updateResourceMetadata() ~
       getResourcesInProject() ~
-      getResourceHistory() ~
       getResourceHistoryEvents() ~
       getProjectResourceAndValueHistory() ~
       getResourcesPreview() ~
@@ -194,49 +190,6 @@ final case class ResourcesRouteV2(appConfig: AppConfig)(
       RouteUtilV2.completeResponse(response, requestContext, targetSchemaTask)
     }
   }
-
-  private def getResourceHistory(): Route =
-    path(resourcesBasePath / "history" / Segment) { (resourceIriStr: IRI) =>
-      get { requestContext =>
-        val getResourceIri = Iri
-          .validateAndEscapeIri(resourceIriStr)
-          .toZIO
-          .orElseFail(BadRequestException(s"Invalid resource IRI: $resourceIriStr"))
-        val params = requestContext.request.uri.query().toMap
-        val getStartDate =
-          getInstantFromParams(params, "startDate", "start date", xsdDateTimeStampToInstant)
-        val getEndDate =
-          getInstantFromParams(params, "endDate", "end date", xsdDateTimeStampToInstant)
-        val requestTask = for {
-          resourceIri    <- getResourceIri
-          startDate      <- getStartDate
-          endDate        <- getEndDate
-          requestingUser <- ZIO.serviceWithZIO[Authenticator](_.getUserADM(requestContext))
-        } yield ResourceVersionHistoryGetRequestV2(
-          resourceIri,
-          withDeletedResource = false,
-          startDate,
-          endDate,
-          requestingUser,
-        )
-        RouteUtilV2.runRdfRouteZ(requestTask, requestContext)
-      }
-    }
-
-  private def getInstantFromParams(
-    params: Map[String, String],
-    key: String,
-    name: String,
-    dateParser: String => Option[Instant],
-  ): IO[BadRequestException, Option[Instant]] =
-    params
-      .get(key)
-      .map(dateStr =>
-        ZIO
-          .fromOption(dateParser(dateStr))
-          .mapBoth(_ => BadRequestException(s"Invalid $name: $dateStr"), Some(_)),
-      )
-      .getOrElse(ZIO.none)
 
   private def getResourceHistoryEvents(): Route =
     path(resourcesBasePath / "resourceHistoryEvents" / Segment) { (resourceIri: IRI) =>

@@ -18,6 +18,7 @@ final class ResourcesEndpointsHandler(
 
   val allHandlers =
     Seq(
+      SecuredEndpointHandler(resourcesEndpoints.getResourcesHistory, resourcesRestService.getResourceHistory),
       SecuredEndpointHandler(resourcesEndpoints.getResources, resourcesRestService.getResources),
     ).map(mapper.mapSecuredEndpointHandler(_))
 }

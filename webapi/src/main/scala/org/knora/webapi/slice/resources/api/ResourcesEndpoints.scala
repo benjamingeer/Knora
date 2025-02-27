@@ -18,6 +18,7 @@ import dsp.errors.RequestRejectedException
 import org.knora.webapi.slice.admin.domain.model.User
 import org.knora.webapi.slice.common.api.ApiV2
 import org.knora.webapi.slice.common.api.BaseEndpoints
+import org.knora.webapi.slice.resources.api.model.IriDto
 import org.knora.webapi.slice.resources.api.model.VersionDate
 
 final case class ResourcesEndpoints(private val baseEndpoints: BaseEndpoints) {
@@ -32,6 +33,30 @@ final case class ResourcesEndpoints(private val baseEndpoints: BaseEndpoints) {
       case _            => None
     }(d => (d, d))
 
+  private val startDateQuery = query[Option[VersionDate]]("startDate")
+    .and(query[Option[VersionDate]]("start date"))
+    .map {
+      case (Some(v), _) => Some(v)
+      case (_, Some(v)) => Some(v)
+      case _            => None
+    }(d => (d, d))
+
+  private val endDateQuery = query[Option[VersionDate]]("endDate")
+    .and(query[Option[VersionDate]]("end date"))
+    .map {
+      case (Some(v), _) => Some(v)
+      case (_, Some(v)) => Some(v)
+      case _            => None
+    }(d => (d, d))
+
+  val getResourcesHistory = baseEndpoints.withUserEndpoint.get
+    .in(base / "history" / path[IriDto].name("resourceIri"))
+    .in(ApiV2.Inputs.formatOptions)
+    .in(startDateQuery)
+    .in(endDateQuery)
+    .out(stringBody)
+    .out(header[MediaType](HeaderNames.ContentType))
+
   val getResources = baseEndpoints.withUserEndpoint.get
     .in(base / paths)
     .in(ApiV2.Inputs.formatOptions)
@@ -40,6 +65,7 @@ final case class ResourcesEndpoints(private val baseEndpoints: BaseEndpoints) {
     .out(header[MediaType](HeaderNames.ContentType))
 
   val endpoints: Seq[AnyEndpoint] = Seq(
+    getResourcesHistory,
     getResources,
   ).map(_.endpoint.tag("V2 Resources"))
 }

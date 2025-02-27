@@ -7,6 +7,7 @@ package org.knora.webapi.responders.v2
 
 import com.typesafe.scalalogging.LazyLogging
 import zio.*
+import zio.Task
 import zio.ZIO
 
 import java.time.Instant
@@ -50,6 +51,7 @@ import org.knora.webapi.slice.admin.domain.service.LegalInfoService
 import org.knora.webapi.slice.admin.domain.service.ProjectService
 import org.knora.webapi.slice.ontology.domain.service.OntologyRepo
 import org.knora.webapi.slice.ontology.domain.service.OntologyService
+import org.knora.webapi.slice.resources.api.model.VersionDate
 import org.knora.webapi.slice.resources.repo.service.ResourcesRepo
 import org.knora.webapi.store.iiif.errors.SipiException
 import org.knora.webapi.store.triplestore.api.TriplestoreService
@@ -1327,6 +1329,22 @@ final case class ResourcesResponderV2(
       ontologySchema = InternalSchema,
     )
   }
+
+  def getResourceHistory(
+    resourceIri: String,
+    startDate: Option[VersionDate],
+    endDate: Option[VersionDate],
+    requestingUser: User,
+  ): Task[ResourceVersionHistoryResponseV2] =
+    getResourceHistoryV2(
+      ResourceVersionHistoryGetRequestV2(
+        resourceIri,
+        withDeletedResource = false,
+        startDate.map(_.value),
+        endDate.map(_.value),
+        requestingUser,
+      ),
+    )
 
   /**
    * Returns the version history of a resource.
