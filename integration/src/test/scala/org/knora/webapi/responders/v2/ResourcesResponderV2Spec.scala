@@ -38,6 +38,7 @@ import org.knora.webapi.models.filemodels.*
 import org.knora.webapi.responders.v2.ResourcesResponseCheckerV2.compareReadResourcesSequenceV2Response
 import org.knora.webapi.routing.UnsafeZioRun
 import org.knora.webapi.sharedtestdata.SharedTestDataADM
+import org.knora.webapi.slice.admin.domain.model.KnoraProject.ProjectIri
 import org.knora.webapi.slice.admin.domain.model.User
 import org.knora.webapi.slice.resources.IiifImageRequestUrl
 import org.knora.webapi.store.triplestore.api.TriplestoreService
@@ -2567,9 +2568,7 @@ class ResourcesResponderV2Spec extends CoreSpec with ImplicitSender { self =>
       expectMsgType[UpdateResourceMetadataResponseV2](timeout)
 
       val events = UnsafeZioRun.runOrThrow(
-        ZIO.serviceWithZIO[ResourcesResponderV2](
-          _.getResourceHistoryEvents(resourceIri, anythingUserProfile).map(_.historyEvents),
-        ),
+        resourcesResponderV2(_.getResourceHistoryEvents(resourceIri, anythingUserProfile).map(_.historyEvents)),
       )
       events.size should be(2)
       val updateMetadataEvent: Option[ResourceAndValueHistoryEvent] =
@@ -2578,25 +2577,27 @@ class ResourcesResponderV2Spec extends CoreSpec with ImplicitSender { self =>
     }
 
     "not return resources of a project which does not exist" in {
-
-      appActor ! ProjectResourcesWithHistoryGetRequestV2(
-        projectIri = "http://rdfh.ch/projects/1111",
-        requestingUser = SharedTestDataADM.anythingAdminUser,
+      val exit = UnsafeZioRun.run(
+        resourcesResponderV2(
+          _.getProjectResourceHistoryEvents(
+            ProjectIri.unsafeFrom("http://rdfh.ch/projects/1111"),
+            SharedTestDataADM.anythingAdminUser,
+          ),
+        ),
       )
-      expectMsgPF(timeout) { case msg: Failure =>
-        msg.cause.isInstanceOf[NotFoundException] should ===(true)
-      }
+      assertFailsWithA[NotFoundException](exit)
     }
 
     "return seq of full history events for each resource of a project" in {
-      appActor ! ProjectResourcesWithHistoryGetRequestV2(
-        projectIri = "http://rdfh.ch/projects/0001",
-        requestingUser = SharedTestDataADM.anythingAdminUser,
+      val response = UnsafeZioRun.runOrThrow(
+        resourcesResponderV2(
+          _.getProjectResourceHistoryEvents(
+            ProjectIri.unsafeFrom("http://rdfh.ch/projects/0001"),
+            SharedTestDataADM.anythingAdminUser,
+          ),
+        ),
       )
-      val response: ResourceAndValueVersionHistoryResponseV2 =
-        expectMsgType[ResourceAndValueVersionHistoryResponseV2](timeout)
       response.historyEvents.size should be > 1
-
     }
   }
 }

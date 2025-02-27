@@ -8,6 +8,7 @@ import sttp.model.MediaType
 import zio.*
 
 import org.knora.webapi.responders.v2.ResourcesResponderV2
+import org.knora.webapi.slice.admin.domain.model.KnoraProject.ProjectIri
 import org.knora.webapi.slice.admin.domain.model.User
 import org.knora.webapi.slice.common.api.KnoraResponseRenderer
 import org.knora.webapi.slice.common.api.KnoraResponseRenderer.FormatOptions
@@ -16,6 +17,13 @@ import org.knora.webapi.slice.resources.api.model.IriDto
 import org.knora.webapi.slice.resources.api.model.VersionDate
 
 final case class ResourcesRestService(resourcesService: ResourcesResponderV2, renderer: KnoraResponseRenderer) {
+
+  def getResourcesProjectHistoryEvents(
+    user: User,
+  )(projectIri: ProjectIri, formatOptions: FormatOptions): Task[(RenderedResponse, MediaType)] =
+    resourcesService
+      .getProjectResourceHistoryEvents(projectIri, user)
+      .flatMap(renderer.render(_, formatOptions))
 
   def getResourcesHistoryEvents(
     user: User,

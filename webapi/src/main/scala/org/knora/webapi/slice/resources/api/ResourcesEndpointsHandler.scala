@@ -19,6 +19,10 @@ final class ResourcesEndpointsHandler(
   val allHandlers =
     Seq(
       SecuredEndpointHandler(
+        resourcesEndpoints.getResourcesProjectHistoryEvents,
+        resourcesRestService.getResourcesProjectHistoryEvents,
+      ),
+      SecuredEndpointHandler(
         resourcesEndpoints.getResourcesHistoryEvents,
         resourcesRestService.getResourcesHistoryEvents,
       ),

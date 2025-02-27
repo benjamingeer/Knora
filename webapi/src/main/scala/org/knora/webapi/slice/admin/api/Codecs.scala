@@ -33,7 +33,7 @@ object Codecs {
   object TapirCodec {
 
     type StringCodec[A] = Codec[String, A, CodecFormat.TextPlain]
-    private def stringCodec[A <: StringValue](from: String => Either[String, A]): StringCodec[A] =
+    def stringCodec[A <: StringValue](from: String => Either[String, A]): StringCodec[A] =
       stringCodec(from, _.value)
     def stringCodec[A](from: String => Either[String, A], to: A => String): StringCodec[A] =
       Codec.string.mapEither(from)(to)
@@ -48,7 +48,6 @@ object Codecs {
     implicit val logo: StringCodec[Logo]                               = stringCodec(Logo.from)
     implicit val longname: StringCodec[Longname]                       = stringCodec(Longname.from)
     implicit val selfJoin: StringCodec[SelfJoin]                       = booleanCodec(SelfJoin.from)
-    implicit val projectIri: StringCodec[ProjectIri]                   = stringCodec(ProjectIri.from)
     implicit val shortcode: StringCodec[Shortcode]                     = stringCodec(Shortcode.from)
     implicit val shortname: StringCodec[Shortname]                     = stringCodec(Shortname.from)
     implicit val sparqlEncodedString: StringCodec[SparqlEncodedString] = stringCodec(SparqlEncodedString.from)

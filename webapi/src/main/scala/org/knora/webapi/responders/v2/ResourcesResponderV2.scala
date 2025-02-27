@@ -184,9 +184,6 @@ final case class ResourcesResponderV2(
 
     case resourceIIIFManifestRequest: ResourceIIIFManifestGetRequestV2 => getIIIFManifestV2(resourceIIIFManifestRequest)
 
-    case projectHistoryEventsRequestV2: ProjectResourcesWithHistoryGetRequestV2 =>
-      getProjectResourceHistoryEvents(projectHistoryEventsRequestV2)
-
     case other =>
       Responder.handleUnexpectedMessage(other, this.getClass.getName)
   }
@@ -1561,20 +1558,17 @@ final case class ResourcesResponderV2(
   /**
    * Returns events representing the history of all resources and values belonging to a project ordered by date.
    *
-   * @param projectResourceHistoryEventsGetRequest the request for history events of a project.
+   * @param projectId the history events of a project.
+   * @param requestingUser the user making the request.
+   *
    * @return the all history events of resources of a project ordered by version date.
    */
-  private def getProjectResourceHistoryEvents(
-    projectResourceHistoryEventsGetRequest: ProjectResourcesWithHistoryGetRequestV2,
+  def getProjectResourceHistoryEvents(
+    projectId: ProjectIri,
+    requestingUser: User,
   ): Task[ResourceAndValueVersionHistoryResponseV2] =
     for {
-      // Get the project; checks if a project with given IRI exists.
-      projectId <- ZIO
-                     .fromEither(ProjectIri.from(projectResourceHistoryEventsGetRequest.projectIri))
-                     .mapError(e => BadRequestException(e))
-      _ <- knoraProjectService
-             .findById(projectId)
-             .someOrFail(NotFoundException(s"Project ${projectId.value} not found"))
+      _ <- knoraProjectService.findById(projectId).someOrFail(NotFoundException(s"Project $projectId not found"))
 
       // Do a SELECT prequery to get the IRIs of the resources that belong to the project.
       prequery              = sparql.v2.txt.getAllResourcesInProjectPrequery(projectId.value)
@@ -1589,15 +1583,10 @@ final case class ResourcesResponderV2(
                 ResourceVersionHistoryGetRequestV2(
                   resourceIri = resourceIri,
                   withDeletedResource = true,
-                  requestingUser = projectResourceHistoryEventsGetRequest.requestingUser,
+                  requestingUser = requestingUser,
                 ),
               )
-            resourceFullHist <-
-              extractEventsFromHistory(
-                resourceIri = resourceIri,
-                resourceHistory = resourceHistory.history,
-                requestingUser = projectResourceHistoryEventsGetRequest.requestingUser,
-              )
+            resourceFullHist <- extractEventsFromHistory(resourceIri, resourceHistory.history, requestingUser)
           } yield resourceFullHist
         }
 

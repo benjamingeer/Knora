@@ -27,7 +27,6 @@ import org.knora.webapi.messages.v2.responder.standoffmessages.MappingXMLtoStand
 import org.knora.webapi.messages.v2.responder.valuemessages.*
 import org.knora.webapi.messages.v2.responder.valuemessages.ValueMessagesV2Optics.*
 import org.knora.webapi.slice.admin.api.model.Project
-import org.knora.webapi.slice.admin.domain.model.KnoraProject.ProjectIri
 import org.knora.webapi.slice.admin.domain.model.Permission
 import org.knora.webapi.slice.admin.domain.model.User
 
@@ -122,19 +121,6 @@ case class ResourceVersionHistoryGetRequestV2(
   endDate: Option[Instant] = None,
   requestingUser: User,
 ) extends ResourcesResponderRequestV2
-
-/**
- * Requests the version history of all resources of a project.
- *
- * @param projectIri          the IRI of the project.
- * @param requestingUser       the user making the request.
- */
-case class ProjectResourcesWithHistoryGetRequestV2(
-  projectIri: IRI,
-  requestingUser: User,
-) extends ResourcesResponderRequestV2 {
-  ProjectIri.from(projectIri).getOrElse(throw BadRequestException(s"Invalid project IRI: $projectIri"))
-}
 
 /**
  * Represents an item in the version history of a resource.

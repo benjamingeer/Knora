@@ -69,7 +69,6 @@ final case class ResourcesRouteV2(appConfig: AppConfig)(
       createResource() ~
       updateResourceMetadata() ~
       getResourcesInProject() ~
-      getProjectResourceAndValueHistory() ~
       getResourcesPreview() ~
       getResourcesTei() ~
       getResourcesGraph() ~
@@ -189,17 +188,6 @@ final case class ResourcesRouteV2(appConfig: AppConfig)(
       RouteUtilV2.completeResponse(response, requestContext, targetSchemaTask)
     }
   }
-
-  private def getProjectResourceAndValueHistory(): Route =
-    path(resourcesBasePath / "projectHistoryEvents" / Segment) { (projectIri: IRI) =>
-      get { requestContext =>
-        val requestTask =
-          ZIO
-            .serviceWithZIO[Authenticator](_.getUserADM(requestContext))
-            .map(ProjectResourcesWithHistoryGetRequestV2(projectIri, _))
-        RouteUtilV2.runRdfRouteZ(requestTask, requestContext)
-      }
-    }
 
   private def getResourceIris(resIris: Seq[IRI]): IO[BadRequestException, Seq[IRI]] =
     ZIO

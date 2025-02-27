@@ -31,12 +31,6 @@ object UnsafeZioRun {
   def runOrThrow[R, E, A](effect: ZIO[R, E, A])(implicit r: Runtime[R]): A =
     Unsafe.unsafe(implicit u => r.unsafe.run(effect).getOrThrowFiberFailure())
 
-  def runOrThrowWithService[R: Tag, A](run: R => A)(implicit runtime: Runtime[R]): A =
-    UnsafeZioRun.runOrThrow(ZIO.serviceWith[R](run))
-
-  def runOrThrowWithServiceZIO[R: Tag, A](run: R => Task[A])(implicit runtime: Runtime[R]): A =
-    UnsafeZioRun.runOrThrow(ZIO.serviceWithZIO[R](run))
-
   /**
    * Executes the effect synchronously and returns its result as a
    * [[Future]].

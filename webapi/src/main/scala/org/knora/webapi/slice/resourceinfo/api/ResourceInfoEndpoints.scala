@@ -10,7 +10,6 @@ import sttp.tapir.generic.auto.*
 import sttp.tapir.json.zio.*
 import zio.ZLayer
 
-import org.knora.webapi.slice.admin.api.Codecs.TapirCodec.projectIri
 import org.knora.webapi.slice.admin.domain.model.KnoraProject.ProjectIri
 import org.knora.webapi.slice.common.api.ApiV2
 import org.knora.webapi.slice.common.api.BaseEndpoints

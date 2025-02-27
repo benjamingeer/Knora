@@ -15,6 +15,7 @@ import zio.ZLayer
 import scala.concurrent.Future
 
 import dsp.errors.RequestRejectedException
+import org.knora.webapi.slice.admin.domain.model.KnoraProject.ProjectIri
 import org.knora.webapi.slice.admin.domain.model.User
 import org.knora.webapi.slice.common.api.ApiV2
 import org.knora.webapi.slice.common.api.BaseEndpoints
@@ -49,6 +50,12 @@ final case class ResourcesEndpoints(private val baseEndpoints: BaseEndpoints) {
       case _            => None
     }(d => (d, d))
 
+  val getResourcesProjectHistoryEvents = baseEndpoints.withUserEndpoint.get
+    .in(base / "projectHistoryEvents" / path[ProjectIri].name("projectIri"))
+    .in(ApiV2.Inputs.formatOptions)
+    .out(stringBody)
+    .out(header[MediaType](HeaderNames.ContentType))
+
   val getResourcesHistoryEvents = baseEndpoints.withUserEndpoint.get
     .in(base / "resourceHistoryEvents" / path[IriDto].name("resourceIri"))
     .in(ApiV2.Inputs.formatOptions)
@@ -71,6 +78,7 @@ final case class ResourcesEndpoints(private val baseEndpoints: BaseEndpoints) {
     .out(header[MediaType](HeaderNames.ContentType))
 
   val endpoints: Seq[AnyEndpoint] = Seq(
+    getResourcesProjectHistoryEvents,
     getResourcesHistoryEvents,
     getResourcesHistory,
     getResources,
