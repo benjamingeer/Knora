@@ -19,7 +19,7 @@ import org.knora.webapi.slice.admin.domain.model.KnoraProject.Shortcode
 object AdminQueryVariables {
 
   private implicit val projectIriOptionCodec: Codec[List[String], Option[ProjectIri], CodecFormat.TextPlain] =
-    Codec.listHeadOption(TapirCodec.projectIri)
+    Codec.listHeadOption
 
   private implicit val shortcodeOptionCodec: Codec[List[String], Option[Shortcode], CodecFormat.TextPlain] =
     Codec.listHeadOption(TapirCodec.shortcode)

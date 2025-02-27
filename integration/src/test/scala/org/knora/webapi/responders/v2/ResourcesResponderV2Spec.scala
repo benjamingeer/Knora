@@ -38,8 +38,10 @@ import org.knora.webapi.models.filemodels.*
 import org.knora.webapi.responders.v2.ResourcesResponseCheckerV2.compareReadResourcesSequenceV2Response
 import org.knora.webapi.routing.UnsafeZioRun
 import org.knora.webapi.sharedtestdata.SharedTestDataADM
+import org.knora.webapi.slice.admin.domain.model.KnoraProject.ProjectIri
 import org.knora.webapi.slice.admin.domain.model.User
 import org.knora.webapi.slice.resources.IiifImageRequestUrl
+import org.knora.webapi.slice.resources.api.model.GraphDirection
 import org.knora.webapi.store.triplestore.api.TriplestoreService
 import org.knora.webapi.store.triplestore.api.TriplestoreService.Queries.Ask
 import org.knora.webapi.store.triplestore.api.TriplestoreService.Queries.Select
@@ -798,69 +800,71 @@ class ResourcesResponderV2Spec extends CoreSpec with ImplicitSender { self =>
     }
 
     "return a graph of resources reachable via links from/to a given resource" in {
-      appActor ! GraphDataGetRequestV2(
-        resourceIri = "http://rdfh.ch/0001/start",
-        depth = 6,
-        inbound = true,
-        outbound = true,
-        excludeProperty = Some(OntologyConstants.KnoraApiV2Complex.IsPartOf.toSmartIri),
-        requestingUser = SharedTestDataADM.anythingUser1,
+      val response = UnsafeZioRun.runOrThrow(
+        resourcesResponderV2(
+          _.getGraphDataResponseV2(
+            resourceIri = "http://rdfh.ch/0001/start",
+            depth = 6,
+            GraphDirection.Both,
+            excludeProperty = Some(OntologyConstants.KnoraApiV2Complex.IsPartOf.toSmartIri),
+            requestingUser = SharedTestDataADM.anythingUser1,
+          ),
+        ),
       )
-
-      val response = expectMsgType[GraphDataGetResponseV2](timeout)
-      val edges    = response.edges
-      val nodes    = response.nodes
+      val edges = response.edges
+      val nodes = response.nodes
 
       edges should contain theSameElementsAs graphTestData.graphForAnythingUser1.edges
       nodes should contain theSameElementsAs graphTestData.graphForAnythingUser1.nodes
     }
 
     "return a graph of resources reachable via links from/to a given resource, filtering the results according to the user's permissions" in {
-      appActor ! GraphDataGetRequestV2(
-        resourceIri = "http://rdfh.ch/0001/start",
-        depth = 6,
-        inbound = true,
-        outbound = true,
-        excludeProperty = Some(OntologyConstants.KnoraApiV2Complex.IsPartOf.toSmartIri),
-        requestingUser = SharedTestDataADM.incunabulaProjectAdminUser,
+      val response = UnsafeZioRun.runOrThrow(
+        resourcesResponderV2(
+          _.getGraphDataResponseV2(
+            resourceIri = "http://rdfh.ch/0001/start",
+            depth = 6,
+            GraphDirection.Both,
+            excludeProperty = Some(OntologyConstants.KnoraApiV2Complex.IsPartOf.toSmartIri),
+            requestingUser = SharedTestDataADM.incunabulaProjectAdminUser,
+          ),
+        ),
       )
-
-      val response = expectMsgType[GraphDataGetResponseV2](timeout)
-      val edges    = response.edges
-      val nodes    = response.nodes
+      val edges = response.edges
+      val nodes = response.nodes
 
       edges should contain theSameElementsAs graphTestData.graphForIncunabulaUser.edges
       nodes should contain theSameElementsAs graphTestData.graphForIncunabulaUser.nodes
     }
 
     "return a graph containing a standoff link" in {
-      appActor ! GraphDataGetRequestV2(
-        resourceIri = "http://rdfh.ch/0001/a-thing",
-        depth = 4,
-        inbound = true,
-        outbound = true,
-        excludeProperty = Some(OntologyConstants.KnoraApiV2Complex.IsPartOf.toSmartIri),
-        requestingUser = SharedTestDataADM.anythingUser1,
+      val response = UnsafeZioRun.runOrThrow(
+        resourcesResponderV2(
+          _.getGraphDataResponseV2(
+            resourceIri = "http://rdfh.ch/0001/a-thing",
+            depth = 4,
+            GraphDirection.Both,
+            excludeProperty = Some(OntologyConstants.KnoraApiV2Complex.IsPartOf.toSmartIri),
+            requestingUser = SharedTestDataADM.anythingUser1,
+          ),
+        ),
       )
-
-      expectMsgPF(timeout) { case response: GraphDataGetResponseV2 =>
-        response should ===(graphTestData.graphWithStandoffLink)
-      }
+      response should ===(graphTestData.graphWithStandoffLink)
     }
 
     "return a graph containing just one node" in {
-      appActor ! GraphDataGetRequestV2(
-        resourceIri = "http://rdfh.ch/0001/another-thing",
-        depth = 4,
-        inbound = true,
-        outbound = true,
-        excludeProperty = Some(OntologyConstants.KnoraApiV2Complex.IsPartOf.toSmartIri),
-        requestingUser = SharedTestDataADM.anythingUser1,
+      val response = UnsafeZioRun.runOrThrow(
+        resourcesResponderV2(
+          _.getGraphDataResponseV2(
+            resourceIri = "http://rdfh.ch/0001/another-thing",
+            depth = 4,
+            GraphDirection.Both,
+            excludeProperty = Some(OntologyConstants.KnoraApiV2Complex.IsPartOf.toSmartIri),
+            requestingUser = SharedTestDataADM.anythingUser1,
+          ),
+        ),
       )
-
-      expectMsgPF(timeout) { case response: GraphDataGetResponseV2 =>
-        response should ===(graphTestData.graphWithOneNode)
-      }
+      response should ===(graphTestData.graphWithOneNode)
     }
 
     "create a resource with no values" in {
@@ -2388,13 +2392,11 @@ class ResourcesResponderV2Spec extends CoreSpec with ImplicitSender { self =>
     "return full history of a-thing-picture resource" in {
       val resourceIri = "http://rdfh.ch/0001/a-thing-picture"
 
-      appActor ! ResourceHistoryEventsGetRequestV2(
-        resourceIri = resourceIri,
-        requestingUser = anythingUserProfile,
+      val events = UnsafeZioRun.runOrThrow(
+        ZIO.serviceWithZIO[ResourcesResponderV2](
+          _.getResourceHistoryEvents(resourceIri, anythingUserProfile).map(_.historyEvents),
+        ),
       )
-      val response: ResourceAndValueVersionHistoryResponseV2 =
-        expectMsgType[ResourceAndValueVersionHistoryResponseV2](timeout)
-      val events: Seq[ResourceAndValueHistoryEvent] = response.historyEvents
       events.size shouldEqual 3
       val createResourceEvents =
         events.filter(historyEvent => historyEvent.eventType == ResourceAndValueEventsUtil.CREATE_RESOURCE_EVENT)
@@ -2410,13 +2412,11 @@ class ResourcesResponderV2Spec extends CoreSpec with ImplicitSender { self =>
     "return full history of a resource as events" in {
       val resourceIri = "http://rdfh.ch/0001/thing-with-history"
 
-      appActor ! ResourceHistoryEventsGetRequestV2(
-        resourceIri = resourceIri,
-        requestingUser = anythingUserProfile,
+      val events = UnsafeZioRun.runOrThrow(
+        ZIO.serviceWithZIO[ResourcesResponderV2](
+          _.getResourceHistoryEvents(resourceIri, anythingUserProfile).map(_.historyEvents),
+        ),
       )
-      val response: ResourceAndValueVersionHistoryResponseV2 =
-        expectMsgType[ResourceAndValueVersionHistoryResponseV2](timeout)
-      val events: Seq[ResourceAndValueHistoryEvent] = response.historyEvents
       events.size should be(9)
     }
 
@@ -2441,13 +2441,11 @@ class ResourcesResponderV2Spec extends CoreSpec with ImplicitSender { self =>
         ),
       )
 
-      appActor ! ResourceHistoryEventsGetRequestV2(
-        resourceIri = resourceIri,
-        requestingUser = anythingUserProfile,
+      val events = UnsafeZioRun.runOrThrow(
+        ZIO.serviceWithZIO[ResourcesResponderV2](
+          _.getResourceHistoryEvents(resourceIri, anythingUserProfile).map(_.historyEvents),
+        ),
       )
-      val response: ResourceAndValueVersionHistoryResponseV2 =
-        expectMsgType[ResourceAndValueVersionHistoryResponseV2](timeout)
-      val events: Seq[ResourceAndValueHistoryEvent] = response.historyEvents
       events.size should be(10)
       val updatePermissionEvent: Option[ResourceAndValueHistoryEvent] =
         events.find(event => event.eventType == ResourceAndValueEventsUtil.UPDATE_VALUE_PERMISSION_EVENT)
@@ -2484,13 +2482,11 @@ class ResourcesResponderV2Spec extends CoreSpec with ImplicitSender { self =>
         ),
       )
 
-      appActor ! ResourceHistoryEventsGetRequestV2(
-        resourceIri = resourceIri,
-        requestingUser = anythingUserProfile,
+      val events = UnsafeZioRun.runOrThrow(
+        ZIO.serviceWithZIO[ResourcesResponderV2](
+          _.getResourceHistoryEvents(resourceIri, anythingUserProfile).map(_.historyEvents),
+        ),
       )
-      val response: ResourceAndValueVersionHistoryResponseV2 =
-        expectMsgType[ResourceAndValueVersionHistoryResponseV2](timeout)
-      val events: Seq[ResourceAndValueHistoryEvent] = response.historyEvents
       events.size should be(11)
       val createValueEvent: Option[ResourceAndValueHistoryEvent] =
         events.find(event =>
@@ -2531,13 +2527,11 @@ class ResourcesResponderV2Spec extends CoreSpec with ImplicitSender { self =>
         ),
       )
 
-      appActor ! ResourceHistoryEventsGetRequestV2(
-        resourceIri = resourceIri,
-        requestingUser = anythingUserProfile,
+      val events = UnsafeZioRun.runOrThrow(
+        ZIO.serviceWithZIO[ResourcesResponderV2](
+          _.getResourceHistoryEvents(resourceIri, anythingUserProfile).map(_.historyEvents),
+        ),
       )
-      val response: ResourceAndValueVersionHistoryResponseV2 =
-        expectMsgType[ResourceAndValueVersionHistoryResponseV2](timeout)
-      val events: Seq[ResourceAndValueHistoryEvent] = response.historyEvents
       events.size should be(12)
       val deleteValueEvent: Option[ResourceAndValueHistoryEvent] =
         events.find(event =>
@@ -2551,14 +2545,11 @@ class ResourcesResponderV2Spec extends CoreSpec with ImplicitSender { self =>
     "return full history of a deleted resource" in {
       val resourceIri = "http://rdfh.ch/0001/PHbbrEsVR32q5D_ioKt6pA"
 
-      appActor ! ResourceHistoryEventsGetRequestV2(
-        resourceIri = resourceIri,
-        requestingUser = anythingUserProfile,
+      val events = UnsafeZioRun.runOrThrow(
+        ZIO.serviceWithZIO[ResourcesResponderV2](
+          _.getResourceHistoryEvents(resourceIri, anythingUserProfile).map(_.historyEvents),
+        ),
       )
-
-      val response: ResourceAndValueVersionHistoryResponseV2 =
-        expectMsgType[ResourceAndValueVersionHistoryResponseV2](timeout)
-      val events: Seq[ResourceAndValueHistoryEvent] = response.historyEvents
       events.size should be(2)
       val deleteResourceEvent: Option[ResourceAndValueHistoryEvent] =
         events.find(event => event.eventType == ResourceAndValueEventsUtil.DELETE_RESOURCE_EVENT)
@@ -2579,13 +2570,9 @@ class ResourcesResponderV2Spec extends CoreSpec with ImplicitSender { self =>
 
       expectMsgType[UpdateResourceMetadataResponseV2](timeout)
 
-      appActor ! ResourceHistoryEventsGetRequestV2(
-        resourceIri = resourceIri,
-        requestingUser = anythingUserProfile,
+      val events = UnsafeZioRun.runOrThrow(
+        resourcesResponderV2(_.getResourceHistoryEvents(resourceIri, anythingUserProfile).map(_.historyEvents)),
       )
-      val response: ResourceAndValueVersionHistoryResponseV2 =
-        expectMsgType[ResourceAndValueVersionHistoryResponseV2](timeout)
-      val events: Seq[ResourceAndValueHistoryEvent] = response.historyEvents
       events.size should be(2)
       val updateMetadataEvent: Option[ResourceAndValueHistoryEvent] =
         events.find(event => event.eventType == ResourceAndValueEventsUtil.UPDATE_RESOURCE_METADATA_EVENT)
@@ -2593,25 +2580,27 @@ class ResourcesResponderV2Spec extends CoreSpec with ImplicitSender { self =>
     }
 
     "not return resources of a project which does not exist" in {
-
-      appActor ! ProjectResourcesWithHistoryGetRequestV2(
-        projectIri = "http://rdfh.ch/projects/1111",
-        requestingUser = SharedTestDataADM.anythingAdminUser,
+      val exit = UnsafeZioRun.run(
+        resourcesResponderV2(
+          _.getProjectResourceHistoryEvents(
+            ProjectIri.unsafeFrom("http://rdfh.ch/projects/1111"),
+            SharedTestDataADM.anythingAdminUser,
+          ),
+        ),
       )
-      expectMsgPF(timeout) { case msg: Failure =>
-        msg.cause.isInstanceOf[NotFoundException] should ===(true)
-      }
+      assertFailsWithA[NotFoundException](exit)
     }
 
     "return seq of full history events for each resource of a project" in {
-      appActor ! ProjectResourcesWithHistoryGetRequestV2(
-        projectIri = "http://rdfh.ch/projects/0001",
-        requestingUser = SharedTestDataADM.anythingAdminUser,
+      val response = UnsafeZioRun.runOrThrow(
+        resourcesResponderV2(
+          _.getProjectResourceHistoryEvents(
+            ProjectIri.unsafeFrom("http://rdfh.ch/projects/0001"),
+            SharedTestDataADM.anythingAdminUser,
+          ),
+        ),
       )
-      val response: ResourceAndValueVersionHistoryResponseV2 =
-        expectMsgType[ResourceAndValueVersionHistoryResponseV2](timeout)
       response.historyEvents.size should be > 1
-
     }
   }
 }

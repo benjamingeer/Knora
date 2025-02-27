@@ -13,7 +13,7 @@ import zio.ZLayer
 import org.knora.webapi.slice.common.api.ApiV2
 import org.knora.webapi.slice.common.api.BaseEndpoints
 import org.knora.webapi.slice.resources.api.model.ValueUuid
-import org.knora.webapi.slice.resources.api.model.ValueVersionDate
+import org.knora.webapi.slice.resources.api.model.VersionDate
 
 final case class ValuesEndpoints(baseEndpoint: BaseEndpoints) {
 
@@ -21,7 +21,7 @@ final case class ValuesEndpoints(baseEndpoint: BaseEndpoints) {
 
   private val resourceIri = path[String].name("resourceIri").description("The IRI of a Resource.")
   private val valueUuid   = path[ValueUuid].name("valueUuid").description("The UUID of a Value.")
-  private val version     = query[Option[ValueVersionDate]]("version")
+  private val version     = query[Option[VersionDate]]("version")
 
   private val linkToValuesDocumentation =
     """Find detailed documentation on <a href="https://docs.dasch.swiss/latest/DSP-API/03-endpoints/api-v2/editing-values/">docs.dasch.swiss</a>."""

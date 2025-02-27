@@ -21,6 +21,7 @@ import zio.ZLayer
 import zio.nio.file.Files
 import zio.nio.file.Path
 
+import org.knora.webapi.config.AppConfig
 import org.knora.webapi.http.version.BuildInfo
 import org.knora.webapi.slice.admin.api.AdminApiEndpoints
 import org.knora.webapi.slice.admin.api.FilesEndpoints
@@ -40,6 +41,7 @@ import org.knora.webapi.slice.infrastructure.Jwt
 import org.knora.webapi.slice.infrastructure.api.ManagementEndpoints
 import org.knora.webapi.slice.lists.api.ListsEndpointsV2
 import org.knora.webapi.slice.resourceinfo.api.ResourceInfoEndpoints
+import org.knora.webapi.slice.resources.api.ResourcesEndpoints
 import org.knora.webapi.slice.resources.api.ValuesEndpoints
 import org.knora.webapi.slice.search.api.SearchEndpoints
 import org.knora.webapi.slice.security.Authenticator
@@ -82,6 +84,7 @@ object DocsGenerator extends ZIOAppDefault {
       _ <- ZIO.logInfo(s"Wrote $filesWritten")
     } yield 0
   }.provideSome[ZIOAppArgs](
+    AppConfig.layer,
     AdminApiEndpoints.layer,
     ApiV2Endpoints.layer,
     AuthenticationEndpointsV2.layer,
@@ -97,6 +100,7 @@ object DocsGenerator extends ZIOAppDefault {
     ProjectsLegalInfoEndpoints.layer,
     ProjectsEndpoints.layer,
     ResourceInfoEndpoints.layer,
+    ResourcesEndpoints.layer,
     SearchEndpoints.layer,
     ShaclEndpoints.layer,
     StoreEndpoints.layer,

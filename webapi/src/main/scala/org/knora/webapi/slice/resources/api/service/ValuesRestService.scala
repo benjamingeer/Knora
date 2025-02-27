@@ -20,7 +20,7 @@ import org.knora.webapi.slice.common.api.KnoraResponseRenderer
 import org.knora.webapi.slice.common.api.KnoraResponseRenderer.FormatOptions
 import org.knora.webapi.slice.common.api.KnoraResponseRenderer.RenderedResponse
 import org.knora.webapi.slice.resources.api.model.ValueUuid
-import org.knora.webapi.slice.resources.api.model.ValueVersionDate
+import org.knora.webapi.slice.resources.api.model.VersionDate
 
 final class ValuesRestService(
   private val valuesService: ValuesResponderV2,
@@ -32,7 +32,7 @@ final class ValuesRestService(
   def getValue(user: User)(
     resourceIri: String,
     valueUuid: ValueUuid,
-    versionDate: Option[ValueVersionDate],
+    versionDate: Option[VersionDate],
     formatOptions: FormatOptions,
   ): Task[(RenderedResponse, MediaType)] =
     render(

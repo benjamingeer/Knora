@@ -28,7 +28,7 @@ object AdminPathVariables {
       .example(PermissionIri.unsafeFrom("http://rdfh.ch/permissions/00FF/Mck2xJDjQ_Oimi_9z4aFaA"))
 
   val projectIri: EndpointInput.PathCapture[ProjectIri] =
-    path[ProjectIri](TapirCodec.projectIri)
+    path[ProjectIri]
       .name("projectIri")
       .description("The IRI of a project. Must be URL-encoded.")
       .example(ProjectIri.unsafeFrom("http://rdfh.ch/projects/0001"))

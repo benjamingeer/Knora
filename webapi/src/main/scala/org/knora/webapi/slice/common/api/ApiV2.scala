@@ -5,14 +5,14 @@
 
 package org.knora.webapi.slice.common.api
 
-import sttp.model.HeaderNames
+import sttp.model.ContentTypeRange
 import sttp.model.MediaType
 import sttp.tapir.Codec
 import sttp.tapir.CodecFormat
 import sttp.tapir.DecodeResult
 import sttp.tapir.EndpointIO
 import sttp.tapir.EndpointInput
-import sttp.tapir.Validator
+import sttp.tapir.extractFromRequest
 import sttp.tapir.header
 import sttp.tapir.query
 
@@ -67,7 +67,9 @@ object ApiV2 {
   }
 
   object Inputs {
-    import Codecs.{apiV2SchemaListCodec, jsonLdRenderingListCodec, markupRenderingListCode}
+    import Codecs.apiV2SchemaListCodec
+    import Codecs.jsonLdRenderingListCodec
+    import Codecs.markupRenderingListCode
 
     // ApiV2Schema inputs
     private val apiV2SchemaHeader = header[Option[ApiV2Schema]](Headers.xKnoraAcceptSchemaHeader)
@@ -118,15 +120,29 @@ object ApiV2 {
       }
 
     // RdfFormat input
-    private val rdfFormat: EndpointIO.Header[RdfFormat] = header[Option[MediaType]](HeaderNames.Accept)
+    private val supportedMediaTypes: List[MediaType] = List(
+      MediaType("application", "json"),
+      MediaType("application", "ld+json"),
+      MediaType("text", "turtle"),
+      MediaType("application", "trig"),
+      MediaType("application", "rdf+xml"),
+      MediaType("application", "n-quads"),
+    )
+
+    private val rdfFormat: EndpointInput.ExtractFromRequest[RdfFormat] = extractFromRequest(_.acceptsContentTypes)
       .description(
-        s"""The RDF format to be used for the request. Valid values are: ${RdfFormat.values}
+        s"""With the Accept header the RDF format used for the response can be specified.
+           |Valid values are: ${RdfFormat.values}.
            |If not specified or unknown, the fallback RDF format ${RdfFormat.default} will be used.""".stripMargin,
       )
-      .mapDecode(s => DecodeResult.Value(s.flatMap(RdfFormat.from).getOrElse(RdfFormat.default)))(it =>
-        Some(it.mediaType),
-      )
-      .validate(Validator.pass[RdfFormat])
+      .mapDecode(s =>
+        DecodeResult.Value(
+          MediaType
+            .bestMatch(supportedMediaTypes, s.getOrElse(Seq.empty))
+            .flatMap(RdfFormat.from)
+            .getOrElse(RdfFormat.default),
+        ),
+      )(it => Right(Seq(ContentTypeRange.exact(it.mediaType))))
 
     // FormatOptions input
     val formatOptions: EndpointInput[FormatOptions] = rdfFormat

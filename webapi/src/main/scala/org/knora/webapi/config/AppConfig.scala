@@ -181,8 +181,8 @@ final case class Features(
 )
 
 object AppConfig {
-  type AppConfigurationsTest = AppConfig & DspIngestConfig & Triplestore & Features & Sipi
-  type AppConfigurations     = AppConfigurationsTest & InstrumentationServerConfig & JwtConfig & KnoraApi
+  type AppConfigurations = AppConfig & DspIngestConfig & Features & GraphRoute & InstrumentationServerConfig &
+    JwtConfig & KnoraApi & Sipi & Triplestore
 
   val parseConfig: UIO[AppConfig] = {
     val descriptor = deriveConfig[AppConfig].mapKey(toKebabCase)
@@ -216,5 +216,6 @@ object AppConfig {
         val issuerFromConfigOrDefault: Option[String] =
           jwtConfig.issuer.orElse(Some(appConfig.knoraApi.externalKnoraApiHostPort))
         jwtConfig.copy(issuer = issuerFromConfigOrDefault)
-      }
+      } ++
+      appConfigLayer.project(_.v2.graphRoute)
 }
