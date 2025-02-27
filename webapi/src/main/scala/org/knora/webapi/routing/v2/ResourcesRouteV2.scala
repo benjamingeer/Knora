@@ -47,7 +47,6 @@ final case class ResourcesRouteV2(appConfig: AppConfig)(
   private val jsonLdRequestParser = ZIO.serviceWithZIO[ApiComplexV2JsonLdRequestParser]
 
   private val sipiConfig: Sipi             = appConfig.sipi
-  private val resultsPerPage: Int          = appConfig.v2.resourcesSequence.resultsPerPage
   private val graphRouteConfig: GraphRoute = appConfig.v2.graphRoute
 
   private val resourcesBasePath: PathMatcher[Unit] = PathMatcher("v2" / "resources")
@@ -66,7 +65,6 @@ final case class ResourcesRouteV2(appConfig: AppConfig)(
   def makeRoute: Route =
     createResource() ~
       updateResourceMetadata() ~
-      getResourcesPreview() ~
       getResourcesTei() ~
       getResourcesGraph() ~
       deleteResource() ~
@@ -103,30 +101,6 @@ final case class ResourcesRouteV2(appConfig: AppConfig)(
       }
     }
   }
-
-  private def getResourceIris(resIris: Seq[IRI]): IO[BadRequestException, Seq[IRI]] =
-    ZIO
-      .fail(BadRequestException(s"List of provided resource Iris exceeds limit of $resultsPerPage"))
-      .when(resIris.size > resultsPerPage) *>
-      ZIO.foreach(resIris) { (resIri: IRI) =>
-        Iri
-          .validateAndEscapeIri(resIri)
-          .toZIO
-          .orElseFail(BadRequestException(s"Invalid resource IRI: <$resIri>"))
-      }
-
-  private def getResourcesPreview(): Route =
-    path("v2" / "resourcespreview" / Segments) { (resIris: Seq[String]) =>
-      get { requestContext =>
-        val targetSchemaTask = RouteUtilV2.getOntologySchema(requestContext)
-        val requestTask = for {
-          resourceIris <- getResourceIris(resIris)
-          targetSchema <- targetSchemaTask
-          user         <- ZIO.serviceWithZIO[Authenticator](_.getUserADM(requestContext))
-        } yield ResourcesPreviewGetRequestV2(resourceIris, withDeletedResource = true, targetSchema, user)
-        RouteUtilV2.runRdfRouteZ(requestTask, requestContext, targetSchemaTask)
-      }
-    }
 
   private def getResourcesTei(): Route = path("v2" / "tei" / Segment) { (resIri: String) =>
     get { requestContext =>

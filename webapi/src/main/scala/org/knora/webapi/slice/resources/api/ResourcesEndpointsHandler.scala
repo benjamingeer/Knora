@@ -23,6 +23,10 @@ final class ResourcesEndpointsHandler(
         resourcesRestService.getResourcesIiifManifest,
       ),
       SecuredEndpointHandler(
+        resourcesEndpoints.getResourcesPreview,
+        resourcesRestService.getResourcesPreview,
+      ),
+      SecuredEndpointHandler(
         resourcesEndpoints.getResourcesProjectHistoryEvents,
         resourcesRestService.getResourcesProjectHistoryEvents,
       ),

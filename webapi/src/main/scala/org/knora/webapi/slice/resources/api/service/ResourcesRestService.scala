@@ -34,6 +34,15 @@ final case class ResourcesRestService(
       .getIiifManifestV2(resourceIri.value, user)
       .flatMap(renderer.render(_, formatOptions))
 
+  def getResourcesPreview(user: User)(
+    resourceIris: List[String],
+    formatOptions: FormatOptions,
+  ): Task[(RenderedResponse, MediaType)] =
+    ensureIris(resourceIris) *>
+      resourcesService
+        .getResourcePreviewV2(resourceIris, withDeleted = true, formatOptions.schema, user)
+        .flatMap(renderer.render(_, formatOptions))
+
   def getResourcesProjectHistoryEvents(
     user: User,
   )(projectIri: ProjectIri, formatOptions: FormatOptions): Task[(RenderedResponse, MediaType)] =
@@ -81,20 +90,23 @@ final case class ResourcesRestService(
     formatOptions: FormatOptions,
     version: Option[VersionDate],
   ): Task[(RenderedResponse, MediaType)] =
-    resourcesService
-      .getResourcesV2(
-        resourceIris,
-        propertyIri = None,
-        valueUuid = None,
-        version.map(_.value),
-        withDeleted = true,
-        showDeletedValues = false,
-        formatOptions.schema,
-        formatOptions.rendering,
-        user,
-      )
-      .flatMap(renderer.render(_, formatOptions))
+    ensureIris(resourceIris) *>
+      resourcesService
+        .getResourcesV2(
+          resourceIris,
+          propertyIri = None,
+          valueUuid = None,
+          version.map(_.value),
+          withDeleted = true,
+          showDeletedValues = false,
+          formatOptions.schema,
+          formatOptions.rendering,
+          user,
+        )
+        .flatMap(renderer.render(_, formatOptions))
 
+  private def ensureIris(values: List[String]): Task[Unit] =
+    ZIO.foreachDiscard(values)(str => ZIO.fromEither(IriDto.from(str)).mapError(BadRequestException.apply))
 }
 
 object ResourcesRestService {

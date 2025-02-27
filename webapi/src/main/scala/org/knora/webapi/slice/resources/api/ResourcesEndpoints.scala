@@ -50,6 +50,12 @@ final case class ResourcesEndpoints(private val baseEndpoints: BaseEndpoints) {
       case _            => None
     }(d => (d, d))
 
+  val getResourcesPreview = baseEndpoints.withUserEndpoint.get
+    .in("v2" / "resourcespreview" / paths)
+    .in(ApiV2.Inputs.formatOptions)
+    .out(stringBody)
+    .out(header[MediaType](HeaderNames.ContentType))
+
   val getResourcesIiifManifest = baseEndpoints.withUserEndpoint.get
     .in(base / "iiifmanifest" / path[IriDto].name("resourceIri"))
     .in(ApiV2.Inputs.formatOptions)
@@ -95,6 +101,7 @@ final case class ResourcesEndpoints(private val baseEndpoints: BaseEndpoints) {
 
   val endpoints: Seq[AnyEndpoint] = Seq(
     getResourcesIiifManifest,
+    getResourcesPreview,
     getResourcesProjectHistoryEvents,
     getResourcesHistoryEvents,
     getResourcesHistory,
