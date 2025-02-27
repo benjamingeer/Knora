@@ -30,7 +30,6 @@ import org.knora.webapi.routing.RouteUtilZ
 import org.knora.webapi.slice.admin.domain.service.ProjectService
 import org.knora.webapi.slice.admin.domain.service.UserService
 import org.knora.webapi.slice.common.ApiComplexV2JsonLdRequestParser
-import org.knora.webapi.slice.common.api.ApiV2.Headers.xKnoraAcceptProject
 import org.knora.webapi.slice.resourceinfo.domain.IriConverter
 import org.knora.webapi.slice.security.Authenticator
 import org.knora.webapi.store.iiif.api.SipiService
@@ -67,7 +66,6 @@ final case class ResourcesRouteV2(appConfig: AppConfig)(
   def makeRoute: Route =
     createResource() ~
       updateResourceMetadata() ~
-      getResourcesInProject() ~
       getResourcesPreview() ~
       getResourcesTei() ~
       getResourcesGraph() ~
@@ -103,74 +101,6 @@ final case class ResourcesRouteV2(appConfig: AppConfig)(
         } yield requestMessage
         RouteUtilV2.runRdfRouteZ(requestMessageFuture, requestContext)
       }
-    }
-  }
-
-  private def getResourcesInProject(): Route = path(resourcesBasePath) {
-    get { requestContext =>
-      val params: Map[String, String] = requestContext.request.uri.query().toMap
-
-      val getResourceClass = ZIO
-        .fromOption(params.get("resourceClass"))
-        .orElseFail(BadRequestException(s"This route requires the parameter 'resourceClass'"))
-        .flatMap(iri =>
-          ZIO
-            .serviceWithZIO[IriConverter](_.asSmartIri(iri))
-            .orElseFail(BadRequestException(s"Invalid resource class IRI: $iri")),
-        )
-        .filterOrElseWith(it => it.isKnoraApiV2EntityIri && it.isApiV2ComplexSchema)(it =>
-          ZIO.fail(BadRequestException(s"Invalid resource class IRI: $it")),
-        )
-        .flatMap(it => ZIO.serviceWithZIO[IriConverter](_.asInternalSmartIri(it)))
-
-      val getOrderByProperty: ZIO[IriConverter, Throwable, Option[SmartIri]] =
-        ZIO.foreach(params.get("orderByProperty")) { orderByPropertyStr =>
-          ZIO
-            .serviceWithZIO[IriConverter](_.asSmartIri(orderByPropertyStr))
-            .orElseFail(BadRequestException(s"Invalid property IRI: $orderByPropertyStr"))
-            .filterOrFail(iri => iri.isKnoraApiV2EntityIri && iri.isApiV2ComplexSchema)(
-              BadRequestException(s"Invalid property IRI: $orderByPropertyStr"),
-            )
-            .flatMap(it => ZIO.serviceWithZIO[IriConverter](_.asInternalSmartIri(it)))
-        }
-
-      val getPage = ZIO
-        .fromOption(params.get("page"))
-        .orElseFail(BadRequestException(s"This route requires the parameter 'page'"))
-        .flatMap(pageStr =>
-          ZIO
-            .fromOption(ValuesValidator.validateInt(pageStr))
-            .orElseFail(BadRequestException(s"Invalid page number: $pageStr")),
-        )
-
-      val getProjectIri = RouteUtilV2
-        .getProjectIri(requestContext)
-        .some
-        .orElseFail(BadRequestException(s"This route requires the request header $xKnoraAcceptProject"))
-
-      val targetSchemaTask = RouteUtilV2.getOntologySchema(requestContext)
-      val response = for {
-        maybeOrderByProperty <- getOrderByProperty
-        resourceClass        <- getResourceClass
-        projectIri           <- getProjectIri
-        page                 <- getPage
-        targetSchema <- targetSchemaTask.zip(RouteUtilV2.getSchemaOptions(requestContext)).map {
-                          case (schema, options) => SchemaRendering(schema, options)
-                        }
-        requestingUser <- ZIO.serviceWithZIO[Authenticator](_.getUserADM(requestContext))
-        response <- ZIO.serviceWithZIO[SearchResponderV2](
-                      _.searchResourcesByProjectAndClassV2(
-                        projectIri,
-                        resourceClass,
-                        maybeOrderByProperty,
-                        page,
-                        targetSchema,
-                        requestingUser,
-                      ),
-                    )
-      } yield response
-
-      RouteUtilV2.completeResponse(response, requestContext, targetSchemaTask)
     }
   }
 

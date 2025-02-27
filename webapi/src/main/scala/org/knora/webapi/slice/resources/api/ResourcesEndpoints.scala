@@ -83,12 +83,23 @@ final case class ResourcesEndpoints(private val baseEndpoints: BaseEndpoints) {
     .out(stringBody)
     .out(header[MediaType](HeaderNames.ContentType))
 
+  val getResourcesParams = baseEndpoints.withUserEndpoint.get
+    .in(base)
+    .in(query[IriDto]("resourceClass"))
+    .in(query[Option[IriDto]]("orderByProperty"))
+    .in(query[Int]("page").validate(Validator.min(0)))
+    .in(header[ProjectIri](ApiV2.Headers.xKnoraAcceptProject))
+    .in(ApiV2.Inputs.formatOptions)
+    .out(stringBody)
+    .out(header[MediaType](HeaderNames.ContentType))
+
   val endpoints: Seq[AnyEndpoint] = Seq(
     getResourcesIiifManifest,
     getResourcesProjectHistoryEvents,
     getResourcesHistoryEvents,
     getResourcesHistory,
     getResources,
+    getResourcesParams,
   ).map(_.endpoint.tag("V2 Resources"))
 }
 

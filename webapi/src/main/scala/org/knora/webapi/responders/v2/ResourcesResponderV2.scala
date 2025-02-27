@@ -620,7 +620,7 @@ final case class ResourcesResponderV2(
           requestingUser = requestingUser,
         )
 
-      _ = apiResponse.checkResourceIris(resourceIris.toSet, apiResponse)
+      _ <- apiResponse.checkResourceIris(resourceIris.toSet, apiResponse)
 
       _ <- valueUuid match {
              case Some(definedValueUuid) =>
@@ -693,10 +693,7 @@ final case class ResourcesResponderV2(
                        requestingUser = requestingUser,
                      )
 
-      _ = apiResponse.checkResourceIris(
-            targetResourceIris = resourceIris.toSet,
-            resourcesSequence = apiResponse,
-          )
+      _ <- apiResponse.checkResourceIris(resourceIris.toSet, apiResponse)
 
       // Check if resources are deleted, if so, replace them with DeletedResource
       responseWithDeletedResourcesReplaced = apiResponse.resources match {

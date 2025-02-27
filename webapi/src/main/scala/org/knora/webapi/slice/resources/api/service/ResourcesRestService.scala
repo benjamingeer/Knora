@@ -7,16 +7,24 @@ package org.knora.webapi.slice.resources.api.service
 import sttp.model.MediaType
 import zio.*
 
+import dsp.errors.BadRequestException
 import org.knora.webapi.responders.v2.ResourcesResponderV2
+import org.knora.webapi.responders.v2.SearchResponderV2
 import org.knora.webapi.slice.admin.domain.model.KnoraProject.ProjectIri
 import org.knora.webapi.slice.admin.domain.model.User
 import org.knora.webapi.slice.common.api.KnoraResponseRenderer
 import org.knora.webapi.slice.common.api.KnoraResponseRenderer.FormatOptions
 import org.knora.webapi.slice.common.api.KnoraResponseRenderer.RenderedResponse
+import org.knora.webapi.slice.resourceinfo.domain.IriConverter
 import org.knora.webapi.slice.resources.api.model.IriDto
 import org.knora.webapi.slice.resources.api.model.VersionDate
 
-final case class ResourcesRestService(resourcesService: ResourcesResponderV2, renderer: KnoraResponseRenderer) {
+final case class ResourcesRestService(
+  private val resourcesService: ResourcesResponderV2,
+  private val searchService: SearchResponderV2,
+  private val iriConverter: IriConverter,
+  renderer: KnoraResponseRenderer,
+) {
 
   def getResourcesIiifManifest(user: User)(
     resourceIri: IriDto,
@@ -39,6 +47,24 @@ final case class ResourcesRestService(resourcesService: ResourcesResponderV2, re
     resourcesService
       .getResourceHistoryEvents(resourceIri.value, user)
       .flatMap(renderer.render(_, formatOptions))
+
+  def searchResourcesByProjectAndClass(user: User)(
+    resourceClass: IriDto,
+    orderByProperty: Option[IriDto],
+    page: Int,
+    projectIri: ProjectIri,
+    format: FormatOptions,
+  ): Task[(RenderedResponse, MediaType)] = for {
+    resourceClass <- iriConverter
+                       .asResourceClassIri(resourceClass.value)
+                       .mapBoth(BadRequestException.apply, _.smartIri.toInternalSchema)
+    order <- ZIO
+               .foreach(orderByProperty.map(_.value))(iriConverter.asPropertyIri)
+               .mapBoth(BadRequestException.apply, _.map(_.smartIri.toInternalSchema))
+    rendering = format.schemaRendering
+    result   <- searchService.searchResourcesByProjectAndClassV2(projectIri, resourceClass, order, page, rendering, user)
+    response <- renderer.render(result, format)
+  } yield response
 
   def getResourceHistory(user: User)(
     resourceIri: IriDto,

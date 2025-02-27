@@ -205,7 +205,7 @@ trait SearchResponderV2 {
    * @return a [[ReadResourcesSequenceV2]].
    */
   def searchResourcesByProjectAndClassV2(
-    projectIri: SmartIri,
+    projectIri: ProjectIri,
     resourceClass: SmartIri,
     orderByProperty: Option[SmartIri],
     page: Int,
@@ -682,7 +682,7 @@ final case class SearchResponderV2Live(
    * @return a [[ReadResourcesSequenceV2]].
    */
   override def searchResourcesByProjectAndClassV2(
-    projectIri: SmartIri,
+    projectIri: ProjectIri,
     resourceClass: SmartIri,
     orderByProperty: Option[SmartIri],
     page: Int,
@@ -776,7 +776,7 @@ final case class SearchResponderV2Live(
       // Do a SELECT prequery to get the IRIs of the requested page of resources.
       prequery = sparql.v2.txt
                    .getResourcesByClassInProjectPrequery(
-                     projectIri = projectIri.toString,
+                     projectIri = projectIri.value,
                      resourceClassIri = internalClassIri,
                      maybeOrderByProperty = maybeInternalOrderByPropertyIri,
                      maybeOrderByValuePredicate = maybeOrderByValuePredicate,

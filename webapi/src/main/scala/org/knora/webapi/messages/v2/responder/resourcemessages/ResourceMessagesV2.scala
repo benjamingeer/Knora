@@ -7,7 +7,6 @@ package org.knora.webapi.messages.v2.responder.resourcemessages
 
 import java.time.Instant
 import java.util.UUID
-
 import dsp.errors.*
 import dsp.valueobjects.UuidUtil
 import org.knora.webapi.*
@@ -29,6 +28,8 @@ import org.knora.webapi.messages.v2.responder.valuemessages.ValueMessagesV2Optic
 import org.knora.webapi.slice.admin.api.model.Project
 import org.knora.webapi.slice.admin.domain.model.Permission
 import org.knora.webapi.slice.admin.domain.model.User
+import zio.Task
+import zio.ZIO
 
 /**
  * An abstract trait for messages that can be sent to `ResourcesResponderV2`.
@@ -863,22 +864,27 @@ case class ReadResourcesSequenceV2(
    * @throws NotFoundException  if the requested resources are not found.
    * @throws ForbiddenException if the user does not have permission to see the requested resources.
    */
-  def checkResourceIris(targetResourceIris: Set[IRI], resourcesSequence: ReadResourcesSequenceV2): Unit = {
+  def checkResourceIris(targetResourceIris: Set[IRI], resourcesSequence: ReadResourcesSequenceV2): Task[Unit] = {
     val hiddenTargetResourceIris: Set[IRI] = targetResourceIris.intersect(resourcesSequence.hiddenResourceIris)
 
     if (hiddenTargetResourceIris.nonEmpty) {
-      throw ForbiddenException(
-        s"You do not have permission to see one or more resources: ${hiddenTargetResourceIris.map(iri => s"<$iri>").mkString(", ")}",
+      return ZIO.fail(
+        ForbiddenException(
+          s"You do not have permission to see one or more resources: ${hiddenTargetResourceIris.map(iri => s"<$iri>").mkString(", ")}",
+        ),
       )
     }
 
     val missingResourceIris: Set[IRI] = targetResourceIris -- resourcesSequence.resources.map(_.resourceIri).toSet
 
     if (missingResourceIris.nonEmpty) {
-      throw NotFoundException(
-        s"One or more resources were not found:  ${missingResourceIris.map(iri => s"<$iri>").mkString(", ")}",
+      return ZIO.fail(
+        NotFoundException(
+          s"One or more resources were not found:  ${missingResourceIris.map(iri => s"<$iri>").mkString(", ")}",
+        ),
       )
     }
+    ZIO.unit
   }
 
   /**

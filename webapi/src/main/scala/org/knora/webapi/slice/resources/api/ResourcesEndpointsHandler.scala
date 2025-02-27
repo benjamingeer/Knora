@@ -31,6 +31,10 @@ final class ResourcesEndpointsHandler(
         resourcesRestService.getResourcesHistoryEvents,
       ),
       SecuredEndpointHandler(resourcesEndpoints.getResourcesHistory, resourcesRestService.getResourceHistory),
+      SecuredEndpointHandler(
+        resourcesEndpoints.getResourcesParams,
+        resourcesRestService.searchResourcesByProjectAndClass,
+      ),
       SecuredEndpointHandler(resourcesEndpoints.getResources, resourcesRestService.getResources),
     ).map(mapper.mapSecuredEndpointHandler(_))
 }
