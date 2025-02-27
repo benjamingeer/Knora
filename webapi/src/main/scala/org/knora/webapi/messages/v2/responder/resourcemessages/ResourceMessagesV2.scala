@@ -911,30 +911,6 @@ case class ReadResourcesSequenceV2(
 }
 
 /**
- * Requests a graph of resources that are reachable via links to or from a given resource. A successful response
- * will be a [[GraphDataGetResponseV2]].
- *
- * @param resourceIri     the IRI of the initial resource.
- * @param depth           the maximum depth of the graph, counting from the initial resource.
- * @param inbound         `true` to query inbound links.
- * @param outbound        `true` to query outbound links.
- * @param excludeProperty the IRI of a link property to exclude from the results.
- * @param requestingUser  the user making the request.
- */
-case class GraphDataGetRequestV2(
-  resourceIri: IRI,
-  depth: Int,
-  inbound: Boolean,
-  outbound: Boolean,
-  excludeProperty: Option[SmartIri],
-  requestingUser: User,
-) extends ResourcesResponderRequestV2 {
-  if (!(inbound || outbound)) {
-    throw BadRequestException("No link direction selected")
-  }
-}
-
-/**
  * Represents a node (i.e. a resource) in a resource graph.
  *
  * @param resourceIri      the IRI of the resource.

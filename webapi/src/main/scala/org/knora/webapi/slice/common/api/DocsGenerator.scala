@@ -21,6 +21,7 @@ import zio.ZLayer
 import zio.nio.file.Files
 import zio.nio.file.Path
 
+import org.knora.webapi.config.AppConfig
 import org.knora.webapi.http.version.BuildInfo
 import org.knora.webapi.slice.admin.api.AdminApiEndpoints
 import org.knora.webapi.slice.admin.api.FilesEndpoints
@@ -83,6 +84,7 @@ object DocsGenerator extends ZIOAppDefault {
       _ <- ZIO.logInfo(s"Wrote $filesWritten")
     } yield 0
   }.provideSome[ZIOAppArgs](
+    AppConfig.layer,
     AdminApiEndpoints.layer,
     ApiV2Endpoints.layer,
     AuthenticationEndpointsV2.layer,

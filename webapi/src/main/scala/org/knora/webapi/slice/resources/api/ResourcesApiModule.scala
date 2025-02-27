@@ -8,6 +8,7 @@ package org.knora.webapi.slice.resources.api
 import zio.URLayer
 import zio.ZLayer
 
+import org.knora.webapi.config.GraphRoute
 import org.knora.webapi.responders.v2.ResourcesResponderV2
 import org.knora.webapi.responders.v2.SearchResponderV2
 import org.knora.webapi.responders.v2.ValuesResponderV2
@@ -23,8 +24,8 @@ import org.knora.webapi.slice.resources.api.service.ValuesRestService
 
 object ResourcesApiModule
     extends URModule[
-      ApiComplexV2JsonLdRequestParser & BaseEndpoints & HandlerMapper & IriConverter & KnoraResponseRenderer &
-        ResourcesResponderV2 & SearchResponderV2 & TapirToPekkoInterpreter & ValuesResponderV2,
+      ApiComplexV2JsonLdRequestParser & BaseEndpoints & GraphRoute & HandlerMapper & IriConverter &
+        KnoraResponseRenderer & ResourcesResponderV2 & SearchResponderV2 & TapirToPekkoInterpreter & ValuesResponderV2,
       ResourcesApiRoutes & ValuesEndpoints & ResourcesEndpoints,
     ] { self =>
 

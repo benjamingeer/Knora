@@ -16,12 +16,10 @@ import dsp.errors.BadRequestException
 import dsp.valueobjects.Iri
 import org.knora.webapi.*
 import org.knora.webapi.config.AppConfig
-import org.knora.webapi.config.GraphRoute
 import org.knora.webapi.config.Sipi
 import org.knora.webapi.core.MessageRelay
 import org.knora.webapi.messages.SmartIri
 import org.knora.webapi.messages.StringFormatter
-import org.knora.webapi.messages.ValuesValidator
 import org.knora.webapi.messages.v2.responder.resourcemessages.*
 import org.knora.webapi.messages.v2.responder.valuemessages.*
 import org.knora.webapi.responders.v2.SearchResponderV2
@@ -46,8 +44,7 @@ final case class ResourcesRouteV2(appConfig: AppConfig)(
 
   private val jsonLdRequestParser = ZIO.serviceWithZIO[ApiComplexV2JsonLdRequestParser]
 
-  private val sipiConfig: Sipi             = appConfig.sipi
-  private val graphRouteConfig: GraphRoute = appConfig.v2.graphRoute
+  private val sipiConfig: Sipi = appConfig.sipi
 
   private val resourcesBasePath: PathMatcher[Unit] = PathMatcher("v2" / "resources")
 
@@ -55,18 +52,11 @@ final case class ResourcesRouteV2(appConfig: AppConfig)(
   private val Mapping_Iri            = "mappingIri"
   private val GravsearchTemplate_Iri = "gravsearchTemplateIri"
   private val TEIHeader_XSLT_IRI     = "teiHeaderXSLTIri"
-  private val Depth                  = "depth"
-  private val ExcludeProperty        = "excludeProperty"
-  private val Direction              = "direction"
-  private val Inbound                = "inbound"
-  private val Outbound               = "outbound"
-  private val Both                   = "both"
 
   def makeRoute: Route =
     createResource() ~
       updateResourceMetadata() ~
       getResourcesTei() ~
-      getResourcesGraph() ~
       deleteResource() ~
       eraseResource()
 
@@ -119,51 +109,6 @@ final case class ResourcesRouteV2(appConfig: AppConfig)(
         user                  <- ZIO.serviceWithZIO[Authenticator](_.getUserADM(requestContext))
       } yield ResourceTEIGetRequestV2(resourceIri, textProperty, mappingIri, gravsearchTemplateIri, headerXSLTIri, user)
       RouteUtilV2.runTEIXMLRoute(requestTask, requestContext)
-    }
-  }
-
-  private def getResourcesGraph(): Route = path("v2" / "graph" / Segment) { (resIriStr: String) =>
-    get { requestContext =>
-      val getResourceIri =
-        Iri
-          .validateAndEscapeIri(resIriStr)
-          .toZIO
-          .orElseFail(BadRequestException(s"Invalid resource IRI: <$resIriStr>"))
-      val params: Map[String, String] = requestContext.request.uri.query().toMap
-      val getDepth: IO[BadRequestException, Int] =
-        ZIO
-          .succeed(params.get(Depth).flatMap(ValuesValidator.validateInt).getOrElse(graphRouteConfig.defaultGraphDepth))
-          .filterOrFail(_ >= 1)(BadRequestException(s"$Depth must be at least 1"))
-          .filterOrFail(_ <= graphRouteConfig.maxGraphDepth)(
-            BadRequestException(s"$Depth cannot be greater than ${graphRouteConfig.maxGraphDepth}"),
-          )
-
-      val getExcludeProperty: ZIO[IriConverter, BadRequestException, Option[SmartIri]] = params
-        .get(ExcludeProperty)
-        .map(propIriStr =>
-          ZIO
-            .serviceWithZIO[IriConverter](_.asSmartIri(propIriStr))
-            .mapBoth(_ => BadRequestException(s"Invalid property IRI: <$propIriStr>"), Some(_)),
-        )
-        .getOrElse(ZIO.none)
-
-      val getInboundOutbound: IO[BadRequestException, (Boolean, Boolean)] =
-        params.getOrElse(Direction, Outbound) match {
-          case Inbound  => ZIO.succeed((true, false))
-          case Outbound => ZIO.succeed((false, true))
-          case Both     => ZIO.succeed((true, true))
-          case other    => ZIO.fail(BadRequestException(s"Invalid direction: $other"))
-        }
-
-      val requestTask = for {
-        resourceIri        <- getResourceIri
-        depth              <- getDepth
-        excludeProperty    <- getExcludeProperty
-        t                  <- getInboundOutbound
-        (inbound, outbound) = t
-        requestingUser     <- ZIO.serviceWithZIO[Authenticator](_.getUserADM(requestContext))
-      } yield GraphDataGetRequestV2(resourceIri, depth, inbound, outbound, excludeProperty, requestingUser)
-      RouteUtilV2.runRdfRouteZ(requestTask, requestContext, RouteUtilV2.getOntologySchema(requestContext))
     }
   }
 

@@ -46,3 +46,25 @@ object IriDto {
   def from(str: String): Either[String, IriDto] =
     if Iri.isIri(str) then Right(IriDto(str)) else Left(s"Invalid IRI: $str")
 }
+
+enum GraphDirection(val inbound: Boolean, val outbound: Boolean) {
+  case Inbound  extends GraphDirection(true, false)
+  case Outbound extends GraphDirection(false, true)
+  case Both     extends GraphDirection(true, true)
+}
+
+object GraphDirection {
+
+  given TapirCodec.StringCodec[GraphDirection] = TapirCodec.stringCodec[GraphDirection](
+    GraphDirection.from,
+    _.toString.toLowerCase,
+  )
+
+  val default: GraphDirection = GraphDirection.Outbound
+
+  def from(str: String): Either[String, GraphDirection] =
+    GraphDirection.values.find(_.toString.toLowerCase == str.toLowerCase) match {
+      case Some(v) => Right(v)
+      case None    => Left(s"Invalid direction: $str")
+    }
+}

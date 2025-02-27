@@ -16,6 +16,7 @@ import org.knora.webapi.slice.common.api.KnoraResponseRenderer
 import org.knora.webapi.slice.common.api.KnoraResponseRenderer.FormatOptions
 import org.knora.webapi.slice.common.api.KnoraResponseRenderer.RenderedResponse
 import org.knora.webapi.slice.resourceinfo.domain.IriConverter
+import org.knora.webapi.slice.resources.api.model.GraphDirection
 import org.knora.webapi.slice.resources.api.model.IriDto
 import org.knora.webapi.slice.resources.api.model.VersionDate
 
@@ -107,6 +108,18 @@ final case class ResourcesRestService(
 
   private def ensureIris(values: List[String]): Task[Unit] =
     ZIO.foreachDiscard(values)(str => ZIO.fromEither(IriDto.from(str)).mapError(BadRequestException.apply))
+
+  def getResourcesGraph(user: User)(
+    resourceIri: IriDto,
+    formatOptions: FormatOptions,
+    depth: Int,
+    direction: GraphDirection,
+    excludeProperty: Option[IriDto],
+  ): Task[(RenderedResponse, MediaType)] = for {
+    excludeProperty <- ZIO.foreach(excludeProperty.map(_.value))(iriConverter.asSmartIri)
+    result          <- resourcesService.getGraphDataResponseV2(resourceIri.value, depth, direction, excludeProperty, user)
+    response        <- renderer.render(result, formatOptions)
+  } yield response
 }
 
 object ResourcesRestService {

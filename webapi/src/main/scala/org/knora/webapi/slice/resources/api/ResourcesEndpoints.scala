@@ -15,14 +15,19 @@ import zio.ZLayer
 import scala.concurrent.Future
 
 import dsp.errors.RequestRejectedException
+import org.knora.webapi.config.GraphRoute
 import org.knora.webapi.slice.admin.domain.model.KnoraProject.ProjectIri
 import org.knora.webapi.slice.admin.domain.model.User
 import org.knora.webapi.slice.common.api.ApiV2
 import org.knora.webapi.slice.common.api.BaseEndpoints
+import org.knora.webapi.slice.resources.api.model.GraphDirection
 import org.knora.webapi.slice.resources.api.model.IriDto
 import org.knora.webapi.slice.resources.api.model.VersionDate
 
-final case class ResourcesEndpoints(private val baseEndpoints: BaseEndpoints) {
+final case class ResourcesEndpoints(
+  private val baseEndpoints: BaseEndpoints,
+  private val graphConfig: GraphRoute,
+) {
 
   private val base = "v2" / "resources"
 
@@ -99,6 +104,20 @@ final case class ResourcesEndpoints(private val baseEndpoints: BaseEndpoints) {
     .out(stringBody)
     .out(header[MediaType](HeaderNames.ContentType))
 
+  val getResourcesGraph = baseEndpoints.withUserEndpoint.get
+    .in("v2" / "graph" / path[IriDto].name("resourceIri"))
+    .in(ApiV2.Inputs.formatOptions)
+    .in(
+      query[Int]("depth")
+        .validate(Validator.min(1))
+        .validate(Validator.max(graphConfig.maxGraphDepth))
+        .default(graphConfig.defaultGraphDepth),
+    )
+    .in(query[GraphDirection]("direction").default(GraphDirection.default))
+    .in(query[Option[IriDto]]("excludeProperty"))
+    .out(stringBody)
+    .out(header[MediaType](HeaderNames.ContentType))
+
   val endpoints: Seq[AnyEndpoint] = Seq(
     getResourcesIiifManifest,
     getResourcesPreview,
@@ -107,6 +126,7 @@ final case class ResourcesEndpoints(private val baseEndpoints: BaseEndpoints) {
     getResourcesHistory,
     getResources,
     getResourcesParams,
+    getResourcesGraph,
   ).map(_.endpoint.tag("V2 Resources"))
 }
 

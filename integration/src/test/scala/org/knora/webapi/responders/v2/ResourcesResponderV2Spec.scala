@@ -41,6 +41,7 @@ import org.knora.webapi.sharedtestdata.SharedTestDataADM
 import org.knora.webapi.slice.admin.domain.model.KnoraProject.ProjectIri
 import org.knora.webapi.slice.admin.domain.model.User
 import org.knora.webapi.slice.resources.IiifImageRequestUrl
+import org.knora.webapi.slice.resources.api.model.GraphDirection
 import org.knora.webapi.store.triplestore.api.TriplestoreService
 import org.knora.webapi.store.triplestore.api.TriplestoreService.Queries.Ask
 import org.knora.webapi.store.triplestore.api.TriplestoreService.Queries.Select
@@ -799,69 +800,71 @@ class ResourcesResponderV2Spec extends CoreSpec with ImplicitSender { self =>
     }
 
     "return a graph of resources reachable via links from/to a given resource" in {
-      appActor ! GraphDataGetRequestV2(
-        resourceIri = "http://rdfh.ch/0001/start",
-        depth = 6,
-        inbound = true,
-        outbound = true,
-        excludeProperty = Some(OntologyConstants.KnoraApiV2Complex.IsPartOf.toSmartIri),
-        requestingUser = SharedTestDataADM.anythingUser1,
+      val response = UnsafeZioRun.runOrThrow(
+        resourcesResponderV2(
+          _.getGraphDataResponseV2(
+            resourceIri = "http://rdfh.ch/0001/start",
+            depth = 6,
+            GraphDirection.Both,
+            excludeProperty = Some(OntologyConstants.KnoraApiV2Complex.IsPartOf.toSmartIri),
+            requestingUser = SharedTestDataADM.anythingUser1,
+          ),
+        ),
       )
-
-      val response = expectMsgType[GraphDataGetResponseV2](timeout)
-      val edges    = response.edges
-      val nodes    = response.nodes
+      val edges = response.edges
+      val nodes = response.nodes
 
       edges should contain theSameElementsAs graphTestData.graphForAnythingUser1.edges
       nodes should contain theSameElementsAs graphTestData.graphForAnythingUser1.nodes
     }
 
     "return a graph of resources reachable via links from/to a given resource, filtering the results according to the user's permissions" in {
-      appActor ! GraphDataGetRequestV2(
-        resourceIri = "http://rdfh.ch/0001/start",
-        depth = 6,
-        inbound = true,
-        outbound = true,
-        excludeProperty = Some(OntologyConstants.KnoraApiV2Complex.IsPartOf.toSmartIri),
-        requestingUser = SharedTestDataADM.incunabulaProjectAdminUser,
+      val response = UnsafeZioRun.runOrThrow(
+        resourcesResponderV2(
+          _.getGraphDataResponseV2(
+            resourceIri = "http://rdfh.ch/0001/start",
+            depth = 6,
+            GraphDirection.Both,
+            excludeProperty = Some(OntologyConstants.KnoraApiV2Complex.IsPartOf.toSmartIri),
+            requestingUser = SharedTestDataADM.incunabulaProjectAdminUser,
+          ),
+        ),
       )
-
-      val response = expectMsgType[GraphDataGetResponseV2](timeout)
-      val edges    = response.edges
-      val nodes    = response.nodes
+      val edges = response.edges
+      val nodes = response.nodes
 
       edges should contain theSameElementsAs graphTestData.graphForIncunabulaUser.edges
       nodes should contain theSameElementsAs graphTestData.graphForIncunabulaUser.nodes
     }
 
     "return a graph containing a standoff link" in {
-      appActor ! GraphDataGetRequestV2(
-        resourceIri = "http://rdfh.ch/0001/a-thing",
-        depth = 4,
-        inbound = true,
-        outbound = true,
-        excludeProperty = Some(OntologyConstants.KnoraApiV2Complex.IsPartOf.toSmartIri),
-        requestingUser = SharedTestDataADM.anythingUser1,
+      val response = UnsafeZioRun.runOrThrow(
+        resourcesResponderV2(
+          _.getGraphDataResponseV2(
+            resourceIri = "http://rdfh.ch/0001/a-thing",
+            depth = 4,
+            GraphDirection.Both,
+            excludeProperty = Some(OntologyConstants.KnoraApiV2Complex.IsPartOf.toSmartIri),
+            requestingUser = SharedTestDataADM.anythingUser1,
+          ),
+        ),
       )
-
-      expectMsgPF(timeout) { case response: GraphDataGetResponseV2 =>
-        response should ===(graphTestData.graphWithStandoffLink)
-      }
+      response should ===(graphTestData.graphWithStandoffLink)
     }
 
     "return a graph containing just one node" in {
-      appActor ! GraphDataGetRequestV2(
-        resourceIri = "http://rdfh.ch/0001/another-thing",
-        depth = 4,
-        inbound = true,
-        outbound = true,
-        excludeProperty = Some(OntologyConstants.KnoraApiV2Complex.IsPartOf.toSmartIri),
-        requestingUser = SharedTestDataADM.anythingUser1,
+      val response = UnsafeZioRun.runOrThrow(
+        resourcesResponderV2(
+          _.getGraphDataResponseV2(
+            resourceIri = "http://rdfh.ch/0001/another-thing",
+            depth = 4,
+            GraphDirection.Both,
+            excludeProperty = Some(OntologyConstants.KnoraApiV2Complex.IsPartOf.toSmartIri),
+            requestingUser = SharedTestDataADM.anythingUser1,
+          ),
+        ),
       )
-
-      expectMsgPF(timeout) { case response: GraphDataGetResponseV2 =>
-        response should ===(graphTestData.graphWithOneNode)
-      }
+      response should ===(graphTestData.graphWithOneNode)
     }
 
     "create a resource with no values" in {
