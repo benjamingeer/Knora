@@ -125,6 +125,15 @@ final case class ResourcesEndpoints(
     .out(stringBody)
     .out(header[MediaType](HeaderNames.ContentType))
 
+  val getResourcesTei = baseEndpoints.withUserEndpoint.get
+    .in("v2" / "tei" / path[IriDto].name("resourceIri"))
+    .in(query[Option[IriDto]]("mappingIri"))
+    .in(query[IriDto]("textProperty"))
+    .in(query[Option[IriDto]]("gravsearchTemplateIri"))
+    .in(query[Option[IriDto]]("headerXSLTIri"))
+    .out(stringBody)
+    .out(header[MediaType](HeaderNames.ContentType))
+
   val postResourcesDelete = baseEndpoints.withUserEndpoint.post
     .in(base / "delete")
     .in(ApiV2.Inputs.formatOptions)
@@ -148,6 +157,7 @@ final case class ResourcesEndpoints(
     getResources,
     getResourcesParams,
     getResourcesGraph,
+    getResourcesTei,
     postResourcesErase,
     postResourcesDelete,
     putResources,

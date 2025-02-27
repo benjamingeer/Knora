@@ -152,22 +152,6 @@ final case class ResourcesResponderV2(
           requestingUser,
         ) =>
       getResourcePreviewV2(resIris, withDeletedResource, targetSchema, requestingUser)
-    case ResourceTEIGetRequestV2(
-          resIri,
-          textProperty,
-          mappingIri,
-          gravsearchTemplateIri,
-          headerXSLTIri,
-          requestingUser,
-        ) =>
-      getResourceAsTeiV2(
-        resIri,
-        textProperty,
-        mappingIri,
-        gravsearchTemplateIri,
-        headerXSLTIri,
-        requestingUser,
-      )
 
     case createResourceRequestV2: CreateResourceRequestV2 =>
       createHandler(createResourceRequestV2)
@@ -782,7 +766,7 @@ final case class ResourcesResponderV2(
    * @param requestingUser        the user making the request.
    * @return a [[ResourceTEIGetResponseV2]].
    */
-  private def getResourceAsTeiV2(
+  def getResourceAsTeiV2(
     resourceIri: IRI,
     textProperty: SmartIri,
     mappingIri: Option[IRI],

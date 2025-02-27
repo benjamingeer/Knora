@@ -177,25 +177,6 @@ case class ResourceVersionHistoryResponseV2(history: Seq[ResourceHistoryEntry]) 
 }
 
 /**
- * Requests a resource as TEI/XML. A successful response will be a [[ResourceTEIGetResponseV2]].
- *
- * @param resourceIri           the IRI of the resource to be returned in TEI/XML.
- * @param textProperty          the property representing the text (to be converted to the body of a TEI document).
- * @param mappingIri            the IRI of the mapping to be used to convert from standoff to TEI/XML, if any. Otherwise the standard mapping is assumed.
- * @param gravsearchTemplateIri the gravsearch template to query the metadata for the TEI header, if provided.
- * @param headerXSLTIri         the IRI of the XSL transformation to convert the resource's metadata to the TEI header.
- * @param requestingUser        the user making the request.
- */
-case class ResourceTEIGetRequestV2(
-  resourceIri: IRI,
-  textProperty: SmartIri,
-  mappingIri: Option[IRI],
-  gravsearchTemplateIri: Option[IRI],
-  headerXSLTIri: Option[IRI],
-  requestingUser: User,
-) extends ResourcesResponderRequestV2
-
-/**
  * Represents a Knora resource as TEI/XML.
  *
  * @param header the header of the TEI document, if given.

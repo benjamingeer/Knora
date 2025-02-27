@@ -41,6 +41,7 @@ final class ResourcesEndpointsHandler(
         resourcesRestService.searchResourcesByProjectAndClass,
       ),
       SecuredEndpointHandler(resourcesEndpoints.getResources, resourcesRestService.getResources),
+      SecuredEndpointHandler(resourcesEndpoints.getResourcesTei, resourcesRestService.getResourceAsTeiV2),
       SecuredEndpointHandler(resourcesEndpoints.postResourcesErase, resourcesRestService.eraseResource),
       SecuredEndpointHandler(resourcesEndpoints.postResourcesDelete, resourcesRestService.deleteResource),
       SecuredEndpointHandler(resourcesEndpoints.putResources, resourcesRestService.updateResourceMetadata),

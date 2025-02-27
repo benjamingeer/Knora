@@ -123,6 +123,21 @@ final case class ResourcesRestService(
     response        <- renderer.render(result, formatOptions)
   } yield response
 
+  def getResourceAsTeiV2(user: User)(
+    resourceIri: IriDto,
+    mappingIri: Option[IriDto],
+    textProperty: IriDto,
+    gravsearchTemplateIri: Option[IriDto],
+    headerXSLTIri: Option[IriDto],
+  ) = for {
+    textProp          <- iriConverter.asSmartIri(textProperty.value)
+    resource           = resourceIri.value
+    mapping            = mappingIri.map(_.value)
+    gravsearchTemplate = gravsearchTemplateIri.map(_.value)
+    headerXslt         = headerXSLTIri.map(_.value)
+    result            <- resourcesService.getResourceAsTeiV2(resource, textProp, mapping, gravsearchTemplate, headerXslt, user)
+  } yield (result.toXML, MediaType.ApplicationXml)
+
   def eraseResource(user: User)(formatOptions: FormatOptions, jsonLd: String): Task[(RenderedResponse, MediaType)] =
     for {
       uuid <- Random.nextUUID
