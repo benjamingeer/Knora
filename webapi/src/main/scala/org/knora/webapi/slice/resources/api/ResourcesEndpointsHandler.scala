@@ -43,6 +43,7 @@ final class ResourcesEndpointsHandler(
       SecuredEndpointHandler(resourcesEndpoints.getResources, resourcesRestService.getResources),
       SecuredEndpointHandler(resourcesEndpoints.postResourcesErase, resourcesRestService.eraseResource),
       SecuredEndpointHandler(resourcesEndpoints.postResourcesDelete, resourcesRestService.deleteResource),
+      SecuredEndpointHandler(resourcesEndpoints.putResources, resourcesRestService.updateResourceMetadata),
     ).map(mapper.mapSecuredEndpointHandler(_))
 }
 

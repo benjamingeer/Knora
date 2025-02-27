@@ -53,10 +53,7 @@ final case class ResourcesRouteV2(appConfig: AppConfig)(
   private val GravsearchTemplate_Iri = "gravsearchTemplateIri"
   private val TEIHeader_XSLT_IRI     = "teiHeaderXSLTIri"
 
-  def makeRoute: Route =
-    createResource() ~
-      updateResourceMetadata() ~
-      getResourcesTei()
+  def makeRoute: Route = createResource() ~ getResourcesTei()
 
   private def createResource(): Route = path(resourcesBasePath) {
     post {
@@ -71,21 +68,6 @@ final case class ResourcesRouteV2(appConfig: AppConfig)(
           _ <- checkMimeTypesForFileValueContents(requestMessage.createResource.flatValues)
         } yield requestMessage
         RouteUtilV2.runRdfRouteZ(requestTask, requestContext)
-      }
-    }
-  }
-
-  private def updateResourceMetadata(): Route = path(resourcesBasePath) {
-    put {
-      entity(as[String]) { jsonRequest => requestContext =>
-        val requestMessageFuture = for {
-          requestingUser <- ZIO.serviceWithZIO[Authenticator](_.getUserADM(requestContext))
-          apiRequestId   <- RouteUtilZ.randomUuid()
-          requestMessage <-
-            jsonLdRequestParser(_.updateResourceMetadataRequestV2(jsonRequest, requestingUser, apiRequestId))
-              .mapError(BadRequestException.apply)
-        } yield requestMessage
-        RouteUtilV2.runRdfRouteZ(requestMessageFuture, requestContext)
       }
     }
   }

@@ -132,6 +132,13 @@ final case class ResourcesEndpoints(
     .out(stringBody)
     .out(header[MediaType](HeaderNames.ContentType))
 
+  val putResources = baseEndpoints.withUserEndpoint.put
+    .in(base)
+    .in(ApiV2.Inputs.formatOptions)
+    .in(stringJsonBody)
+    .out(stringBody)
+    .out(header[MediaType](HeaderNames.ContentType))
+
   val endpoints: Seq[AnyEndpoint] = Seq(
     getResourcesIiifManifest,
     getResourcesPreview,
@@ -143,6 +150,7 @@ final case class ResourcesEndpoints(
     getResourcesGraph,
     postResourcesErase,
     postResourcesDelete,
+    putResources,
   ).map(_.endpoint.tag("V2 Resources"))
 }
 

@@ -5,7 +5,6 @@
 
 package org.knora.webapi.responders.v2
 
-import org.apache.pekko.actor.Status.Failure
 import org.apache.pekko.testkit.ImplicitSender
 import org.xmlunit.builder.DiffBuilder
 import org.xmlunit.builder.Input
@@ -1689,12 +1688,8 @@ class ResourcesResponderV2Spec extends CoreSpec with ImplicitSender { self =>
         requestingUser = incunabulaUserProfile,
         apiRequestID = UUID.randomUUID,
       )
-
-      appActor ! updateRequest
-
-      expectMsgPF(timeout) { case msg: Failure =>
-        msg.cause.isInstanceOf[ForbiddenException] should ===(true)
-      }
+      val exit = UnsafeZioRun.run(resourcesResponderV2(_.updateResourceMetadataV2(updateRequest)))
+      assertFailsWithA[ForbiddenException](exit)
     }
 
     "not update a resource's metadata if the user does not supply the correct resource class" in {
@@ -1705,12 +1700,8 @@ class ResourcesResponderV2Spec extends CoreSpec with ImplicitSender { self =>
         requestingUser = anythingUserProfile,
         apiRequestID = UUID.randomUUID,
       )
-
-      appActor ! updateRequest
-
-      expectMsgPF(timeout) { case msg: Failure =>
-        msg.cause.isInstanceOf[BadRequestException] should ===(true)
-      }
+      val exit = UnsafeZioRun.run(resourcesResponderV2(_.updateResourceMetadataV2(updateRequest)))
+      assertFailsWithA[BadRequestException](exit)
     }
 
     "update a resource's metadata when it doesn't have a knora-base:lastModificationDate" in {
@@ -1726,13 +1717,9 @@ class ResourcesResponderV2Spec extends CoreSpec with ImplicitSender { self =>
         requestingUser = anythingUserProfile,
         apiRequestID = UUID.randomUUID,
       )
-
-      appActor ! updateRequest
-
-      expectMsgType[UpdateResourceMetadataResponseV2](timeout)
+      val _ = UnsafeZioRun.runOrThrow(resourcesResponderV2(_.updateResourceMetadataV2(updateRequest)))
 
       // Get the resource from the triplestore and check it.
-
       val outputResource: ReadResourceV2 = getResource(aThingIri)
       assert(outputResource.label == newLabel)
       assert(
@@ -1752,12 +1739,8 @@ class ResourcesResponderV2Spec extends CoreSpec with ImplicitSender { self =>
         requestingUser = anythingUserProfile,
         apiRequestID = UUID.randomUUID,
       )
-
-      appActor ! updateRequest
-
-      expectMsgPF(timeout) { case msg: Failure =>
-        msg.cause.isInstanceOf[EditConflictException] should ===(true)
-      }
+      val exit = UnsafeZioRun.run(resourcesResponderV2(_.updateResourceMetadataV2(updateRequest)))
+      assertFailsWithA[EditConflictException](exit)
     }
 
     "not update a resource's metadata if the wrong knora-base:lastModificationDate is submitted" in {
@@ -1769,12 +1752,8 @@ class ResourcesResponderV2Spec extends CoreSpec with ImplicitSender { self =>
         requestingUser = anythingUserProfile,
         apiRequestID = UUID.randomUUID,
       )
-
-      appActor ! updateRequest
-
-      expectMsgPF(timeout) { case msg: Failure =>
-        msg.cause.isInstanceOf[EditConflictException] should ===(true)
-      }
+      val exit = UnsafeZioRun.run(resourcesResponderV2(_.updateResourceMetadataV2(updateRequest)))
+      assertFailsWithA[EditConflictException](exit)
     }
 
     "update a resource's metadata when it has a knora-base:lastModificationDate" in {
@@ -1788,13 +1767,9 @@ class ResourcesResponderV2Spec extends CoreSpec with ImplicitSender { self =>
         requestingUser = anythingUserProfile,
         apiRequestID = UUID.randomUUID,
       )
-
-      appActor ! updateRequest
-
-      expectMsgType[UpdateResourceMetadataResponseV2](timeout)
+      val _ = UnsafeZioRun.runOrThrow(resourcesResponderV2(_.updateResourceMetadataV2(updateRequest)))
 
       // Get the resource from the triplestore and check it.
-
       val outputResource: ReadResourceV2 = getResource(aThingIri)
       assert(outputResource.label == newLabel)
       val updatedLastModificationDate = outputResource.lastModificationDate.get
@@ -1811,12 +1786,8 @@ class ResourcesResponderV2Spec extends CoreSpec with ImplicitSender { self =>
         requestingUser = anythingUserProfile,
         apiRequestID = UUID.randomUUID,
       )
-
-      appActor ! updateRequest
-
-      expectMsgPF(timeout) { case msg: Failure =>
-        msg.cause.isInstanceOf[BadRequestException] should ===(true)
-      }
+      val exit = UnsafeZioRun.run(resourcesResponderV2(_.updateResourceMetadataV2(updateRequest)))
+      assertFailsWithA[BadRequestException](exit)
     }
 
     "update a resource's knora-base:lastModificationDate" in {
@@ -1830,10 +1801,7 @@ class ResourcesResponderV2Spec extends CoreSpec with ImplicitSender { self =>
         requestingUser = anythingUserProfile,
         apiRequestID = UUID.randomUUID,
       )
-
-      appActor ! updateRequest
-
-      expectMsgType[UpdateResourceMetadataResponseV2](timeout)
+      val _ = UnsafeZioRun.runOrThrow(resourcesResponderV2(_.updateResourceMetadataV2(updateRequest)))
 
       // Get the resource from the triplestore and check it.
 
@@ -2537,16 +2505,14 @@ class ResourcesResponderV2Spec extends CoreSpec with ImplicitSender { self =>
 
     "update resource's metadata to test update resource metadata event" in {
       val resourceIri = "http://rdfh.ch/0001/thing_with_BCE_date2"
-      appActor ! UpdateResourceMetadataRequestV2(
+      val updateRequest = UpdateResourceMetadataRequestV2(
         resourceIri = resourceIri,
         resourceClassIri = "http://0.0.0.0:3333/ontology/0001/anything/v2#Thing".toSmartIri,
         maybeLabel = Some("a new label"),
         requestingUser = anythingUserProfile,
         apiRequestID = UUID.randomUUID,
       )
-
-      expectMsgType[UpdateResourceMetadataResponseV2](timeout)
-
+      val _ = UnsafeZioRun.runOrThrow(resourcesResponderV2(_.updateResourceMetadataV2(updateRequest)))
       val events = UnsafeZioRun.runOrThrow(
         resourcesResponderV2(_.getResourceHistoryEvents(resourceIri, anythingUserProfile).map(_.historyEvents)),
       )

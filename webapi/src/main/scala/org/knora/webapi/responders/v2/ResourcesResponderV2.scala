@@ -172,9 +172,6 @@ final case class ResourcesResponderV2(
     case createResourceRequestV2: CreateResourceRequestV2 =>
       createHandler(createResourceRequestV2)
 
-    case updateResourceMetadataRequestV2: UpdateResourceMetadataRequestV2 =>
-      updateResourceMetadataV2(updateResourceMetadataRequestV2)
-
     case resourceHistoryRequest: ResourceVersionHistoryGetRequestV2 =>
       getResourceHistoryV2(resourceHistoryRequest)
 
@@ -222,7 +219,7 @@ final case class ResourcesResponderV2(
    * @param updateResourceMetadataRequestV2 the update request.
    * @return a [[UpdateResourceMetadataResponseV2]].
    */
-  private def updateResourceMetadataV2(
+  def updateResourceMetadataV2(
     updateResourceMetadataRequestV2: UpdateResourceMetadataRequestV2,
   ): Task[UpdateResourceMetadataResponseV2] = {
     def makeTaskFuture: Task[UpdateResourceMetadataResponseV2] =

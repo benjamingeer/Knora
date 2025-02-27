@@ -615,7 +615,7 @@ case class UpdateResourceMetadataRequestV2(
   maybeNewModificationDate: Option[Instant] = None,
   requestingUser: User,
   apiRequestID: UUID,
-) extends ResourcesResponderRequestV2
+)
 
 /**
  * Represents a response after updating a resource's metadata.

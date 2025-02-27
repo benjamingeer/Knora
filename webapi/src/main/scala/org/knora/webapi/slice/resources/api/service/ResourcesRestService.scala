@@ -143,6 +143,17 @@ final case class ResourcesRestService(
       response <- renderer.render(result, formatOptions)
     } yield response
 
+  def updateResourceMetadata(
+    user: User,
+  )(formatOptions: FormatOptions, jsonLd: String): Task[(RenderedResponse, MediaType)] =
+    for {
+      uuid <- Random.nextUUID
+      eraseRequest <- requestParser
+                        .updateResourceMetadataRequestV2(jsonLd, user, uuid)
+                        .mapError(BadRequestException.apply)
+      result   <- resourcesService.updateResourceMetadataV2(eraseRequest)
+      response <- renderer.render(result, formatOptions)
+    } yield response
 }
 
 object ResourcesRestService {
