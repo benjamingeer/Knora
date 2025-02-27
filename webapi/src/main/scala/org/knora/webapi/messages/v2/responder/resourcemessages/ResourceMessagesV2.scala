@@ -9,7 +9,6 @@ import java.time.Instant
 import java.util.UUID
 
 import dsp.errors.*
-import dsp.valueobjects.Iri
 import dsp.valueobjects.UuidUtil
 import org.knora.webapi.*
 import org.knora.webapi.config.AppConfig
@@ -123,25 +122,6 @@ case class ResourceVersionHistoryGetRequestV2(
   endDate: Option[Instant] = None,
   requestingUser: User,
 ) extends ResourcesResponderRequestV2
-
-/**
- * Requests the full version history of a resource and its values as events.
- *
- * @param resourceIri            the IRI of the resource.
- * @param requestingUser         the user making the request.
- */
-case class ResourceHistoryEventsGetRequestV2(
-  resourceIri: IRI,
-  requestingUser: User,
-) extends ResourcesResponderRequestV2 {
-  private val stringFormatter = StringFormatter.getInstanceForConstantOntologies
-  Iri
-    .validateAndEscapeIri(resourceIri)
-    .getOrElse(throw BadRequestException(s"Invalid resource IRI: $resourceIri"))
-  if (!stringFormatter.toSmartIri(resourceIri).isKnoraResourceIri) {
-    throw BadRequestException(s"Given IRI is not a resource IRI: $resourceIri")
-  }
-}
 
 /**
  * Requests the version history of all resources of a project.

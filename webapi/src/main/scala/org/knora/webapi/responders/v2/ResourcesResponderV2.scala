@@ -184,9 +184,6 @@ final case class ResourcesResponderV2(
 
     case resourceIIIFManifestRequest: ResourceIIIFManifestGetRequestV2 => getIIIFManifestV2(resourceIIIFManifestRequest)
 
-    case resourceHistoryEventsRequest: ResourceHistoryEventsGetRequestV2 =>
-      getResourceHistoryEvents(resourceHistoryEventsRequest)
-
     case projectHistoryEventsRequestV2: ProjectResourcesWithHistoryGetRequestV2 =>
       getProjectResourceHistoryEvents(projectHistoryEventsRequestV2)
 
@@ -1546,25 +1543,20 @@ final case class ResourcesResponderV2(
    * @param resourceHistoryEventsGetRequest the request for events describing history of a resource.
    * @return the events extracted from full representation of a resource at each time point in its history ordered by version date.
    */
-  private def getResourceHistoryEvents(
-    resourceHistoryEventsGetRequest: ResourceHistoryEventsGetRequestV2,
+  def getResourceHistoryEvents(
+    resourceIri: IRI,
+    requestingUser: User,
   ): Task[ResourceAndValueVersionHistoryResponseV2] =
     for {
-      resourceHistory <-
-        getResourceHistoryV2(
-          ResourceVersionHistoryGetRequestV2(
-            resourceIri = resourceHistoryEventsGetRequest.resourceIri,
-            withDeletedResource = true,
-            requestingUser = resourceHistoryEventsGetRequest.requestingUser,
-          ),
-        )
-      resourceFullHist <- extractEventsFromHistory(
-                            resourceIri = resourceHistoryEventsGetRequest.resourceIri,
-                            resourceHistory = resourceHistory.history,
-                            requestingUser = resourceHistoryEventsGetRequest.requestingUser,
-                          )
-      sortedResourceHistory = resourceFullHist.sortBy(_.versionDate)
-    } yield ResourceAndValueVersionHistoryResponseV2(historyEvents = sortedResourceHistory)
+      resourceHistory <- getResourceHistoryV2(
+                           ResourceVersionHistoryGetRequestV2(
+                             resourceIri = resourceIri,
+                             withDeletedResource = true,
+                             requestingUser = requestingUser,
+                           ),
+                         )
+      resourceFullHist <- extractEventsFromHistory(resourceIri, resourceHistory.history, requestingUser)
+    } yield ResourceAndValueVersionHistoryResponseV2(resourceFullHist.sortBy(_.versionDate))
 
   /**
    * Returns events representing the history of all resources and values belonging to a project ordered by date.

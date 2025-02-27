@@ -49,6 +49,12 @@ final case class ResourcesEndpoints(private val baseEndpoints: BaseEndpoints) {
       case _            => None
     }(d => (d, d))
 
+  val getResourcesHistoryEvents = baseEndpoints.withUserEndpoint.get
+    .in(base / "resourceHistoryEvents" / path[IriDto].name("resourceIri"))
+    .in(ApiV2.Inputs.formatOptions)
+    .out(stringBody)
+    .out(header[MediaType](HeaderNames.ContentType))
+
   val getResourcesHistory = baseEndpoints.withUserEndpoint.get
     .in(base / "history" / path[IriDto].name("resourceIri"))
     .in(ApiV2.Inputs.formatOptions)
@@ -65,6 +71,7 @@ final case class ResourcesEndpoints(private val baseEndpoints: BaseEndpoints) {
     .out(header[MediaType](HeaderNames.ContentType))
 
   val endpoints: Seq[AnyEndpoint] = Seq(
+    getResourcesHistoryEvents,
     getResourcesHistory,
     getResources,
   ).map(_.endpoint.tag("V2 Resources"))

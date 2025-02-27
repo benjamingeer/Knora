@@ -17,6 +17,13 @@ import org.knora.webapi.slice.resources.api.model.VersionDate
 
 final case class ResourcesRestService(resourcesService: ResourcesResponderV2, renderer: KnoraResponseRenderer) {
 
+  def getResourcesHistoryEvents(
+    user: User,
+  )(resourceIri: IriDto, formatOptions: FormatOptions): Task[(RenderedResponse, MediaType)] =
+    resourcesService
+      .getResourceHistoryEvents(resourceIri.value, user)
+      .flatMap(renderer.render(_, formatOptions))
+
   def getResourceHistory(user: User)(
     resourceIri: IriDto,
     formatOptions: FormatOptions,

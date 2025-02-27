@@ -2388,13 +2388,11 @@ class ResourcesResponderV2Spec extends CoreSpec with ImplicitSender { self =>
     "return full history of a-thing-picture resource" in {
       val resourceIri = "http://rdfh.ch/0001/a-thing-picture"
 
-      appActor ! ResourceHistoryEventsGetRequestV2(
-        resourceIri = resourceIri,
-        requestingUser = anythingUserProfile,
+      val events = UnsafeZioRun.runOrThrow(
+        ZIO.serviceWithZIO[ResourcesResponderV2](
+          _.getResourceHistoryEvents(resourceIri, anythingUserProfile).map(_.historyEvents),
+        ),
       )
-      val response: ResourceAndValueVersionHistoryResponseV2 =
-        expectMsgType[ResourceAndValueVersionHistoryResponseV2](timeout)
-      val events: Seq[ResourceAndValueHistoryEvent] = response.historyEvents
       events.size shouldEqual 3
       val createResourceEvents =
         events.filter(historyEvent => historyEvent.eventType == ResourceAndValueEventsUtil.CREATE_RESOURCE_EVENT)
@@ -2410,13 +2408,11 @@ class ResourcesResponderV2Spec extends CoreSpec with ImplicitSender { self =>
     "return full history of a resource as events" in {
       val resourceIri = "http://rdfh.ch/0001/thing-with-history"
 
-      appActor ! ResourceHistoryEventsGetRequestV2(
-        resourceIri = resourceIri,
-        requestingUser = anythingUserProfile,
+      val events = UnsafeZioRun.runOrThrow(
+        ZIO.serviceWithZIO[ResourcesResponderV2](
+          _.getResourceHistoryEvents(resourceIri, anythingUserProfile).map(_.historyEvents),
+        ),
       )
-      val response: ResourceAndValueVersionHistoryResponseV2 =
-        expectMsgType[ResourceAndValueVersionHistoryResponseV2](timeout)
-      val events: Seq[ResourceAndValueHistoryEvent] = response.historyEvents
       events.size should be(9)
     }
 
@@ -2441,13 +2437,11 @@ class ResourcesResponderV2Spec extends CoreSpec with ImplicitSender { self =>
         ),
       )
 
-      appActor ! ResourceHistoryEventsGetRequestV2(
-        resourceIri = resourceIri,
-        requestingUser = anythingUserProfile,
+      val events = UnsafeZioRun.runOrThrow(
+        ZIO.serviceWithZIO[ResourcesResponderV2](
+          _.getResourceHistoryEvents(resourceIri, anythingUserProfile).map(_.historyEvents),
+        ),
       )
-      val response: ResourceAndValueVersionHistoryResponseV2 =
-        expectMsgType[ResourceAndValueVersionHistoryResponseV2](timeout)
-      val events: Seq[ResourceAndValueHistoryEvent] = response.historyEvents
       events.size should be(10)
       val updatePermissionEvent: Option[ResourceAndValueHistoryEvent] =
         events.find(event => event.eventType == ResourceAndValueEventsUtil.UPDATE_VALUE_PERMISSION_EVENT)
@@ -2484,13 +2478,11 @@ class ResourcesResponderV2Spec extends CoreSpec with ImplicitSender { self =>
         ),
       )
 
-      appActor ! ResourceHistoryEventsGetRequestV2(
-        resourceIri = resourceIri,
-        requestingUser = anythingUserProfile,
+      val events = UnsafeZioRun.runOrThrow(
+        ZIO.serviceWithZIO[ResourcesResponderV2](
+          _.getResourceHistoryEvents(resourceIri, anythingUserProfile).map(_.historyEvents),
+        ),
       )
-      val response: ResourceAndValueVersionHistoryResponseV2 =
-        expectMsgType[ResourceAndValueVersionHistoryResponseV2](timeout)
-      val events: Seq[ResourceAndValueHistoryEvent] = response.historyEvents
       events.size should be(11)
       val createValueEvent: Option[ResourceAndValueHistoryEvent] =
         events.find(event =>
@@ -2531,13 +2523,11 @@ class ResourcesResponderV2Spec extends CoreSpec with ImplicitSender { self =>
         ),
       )
 
-      appActor ! ResourceHistoryEventsGetRequestV2(
-        resourceIri = resourceIri,
-        requestingUser = anythingUserProfile,
+      val events = UnsafeZioRun.runOrThrow(
+        ZIO.serviceWithZIO[ResourcesResponderV2](
+          _.getResourceHistoryEvents(resourceIri, anythingUserProfile).map(_.historyEvents),
+        ),
       )
-      val response: ResourceAndValueVersionHistoryResponseV2 =
-        expectMsgType[ResourceAndValueVersionHistoryResponseV2](timeout)
-      val events: Seq[ResourceAndValueHistoryEvent] = response.historyEvents
       events.size should be(12)
       val deleteValueEvent: Option[ResourceAndValueHistoryEvent] =
         events.find(event =>
@@ -2551,14 +2541,11 @@ class ResourcesResponderV2Spec extends CoreSpec with ImplicitSender { self =>
     "return full history of a deleted resource" in {
       val resourceIri = "http://rdfh.ch/0001/PHbbrEsVR32q5D_ioKt6pA"
 
-      appActor ! ResourceHistoryEventsGetRequestV2(
-        resourceIri = resourceIri,
-        requestingUser = anythingUserProfile,
+      val events = UnsafeZioRun.runOrThrow(
+        ZIO.serviceWithZIO[ResourcesResponderV2](
+          _.getResourceHistoryEvents(resourceIri, anythingUserProfile).map(_.historyEvents),
+        ),
       )
-
-      val response: ResourceAndValueVersionHistoryResponseV2 =
-        expectMsgType[ResourceAndValueVersionHistoryResponseV2](timeout)
-      val events: Seq[ResourceAndValueHistoryEvent] = response.historyEvents
       events.size should be(2)
       val deleteResourceEvent: Option[ResourceAndValueHistoryEvent] =
         events.find(event => event.eventType == ResourceAndValueEventsUtil.DELETE_RESOURCE_EVENT)
@@ -2579,13 +2566,11 @@ class ResourcesResponderV2Spec extends CoreSpec with ImplicitSender { self =>
 
       expectMsgType[UpdateResourceMetadataResponseV2](timeout)
 
-      appActor ! ResourceHistoryEventsGetRequestV2(
-        resourceIri = resourceIri,
-        requestingUser = anythingUserProfile,
+      val events = UnsafeZioRun.runOrThrow(
+        ZIO.serviceWithZIO[ResourcesResponderV2](
+          _.getResourceHistoryEvents(resourceIri, anythingUserProfile).map(_.historyEvents),
+        ),
       )
-      val response: ResourceAndValueVersionHistoryResponseV2 =
-        expectMsgType[ResourceAndValueVersionHistoryResponseV2](timeout)
-      val events: Seq[ResourceAndValueHistoryEvent] = response.historyEvents
       events.size should be(2)
       val updateMetadataEvent: Option[ResourceAndValueHistoryEvent] =
         events.find(event => event.eventType == ResourceAndValueEventsUtil.UPDATE_RESOURCE_METADATA_EVENT)

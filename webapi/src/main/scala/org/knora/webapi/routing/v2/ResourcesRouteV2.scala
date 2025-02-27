@@ -69,7 +69,6 @@ final case class ResourcesRouteV2(appConfig: AppConfig)(
       createResource() ~
       updateResourceMetadata() ~
       getResourcesInProject() ~
-      getResourceHistoryEvents() ~
       getProjectResourceAndValueHistory() ~
       getResourcesPreview() ~
       getResourcesTei() ~
@@ -190,16 +189,6 @@ final case class ResourcesRouteV2(appConfig: AppConfig)(
       RouteUtilV2.completeResponse(response, requestContext, targetSchemaTask)
     }
   }
-
-  private def getResourceHistoryEvents(): Route =
-    path(resourcesBasePath / "resourceHistoryEvents" / Segment) { (resourceIri: IRI) =>
-      get { requestContext =>
-        val requestTask = ZIO
-          .serviceWithZIO[Authenticator](_.getUserADM(requestContext))
-          .map(ResourceHistoryEventsGetRequestV2(resourceIri, _))
-        RouteUtilV2.runRdfRouteZ(requestTask, requestContext)
-      }
-    }
 
   private def getProjectResourceAndValueHistory(): Route =
     path(resourcesBasePath / "projectHistoryEvents" / Segment) { (projectIri: IRI) =>
