@@ -5,8 +5,12 @@
 
 package org.knora.webapi.messages.v2.responder.resourcemessages
 
+import zio.Task
+import zio.ZIO
+
 import java.time.Instant
 import java.util.UUID
+
 import dsp.errors.*
 import dsp.valueobjects.UuidUtil
 import org.knora.webapi.*
@@ -28,8 +32,6 @@ import org.knora.webapi.messages.v2.responder.valuemessages.ValueMessagesV2Optic
 import org.knora.webapi.slice.admin.api.model.Project
 import org.knora.webapi.slice.admin.domain.model.Permission
 import org.knora.webapi.slice.admin.domain.model.User
-import zio.Task
-import zio.ZIO
 
 /**
  * An abstract trait for messages that can be sent to `ResourcesResponderV2`.
