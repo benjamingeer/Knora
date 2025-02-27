@@ -28,6 +28,7 @@ final case class ApiV2Endpoints(
     authenticationEndpoints.endpoints ++
       listsEndpointsV2.endpoints ++
       resourceInfoEndpoints.endpoints ++
+      resourcesEndpoints.endpoints ++
       searchEndpoints.endpoints ++
       valuesEndpoints.endpoints
 }
