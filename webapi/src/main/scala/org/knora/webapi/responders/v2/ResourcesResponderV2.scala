@@ -182,8 +182,6 @@ final case class ResourcesResponderV2(
     case resourceHistoryRequest: ResourceVersionHistoryGetRequestV2 =>
       getResourceHistoryV2(resourceHistoryRequest)
 
-    case resourceIIIFManifestRequest: ResourceIIIFManifestGetRequestV2 => getIIIFManifestV2(resourceIIIFManifestRequest)
-
     case other =>
       Responder.handleUnexpectedMessage(other, this.getClass.getName)
   }
@@ -1408,7 +1406,7 @@ final case class ResourcesResponderV2(
       historyEntriesWithResourceCreation,
     )
 
-  private def getIIIFManifestV2(request: ResourceIIIFManifestGetRequestV2): Task[ResourceIIIFManifestGetResponseV2] =
+  def getIiifManifestV2(resourceIri: IRI, requestingUser: User): Task[ResourceIIIFManifestGetResponseV2] =
     // The implementation here is experimental. If we had a way of streaming the canvas URLs to the IIIF viewer,
     // it would be better to write the Gravsearch query differently, so that ?representation was the main resource.
     // Then the Gravsearch query could return pages of results.
@@ -1420,9 +1418,7 @@ final case class ResourcesResponderV2(
       // Make a Gravsearch query from a template.
       gravsearchQueryForIncomingLinks <- ZIO.attempt(
                                            org.knora.webapi.messages.twirl.queries.gravsearch.txt
-                                             .getIncomingImageLinks(
-                                               resourceIri = request.resourceIri,
-                                             )
+                                             .getIncomingImageLinks(resourceIri)
                                              .toString(),
                                          )
 
@@ -1432,10 +1428,10 @@ final case class ResourcesResponderV2(
       searchResponse <- searchResponderV2.gravsearchV2(
                           parsedGravsearchQuery,
                           apiV2SchemaWithOption(MarkupRendering.Standoff),
-                          request.requestingUser,
+                          requestingUser,
                         )
 
-      resource      = searchResponse.toResource(request.resourceIri)
+      resource      = searchResponse.toResource(resourceIri)
       incomingLinks = resource.values.getOrElse(OntologyConstants.KnoraBase.HasIncomingLinkValue.toSmartIri, Seq.empty)
 
       representations: Seq[ReadResourceV2] = incomingLinks.collect { case readLinkValueV2: ReadLinkValueV2 =>
@@ -1447,7 +1443,7 @@ final case class ResourcesResponderV2(
         body = JsonLDObject(
           Map(
             JsonLDKeywords.CONTEXT -> JsonLDString("http://iiif.io/api/presentation/3/context.json"),
-            "id"                   -> JsonLDString(s"${request.resourceIri}/manifest"), // Is this IRI OK?
+            "id"                   -> JsonLDString(s"${resourceIri}/manifest"), // Is this IRI OK?
             "type"                 -> JsonLDString("Manifest"),
             "label"                -> JsonLDObject(Map("en" -> JsonLDArray(Seq(JsonLDString(resource.label))))),
             "behavior"             -> JsonLDArray(Seq(JsonLDString("paged"))),
@@ -1537,7 +1533,8 @@ final case class ResourcesResponderV2(
   /**
    * Returns all events describing the history of a resource ordered by version date.
    *
-   * @param resourceHistoryEventsGetRequest the request for events describing history of a resource.
+   * @param resourceIri the request for events describing history of a resource.
+   * @param requestingUser the user making the request.
    * @return the events extracted from full representation of a resource at each time point in its history ordered by version date.
    */
   def getResourceHistoryEvents(

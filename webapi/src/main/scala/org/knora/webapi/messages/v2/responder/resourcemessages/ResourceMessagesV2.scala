@@ -80,18 +80,6 @@ case class ResourcesPreviewGetRequestV2(
 ) extends ResourcesResponderRequestV2
 
 /**
- * Requests a IIIF manifest for the images that are `knora-base:isPartOf` the specified
- * resource.
- *
- * @param resourceIri          the resource IRI.
- * @param requestingUser       the user making the request.
- */
-case class ResourceIIIFManifestGetRequestV2(
-  resourceIri: IRI,
-  requestingUser: User,
-) extends ResourcesResponderRequestV2
-
-/**
  * Represents a IIIF manifest for the images that are `knora-base:isPartOf` the specified
  * resource.
  *

@@ -65,8 +65,7 @@ final case class ResourcesRouteV2(appConfig: AppConfig)(
   private val Both                   = "both"
 
   def makeRoute: Route =
-    getIIIFManifest() ~
-      createResource() ~
+    createResource() ~
       updateResourceMetadata() ~
       getResourcesInProject() ~
       getResourcesPreview() ~
@@ -74,20 +73,6 @@ final case class ResourcesRouteV2(appConfig: AppConfig)(
       getResourcesGraph() ~
       deleteResource() ~
       eraseResource()
-
-  private def getIIIFManifest(): Route =
-    path(resourcesBasePath / "iiifmanifest" / Segment) { (resourceIriStr: IRI) =>
-      get { requestContext =>
-        val requestTask = for {
-          resourceIri <- Iri
-                           .validateAndEscapeIri(resourceIriStr)
-                           .toZIO
-                           .orElseFail(BadRequestException(s"Invalid resource IRI: $resourceIriStr"))
-          user <- ZIO.serviceWithZIO[Authenticator](_.getUserADM(requestContext))
-        } yield ResourceIIIFManifestGetRequestV2(resourceIri, user)
-        RouteUtilV2.runRdfRouteZ(requestTask, requestContext)
-      }
-    }
 
   private def createResource(): Route = path(resourcesBasePath) {
     post {
