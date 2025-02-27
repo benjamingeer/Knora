@@ -56,9 +56,7 @@ final case class ResourcesRouteV2(appConfig: AppConfig)(
   def makeRoute: Route =
     createResource() ~
       updateResourceMetadata() ~
-      getResourcesTei() ~
-      deleteResource() ~
-      eraseResource()
+      getResourcesTei()
 
   private def createResource(): Route = path(resourcesBasePath) {
     post {
@@ -109,35 +107,6 @@ final case class ResourcesRouteV2(appConfig: AppConfig)(
         user                  <- ZIO.serviceWithZIO[Authenticator](_.getUserADM(requestContext))
       } yield ResourceTEIGetRequestV2(resourceIri, textProperty, mappingIri, gravsearchTemplateIri, headerXSLTIri, user)
       RouteUtilV2.runTEIXMLRoute(requestTask, requestContext)
-    }
-  }
-
-  private def deleteResource(): Route = path(resourcesBasePath / "delete") {
-    post {
-      entity(as[String]) { jsonRequest => requestContext =>
-        val requestTask = for {
-          apiRequestId   <- RouteUtilZ.randomUuid()
-          requestingUser <- ZIO.serviceWithZIO[Authenticator](_.getUserADM(requestContext))
-          msg <- jsonLdRequestParser(_.deleteOrEraseResourceRequestV2(jsonRequest, requestingUser, apiRequestId))
-                   .mapError(BadRequestException.apply)
-        } yield msg
-        RouteUtilV2.runRdfRouteZ(requestTask, requestContext)
-      }
-    }
-  }
-
-  private def eraseResource(): Route = path(resourcesBasePath / "erase") {
-    post {
-      entity(as[String]) { jsonRequest => requestContext =>
-        val requestTask = for {
-          apiRequestId   <- RouteUtilZ.randomUuid()
-          requestingUser <- ZIO.serviceWithZIO[Authenticator](_.getUserADM(requestContext))
-          requestMessage <-
-            jsonLdRequestParser(_.deleteOrEraseResourceRequestV2(jsonRequest, requestingUser, apiRequestId))
-              .mapError(BadRequestException.apply)
-        } yield requestMessage.copy(erase = true)
-        RouteUtilV2.runRdfRouteZ(requestTask, requestContext)
-      }
     }
   }
 

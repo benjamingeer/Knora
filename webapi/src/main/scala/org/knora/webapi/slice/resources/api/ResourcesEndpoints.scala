@@ -118,6 +118,20 @@ final case class ResourcesEndpoints(
     .out(stringBody)
     .out(header[MediaType](HeaderNames.ContentType))
 
+  val postResourcesErase = baseEndpoints.withUserEndpoint.post
+    .in(base / "erase")
+    .in(ApiV2.Inputs.formatOptions)
+    .in(stringJsonBody)
+    .out(stringBody)
+    .out(header[MediaType](HeaderNames.ContentType))
+
+  val postResourcesDelete = baseEndpoints.withUserEndpoint.post
+    .in(base / "delete")
+    .in(ApiV2.Inputs.formatOptions)
+    .in(stringJsonBody)
+    .out(stringBody)
+    .out(header[MediaType](HeaderNames.ContentType))
+
   val endpoints: Seq[AnyEndpoint] = Seq(
     getResourcesIiifManifest,
     getResourcesPreview,
@@ -127,6 +141,8 @@ final case class ResourcesEndpoints(
     getResources,
     getResourcesParams,
     getResourcesGraph,
+    postResourcesErase,
+    postResourcesDelete,
   ).map(_.endpoint.tag("V2 Resources"))
 }
 

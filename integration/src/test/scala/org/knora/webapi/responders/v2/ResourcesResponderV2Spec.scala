@@ -1845,7 +1845,6 @@ class ResourcesResponderV2Spec extends CoreSpec with ImplicitSender { self =>
 
     "not mark a resource as deleted with a custom delete date that is earlier than the resource's last modification date" in {
       val deleteDate: Instant = aThingLastModificationDate.minus(1, ChronoUnit.DAYS)
-
       val deleteRequest = DeleteOrEraseResourceRequestV2(
         resourceIri = aThingIri,
         resourceClassIri = "http://0.0.0.0:3333/ontology/0001/anything/v2#Thing".toSmartIri,
@@ -1855,12 +1854,8 @@ class ResourcesResponderV2Spec extends CoreSpec with ImplicitSender { self =>
         requestingUser = SharedTestDataADM.anythingUser1,
         apiRequestID = UUID.randomUUID,
       )
-
-      appActor ! deleteRequest
-
-      expectMsgPF(timeout) { case msg: Failure =>
-        msg.cause.isInstanceOf[BadRequestException] should ===(true)
-      }
+      val exit = UnsafeZioRun.run(resourcesResponderV2(_.markResourceAsDeletedV2(deleteRequest)))
+      assertFailsWithA[BadRequestException](exit)
     }
 
     "mark a resource as deleted" in {
@@ -1872,10 +1867,7 @@ class ResourcesResponderV2Spec extends CoreSpec with ImplicitSender { self =>
         requestingUser = SharedTestDataADM.anythingUser1,
         apiRequestID = UUID.randomUUID,
       )
-
-      appActor ! deleteRequest
-
-      expectMsgType[SuccessResponseV2](timeout)
+      val _ = UnsafeZioRun.runOrThrow(resourcesResponderV2(_.markResourceAsDeletedV2(deleteRequest)))
 
       appActor ! ResourcesGetRequestV2(
         resourceIris = Seq(aThingIri),
@@ -1906,9 +1898,7 @@ class ResourcesResponderV2Spec extends CoreSpec with ImplicitSender { self =>
         apiRequestID = UUID.randomUUID,
       )
 
-      appActor ! deleteRequest
-
-      expectMsgType[SuccessResponseV2](timeout)
+      val _ = UnsafeZioRun.runOrThrow(resourcesResponderV2(_.markResourceAsDeletedV2(deleteRequest)))
 
       appActor ! ResourcesGetRequestV2(
         resourceIris = Seq(resourceIri),
@@ -2180,16 +2170,12 @@ class ResourcesResponderV2Spec extends CoreSpec with ImplicitSender { self =>
         resourceIri = resourceIriToErase.get,
         resourceClassIri = "http://0.0.0.0:3333/ontology/0001/anything/v2#Thing".toSmartIri,
         maybeLastModificationDate = Some(resourceToEraseLastModificationDate),
-        erase = true,
         requestingUser = anythingUserProfile,
         apiRequestID = UUID.randomUUID,
       )
 
-      appActor ! eraseRequest
-
-      expectMsgPF(timeout) { case msg: Failure =>
-        msg.cause.isInstanceOf[ForbiddenException] should ===(true)
-      }
+      val exit = UnsafeZioRun.run(resourcesResponderV2(_.eraseResourceV2(eraseRequest)))
+      assertFailsWithA[ForbiddenException](exit)
     }
 
     "not erase a resource if another resource has a link to it" in {
@@ -2234,16 +2220,12 @@ class ResourcesResponderV2Spec extends CoreSpec with ImplicitSender { self =>
         resourceIri = resourceIriToErase.get,
         resourceClassIri = "http://0.0.0.0:3333/ontology/0001/anything/v2#Thing".toSmartIri,
         maybeLastModificationDate = Some(resourceToEraseLastModificationDate),
-        erase = true,
         requestingUser = SharedTestDataADM.anythingAdminUser,
         apiRequestID = UUID.randomUUID,
       )
 
-      appActor ! eraseRequest
-
-      expectMsgPF(timeout) { case msg: Failure =>
-        msg.cause.isInstanceOf[BadRequestException] should ===(true)
-      }
+      val exit = UnsafeZioRun.run(resourcesResponderV2(_.eraseResourceV2(eraseRequest)))
+      assertFailsWithA[BadRequestException](exit)
 
       // Delete the link.
       UnsafeZioRun.runOrThrow(
@@ -2265,21 +2247,16 @@ class ResourcesResponderV2Spec extends CoreSpec with ImplicitSender { self =>
 
     "erase a resource" in {
       // Erase the resource.
-
       val eraseRequest = DeleteOrEraseResourceRequestV2(
         resourceIri = resourceIriToErase.get,
         resourceClassIri = "http://0.0.0.0:3333/ontology/0001/anything/v2#Thing".toSmartIri,
         maybeLastModificationDate = Some(resourceToEraseLastModificationDate),
-        erase = true,
         requestingUser = SharedTestDataADM.anythingAdminUser,
         apiRequestID = UUID.randomUUID,
       )
-
-      appActor ! eraseRequest
-      expectMsgType[SuccessResponseV2](timeout)
+      val _ = UnsafeZioRun.runOrThrow(resourcesResponderV2(_.eraseResourceV2(eraseRequest)))
 
       // Check that all parts of the resource were erased.
-
       val erasedIrisToCheck: Set[SmartIri] = (
         standoffTagIrisToErase.toSet +
           resourceIriToErase.get +

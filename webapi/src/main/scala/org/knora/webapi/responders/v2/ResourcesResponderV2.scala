@@ -175,9 +175,6 @@ final case class ResourcesResponderV2(
     case updateResourceMetadataRequestV2: UpdateResourceMetadataRequestV2 =>
       updateResourceMetadataV2(updateResourceMetadataRequestV2)
 
-    case deleteOrEraseResourceRequestV2: DeleteOrEraseResourceRequestV2 =>
-      deleteOrEraseResourceV2(deleteOrEraseResourceRequestV2)
-
     case resourceHistoryRequest: ResourceVersionHistoryGetRequestV2 =>
       getResourceHistoryV2(resourceHistoryRequest)
 
@@ -339,27 +336,12 @@ final case class ResourcesResponderV2(
   }
 
   /**
-   * Either marks a resource as deleted or erases it from the triplestore, depending on the value of `erase`
-   * in the request message.
-   *
-   * @param deleteOrEraseResourceV2 the request message.
-   */
-  private def deleteOrEraseResourceV2(
-    deleteOrEraseResourceV2: DeleteOrEraseResourceRequestV2,
-  ): Task[SuccessResponseV2] =
-    if (deleteOrEraseResourceV2.erase) {
-      eraseResourceV2(deleteOrEraseResourceV2)
-    } else {
-      markResourceAsDeletedV2(deleteOrEraseResourceV2)
-    }
-
-  /**
    * Marks a resource as deleted.
    *
    * @param deleteResourceV2 the request message.
    */
-  private def markResourceAsDeletedV2(deleteResourceV2: DeleteOrEraseResourceRequestV2): Task[SuccessResponseV2] = {
-    def deleteTask(): Task[SuccessResponseV2] =
+  def markResourceAsDeletedV2(deleteResourceV2: DeleteOrEraseResourceRequestV2): Task[SuccessResponseV2] = {
+    val deleteTask: Task[SuccessResponseV2] =
       for {
         // Get the metadata of the resource to be updated.
         resourcesSeq <- getResourcePreviewV2(
@@ -428,8 +410,7 @@ final case class ResourcesResponderV2(
           }
       } yield SuccessResponseV2("Resource marked as deleted")
 
-    ZIO.when(deleteResourceV2.erase)(ZIO.fail(AssertionException(s"Request message has erase == true"))) *>
-      IriLocker.runWithIriLock(deleteResourceV2.apiRequestID, deleteResourceV2.resourceIri, deleteTask())
+    IriLocker.runWithIriLock(deleteResourceV2.apiRequestID, deleteResourceV2.resourceIri, deleteTask)
   }
 
   /**
@@ -437,8 +418,8 @@ final case class ResourcesResponderV2(
    *
    * @param eraseResourceV2 the request message.
    */
-  private def eraseResourceV2(eraseResourceV2: DeleteOrEraseResourceRequestV2): Task[SuccessResponseV2] = {
-    def eraseTask: Task[SuccessResponseV2] =
+  def eraseResourceV2(eraseResourceV2: DeleteOrEraseResourceRequestV2): Task[SuccessResponseV2] = {
+    val eraseTask: Task[SuccessResponseV2] =
       for {
         // Get the metadata of the resource to be updated.
         resourcesSeq <- getResourcePreviewV2(
@@ -498,11 +479,7 @@ final case class ResourcesResponderV2(
             )
             .whenZIO(iriService.checkIriExists(resourceSmartIri.toString))
       } yield SuccessResponseV2("Resource erased")
-
-    for {
-      _          <- ZIO.when(!eraseResourceV2.erase)(ZIO.fail(AssertionException(s"Request message has erase == false")))
-      taskResult <- IriLocker.runWithIriLock(eraseResourceV2.apiRequestID, eraseResourceV2.resourceIri, eraseTask)
-    } yield taskResult
+    IriLocker.runWithIriLock(eraseResourceV2.apiRequestID, eraseResourceV2.resourceIri, eraseTask)
   }
 
   /**

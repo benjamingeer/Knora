@@ -717,10 +717,9 @@ case class DeleteOrEraseResourceRequestV2(
   maybeDeleteComment: Option[String] = None,
   maybeDeleteDate: Option[Instant] = None,
   maybeLastModificationDate: Option[Instant] = None,
-  erase: Boolean = false,
   requestingUser: User,
   apiRequestID: UUID,
-) extends ResourcesResponderRequestV2
+)
 
 /**
  * Represents a sequence of resources read back from Knora.

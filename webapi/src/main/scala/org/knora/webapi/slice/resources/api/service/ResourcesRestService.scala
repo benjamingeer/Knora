@@ -12,6 +12,7 @@ import org.knora.webapi.responders.v2.ResourcesResponderV2
 import org.knora.webapi.responders.v2.SearchResponderV2
 import org.knora.webapi.slice.admin.domain.model.KnoraProject.ProjectIri
 import org.knora.webapi.slice.admin.domain.model.User
+import org.knora.webapi.slice.common.ApiComplexV2JsonLdRequestParser
 import org.knora.webapi.slice.common.api.KnoraResponseRenderer
 import org.knora.webapi.slice.common.api.KnoraResponseRenderer.FormatOptions
 import org.knora.webapi.slice.common.api.KnoraResponseRenderer.RenderedResponse
@@ -24,7 +25,8 @@ final case class ResourcesRestService(
   private val resourcesService: ResourcesResponderV2,
   private val searchService: SearchResponderV2,
   private val iriConverter: IriConverter,
-  renderer: KnoraResponseRenderer,
+  private val requestParser: ApiComplexV2JsonLdRequestParser,
+  private val renderer: KnoraResponseRenderer,
 ) {
 
   def getResourcesIiifManifest(user: User)(
@@ -120,6 +122,27 @@ final case class ResourcesRestService(
     result          <- resourcesService.getGraphDataResponseV2(resourceIri.value, depth, direction, excludeProperty, user)
     response        <- renderer.render(result, formatOptions)
   } yield response
+
+  def eraseResource(user: User)(formatOptions: FormatOptions, jsonLd: String): Task[(RenderedResponse, MediaType)] =
+    for {
+      uuid <- Random.nextUUID
+      eraseRequest <- requestParser
+                        .deleteOrEraseResourceRequestV2(jsonLd, user, uuid)
+                        .mapError(BadRequestException.apply)
+      result   <- resourcesService.eraseResourceV2(eraseRequest)
+      response <- renderer.render(result, formatOptions)
+    } yield response
+
+  def deleteResource(user: User)(formatOptions: FormatOptions, jsonLd: String): Task[(RenderedResponse, MediaType)] =
+    for {
+      uuid <- Random.nextUUID
+      eraseRequest <- requestParser
+                        .deleteOrEraseResourceRequestV2(jsonLd, user, uuid)
+                        .mapError(BadRequestException.apply)
+      result   <- resourcesService.markResourceAsDeletedV2(eraseRequest)
+      response <- renderer.render(result, formatOptions)
+    } yield response
+
 }
 
 object ResourcesRestService {

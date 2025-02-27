@@ -146,7 +146,6 @@ final case class ApiComplexV2JsonLdRequestParser(
       deleteComment,
       deleteDate,
       lastModificationDate,
-      false,
       requestingUser,
       uuid,
     )
