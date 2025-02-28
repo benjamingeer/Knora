@@ -456,7 +456,7 @@ class CardinalitiesV2E2ESpec extends E2ESpec {
         )
       }
 
-      // first adding the the cardinalities to the *super*, then to the *sub* class
+      // first adding the cardinalities to the *super*, then to the *sub* class
       val clsAndProps = List(
         (superClassName, superClassProperty1),
         (superClassName, superClassProperty2),

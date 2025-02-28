@@ -30,7 +30,6 @@ import org.knora.webapi.messages.util.rdf.JsonLDKeywords
 import org.knora.webapi.messages.util.rdf.JsonLDUtil
 import org.knora.webapi.messages.util.search.SparqlQueryConstants
 import org.knora.webapi.routing.UnsafeZioRun
-import org.knora.webapi.routing.v2.ResourcesRouteV2
 import org.knora.webapi.routing.v2.StandoffRouteV2
 import org.knora.webapi.sharedtestdata.SharedTestDataADM
 import org.knora.webapi.slice.search.api.SearchApiRoutes
@@ -54,8 +53,6 @@ class SearchRouteV2R2RSpec extends R2RSpec {
     .runOrThrow(ZIO.serviceWith[SearchApiRoutes](_.routes))
     .reduce(_ ~ _)
 
-  private val resourcePath =
-    DSPApiDirectives.handleErrors(appConfig)(ResourcesRouteV2(appConfig).makeRoute)
   private val standoffPath =
     DSPApiDirectives.handleErrors(appConfig)(StandoffRouteV2().makeRoute)
 
@@ -7345,19 +7342,25 @@ class SearchRouteV2R2RSpec extends R2RSpec {
            |  }
            |}""".stripMargin
 
-      Post("/v2/resources", HttpEntity(RdfMediaTypes.`application/ld+json`, jsonLDEntity)) ~> addCredentials(
-        BasicHttpCredentials(anythingUserEmail, password),
-      ) ~> resourcePath ~> check {
-        val resourceCreateResponseStr = responseAs[String]
-        assert(status == StatusCodes.OK, resourceCreateResponseStr)
-        val resourceCreateResponseAsJsonLD: JsonLDDocument = JsonLDUtil.parseJsonLD(resourceCreateResponseStr)
-        val validationFun: (String, => Nothing) => String =
-          (s, e) => Iri.validateAndEscapeIri(s).getOrElse(e)
-        val resourceIri: IRI =
-          resourceCreateResponseAsJsonLD.body.requireStringWithValidation(JsonLDKeywords.ID, validationFun)
-        assert(resourceIri.toSmartIri.isKnoraDataIri)
-        hamletResourceIri.set(resourceIri)
-      }
+      val resourceCreateResponseStr = UnsafeZioRun.runOrThrow(
+        ZIO.serviceWithZIO[TestClientService](
+          _.getResponseString(
+            Post(
+              appConfig.knoraApi.internalKnoraApiBaseUrl + "/v2/resources",
+              HttpEntity(RdfMediaTypes.`application/ld+json`, jsonLDEntity),
+            ) ~> addCredentials(
+              BasicHttpCredentials(anythingUserEmail, password),
+            ),
+          ),
+        ),
+      )
+      val resourceCreateResponseAsJsonLD: JsonLDDocument = JsonLDUtil.parseJsonLD(resourceCreateResponseStr)
+      val validationFun: (String, => Nothing) => String =
+        (s, e) => Iri.validateAndEscapeIri(s).getOrElse(e)
+      val resourceIri: IRI =
+        resourceCreateResponseAsJsonLD.body.requireStringWithValidation(JsonLDKeywords.ID, validationFun)
+      assert(resourceIri.toSmartIri.isKnoraDataIri)
+      hamletResourceIri.set(resourceIri)
     }
 
     "search for the large text and its markup and receive it as XML, and check that it matches the original XML" ignore { // depends on previous test
@@ -7399,7 +7402,6 @@ class SearchRouteV2R2RSpec extends R2RSpec {
 
     "find a resource with two different incoming links" in {
       // Create the target resource.
-
       val targetResource: String =
         """{
           |  "@type" : "anything:BlueThing",
@@ -7415,20 +7417,16 @@ class SearchRouteV2R2RSpec extends R2RSpec {
           |    "anything" : "http://0.0.0.0:3333/ontology/0001/anything/v2#"
           |  }
           |}""".stripMargin
-
-      val targetResourceIri: IRI =
-        Post(s"/v2/resources", HttpEntity(RdfMediaTypes.`application/ld+json`, targetResource)) ~> addCredentials(
-          BasicHttpCredentials(anythingUserEmail, password),
-        ) ~> resourcePath ~> check {
-          val createTargetResourceResponseStr = responseAs[String]
-          assert(response.status == StatusCodes.OK, createTargetResourceResponseStr)
-          val responseJsonDoc: JsonLDDocument = responseToJsonLDDocument(response)
-          val validationFun: (String, => Nothing) => String =
-            (s, e) => Iri.validateAndEscapeIri(s).getOrElse(e)
-          responseJsonDoc.body.requireStringWithValidation(JsonLDKeywords.ID, validationFun)
-        }
-
-      assert(targetResourceIri.toSmartIri.isKnoraDataIri)
+      val targetResourceIri = UnsafeZioRun.runOrThrow(
+        ZIO.serviceWithZIO[TestClientService](
+          _.getResponseJsonLD(
+            Post(
+              appConfig.knoraApi.internalKnoraApiBaseUrl + s"/v2/resources",
+              HttpEntity(RdfMediaTypes.`application/ld+json`, targetResource),
+            ) ~> addCredentials(BasicHttpCredentials(anythingUserEmail, password)),
+          ).map(_.body.getRequiredString(JsonLDKeywords.ID).getOrElse(throw AssertionError("No IRI returned"))),
+        ),
+      )
 
       val sourceResource1: String =
         s"""{
@@ -7451,20 +7449,16 @@ class SearchRouteV2R2RSpec extends R2RSpec {
            |    "anything" : "http://0.0.0.0:3333/ontology/0001/anything/v2#"
            |  }
            |}""".stripMargin
-
-      val sourceResource1Iri: IRI =
-        Post(s"/v2/resources", HttpEntity(RdfMediaTypes.`application/ld+json`, sourceResource1)) ~> addCredentials(
-          BasicHttpCredentials(anythingUserEmail, password),
-        ) ~> resourcePath ~> check {
-          val createSourceResource1ResponseStr = responseAs[String]
-          assert(response.status == StatusCodes.OK, createSourceResource1ResponseStr)
-          val responseJsonDoc: JsonLDDocument = responseToJsonLDDocument(response)
-          val validationFun: (String, => Nothing) => String =
-            (s, e) => Iri.validateAndEscapeIri(s).getOrElse(e)
-          responseJsonDoc.body.requireStringWithValidation(JsonLDKeywords.ID, validationFun)
-        }
-
-      assert(sourceResource1Iri.toSmartIri.isKnoraDataIri)
+      val _ = UnsafeZioRun.runOrThrow(
+        ZIO.serviceWithZIO[TestClientService](
+          _.checkResponseOK(
+            Post(
+              appConfig.knoraApi.internalKnoraApiBaseUrl + "/v2/resources",
+              HttpEntity(RdfMediaTypes.`application/ld+json`, sourceResource1),
+            ) ~> addCredentials(BasicHttpCredentials(anythingUserEmail, password)),
+          ),
+        ),
+      )
 
       val sourceResource2: String =
         s"""{
@@ -7488,19 +7482,16 @@ class SearchRouteV2R2RSpec extends R2RSpec {
            |  }
            |}""".stripMargin
 
-      val sourceResource2Iri: IRI =
-        Post(s"/v2/resources", HttpEntity(RdfMediaTypes.`application/ld+json`, sourceResource2)) ~> addCredentials(
-          BasicHttpCredentials(anythingUserEmail, password),
-        ) ~> resourcePath ~> check {
-          val createSourceResource2ResponseStr = responseAs[String]
-          assert(response.status == StatusCodes.OK, createSourceResource2ResponseStr)
-          val responseJsonDoc: JsonLDDocument = responseToJsonLDDocument(response)
-          val validationFun: (String, => Nothing) => String =
-            (s, e) => Iri.validateAndEscapeIri(s).getOrElse(e)
-          responseJsonDoc.body.requireStringWithValidation(JsonLDKeywords.ID, validationFun)
-        }
-
-      assert(sourceResource2Iri.toSmartIri.isKnoraDataIri)
+      val _ = UnsafeZioRun.runOrThrow(
+        ZIO.serviceWithZIO[TestClientService](
+          _.checkResponseOK(
+            Post(
+              appConfig.knoraApi.internalKnoraApiBaseUrl + "/v2/resources",
+              HttpEntity(RdfMediaTypes.`application/ld+json`, sourceResource2),
+            ) ~> addCredentials(BasicHttpCredentials(anythingUserEmail, password)),
+          ),
+        ),
+      )
 
       val gravsearchQuery =
         s"""
@@ -7762,23 +7753,19 @@ class SearchRouteV2R2RSpec extends R2RSpec {
            |    "anything" : "http://0.0.0.0:3333/ontology/0001/anything/v2#"
            |  }
            |}""".stripMargin
-
-      Post(s"/v2/resources", HttpEntity(RdfMediaTypes.`application/ld+json`, jsonLDEntity)) ~> addCredentials(
-        BasicHttpCredentials(anythingUserEmail, password),
-      ) ~> resourcePath ~> check {
-        val responseStr = responseAs[String]
-        assert(status == StatusCodes.OK, responseStr)
-        val resourceCreateResponseAsJsonLD: JsonLDDocument = JsonLDUtil.parseJsonLD(responseStr)
-        val validationFun: (String, => Nothing) => String =
-          (s, e) => Iri.validateAndEscapeIri(s).getOrElse(e)
-        val resourceIri: IRI =
-          resourceCreateResponseAsJsonLD.body.requireStringWithValidation(JsonLDKeywords.ID, validationFun)
-        assert(resourceIri.toSmartIri.isKnoraDataIri)
-        timeTagResourceIri.set(resourceIri)
-      }
+      val resourceIri = UnsafeZioRun.runOrThrow(
+        ZIO.serviceWithZIO[TestClientService](
+          _.getResponseJsonLD(
+            Post(
+              appConfig.knoraApi.internalKnoraApiBaseUrl + s"/v2/resources",
+              HttpEntity(RdfMediaTypes.`application/ld+json`, jsonLDEntity),
+            ) ~> addCredentials(BasicHttpCredentials(anythingUserEmail, password)),
+          ).map(_.body.getRequiredString(JsonLDKeywords.ID).getOrElse(throw AssertionError("No IRI returned"))),
+        ),
+      )
+      timeTagResourceIri.set(resourceIri)
 
       // Search for the resource.
-
       val gravsearchQuery =
         """
           |PREFIX knora-api: <http://api.knora.org/ontology/knora-api/v2#>

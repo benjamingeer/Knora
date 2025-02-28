@@ -7,6 +7,7 @@ package org.knora.webapi.e2e.v2
 
 import org.apache.pekko
 import spray.json.JsString
+import zio.ZIO
 
 import java.net.URLEncoder
 import java.time.Instant
@@ -31,10 +32,11 @@ import org.knora.webapi.messages.ValuesValidator
 import org.knora.webapi.messages.store.triplestoremessages.RdfDataObject
 import org.knora.webapi.messages.util.rdf.*
 import org.knora.webapi.models.*
+import org.knora.webapi.routing.UnsafeZioRun
 import org.knora.webapi.routing.v2.OntologiesRouteV2
-import org.knora.webapi.routing.v2.ResourcesRouteV2
 import org.knora.webapi.sharedtestdata.SharedOntologyTestDataADM
 import org.knora.webapi.sharedtestdata.SharedTestDataADM
+import org.knora.webapi.testservices.TestClientService
 import org.knora.webapi.util.*
 
 import pekko.http.scaladsl.model.*
@@ -61,8 +63,6 @@ class OntologyV2R2RSpec extends R2RSpec {
 
   private val ontologiesPath =
     DSPApiDirectives.handleErrors(appConfig)(OntologiesRouteV2().makeRoute)
-  private val resourcesPath =
-    DSPApiDirectives.handleErrors(appConfig)(ResourcesRouteV2(appConfig).makeRoute)
 
   implicit val ec: ExecutionContextExecutor = system.dispatcher
 
@@ -2820,23 +2820,16 @@ class OntologyV2R2RSpec extends R2RSpec {
          |    "freetest" : "${SharedOntologyTestDataADM.FREETEST_ONTOLOGY_IRI_LocalHost}#"
          |  }
          |}""".stripMargin
-
-    Post(
-      "/v2/resources",
-      HttpEntity(RdfMediaTypes.`application/ld+json`, createResourceWithValues),
-    ) ~> addCredentials(BasicHttpCredentials(anythingUsername, password)) ~> resourcesPath ~> check {
-      val responseStr = responseAs[String]
-      assert(status == StatusCodes.OK, responseStr)
-
-      val responseJsonDoc                               = JsonLDUtil.parseJsonLD(responseStr)
-      val validationFun: (String, => Nothing) => String = (s, e) => Iri.validateAndEscapeIri(s).getOrElse(e)
-      val resourceIri: IRI                              = responseJsonDoc.body.requireStringWithValidation(JsonLDKeywords.ID, validationFun)
-      assert(resourceIri.toSmartIri.isKnoraDataIri)
-
-      val responseJsonDoc2 = JsonLDUtil.parseJsonLD(responseStr)
-      val label            = responseJsonDoc2.body.value.get(OntologyConstants.Rdfs.Label).get
-      assert(label == JsonLDString(resourceLabel))
-    }
+    val _ = UnsafeZioRun.runOrThrow(
+      ZIO.serviceWithZIO[TestClientService](
+        _.checkResponseOK(
+          Post(
+            appConfig.knoraApi.internalKnoraApiBaseUrl + "/v2/resources",
+            HttpEntity(RdfMediaTypes.`application/ld+json`, createResourceWithValues),
+          ) ~> addCredentials(BasicHttpCredentials(anythingUsername, password)),
+        ),
+      ),
+    )
 
     // payload to test cardinality can't be deleted
     val cardinalityCantBeDeletedPayload = AddCardinalitiesRequest.make(
@@ -3098,19 +3091,16 @@ class OntologyV2R2RSpec extends R2RSpec {
          |    "freetest" : "${SharedOntologyTestDataADM.FREETEST_ONTOLOGY_IRI_LocalHost}#"
          |  }
          |}""".stripMargin
-
-    Post(
-      "/v2/resources",
-      HttpEntity(RdfMediaTypes.`application/ld+json`, createResourceWithValues),
-    ) ~> addCredentials(BasicHttpCredentials(anythingUsername, password)) ~> resourcesPath ~> check {
-      val responseStr = responseAs[String]
-      assert(status == StatusCodes.OK, responseStr)
-      val responseJsonDoc                               = JsonLDUtil.parseJsonLD(responseStr)
-      val validationFun: (String, => Nothing) => String = (s, e) => Iri.validateAndEscapeIri(s).getOrElse(e)
-      val resourceIri: IRI =
-        responseJsonDoc.body.requireStringWithValidation(JsonLDKeywords.ID, validationFun)
-      assert(resourceIri.toSmartIri.isKnoraDataIri)
-    }
+    val _ = UnsafeZioRun.runOrThrow(
+      ZIO.serviceWithZIO[TestClientService](
+        _.checkResponseOK(
+          Post(
+            appConfig.knoraApi.internalKnoraApiBaseUrl + "/v2/resources",
+            HttpEntity(RdfMediaTypes.`application/ld+json`, createResourceWithValues),
+          ) ~> addCredentials(BasicHttpCredentials(anythingUsername, password)),
+        ),
+      ),
+    )
 
     // payload to ask if cardinality can be removed from TestClassTwo
     val cardinalityCanBeDeletedPayload = AddCardinalitiesRequest

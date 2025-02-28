@@ -18,6 +18,7 @@ import scala.jdk.CollectionConverters.*
 import scala.language.implicitConversions
 
 import org.knora.webapi.IRI
+import org.knora.webapi.config.Sipi
 import org.knora.webapi.core.MessageRelay
 import org.knora.webapi.messages.OntologyConstants.KnoraApiV2Complex as KA
 import org.knora.webapi.messages.OntologyConstants.KnoraApiV2Complex.*
@@ -54,6 +55,7 @@ final case class ApiComplexV2JsonLdRequestParser(
   sipiService: SipiService,
   projectService: ProjectService,
   userService: UserService,
+  sipiConfig: Sipi,
 ) {
 
   /**
@@ -243,19 +245,52 @@ final case class ApiComplexV2JsonLdRequestParser(
              .when(r.resourceIri.exists(_.shortcode != project.shortcode))
       attachedToUser <- attachedToUser(r.resource, requestingUser, project.id)
       values         <- extractValues(r.resource, project.shortcode)
-    } yield CreateResourceRequestV2(
-      CreateResourceV2(
-        r.resourceIri.map(_.smartIri),
-        r.resourceClassSmartIri,
-        label,
-        values,
-        project,
-        permissions,
-        creationDate,
-      ),
-      attachedToUser,
-      uuid,
-    )
+      createResource = CreateResourceV2(
+                         r.resourceIri.map(_.smartIri),
+                         r.resourceClassSmartIri,
+                         label,
+                         values,
+                         project,
+                         permissions,
+                         creationDate,
+                       )
+      _ <- checkMimeTypesForFileValueContents(createResource.flatValues)
+    } yield CreateResourceRequestV2(createResource, attachedToUser, uuid)
+  }
+
+  private def checkMimeTypesForFileValueContents(
+    values: Iterable[CreateValueInNewResourceV2],
+  ): IO[String, Unit] = {
+    def failBadRequest(fileValueContent: FileValueContentV2): IO[String, Unit] = {
+      val msg =
+        s"File ${fileValueContent.fileValue.internalFilename} has MIME type ${fileValueContent.fileValue.internalMimeType}, which is not supported for still image files"
+      ZIO.fail(msg)
+    }
+    ZIO
+      .foreach(values) { value =>
+        value.valueContent match {
+          case fileValueContent: StillImageFileValueContentV2 =>
+            failBadRequest(fileValueContent)
+              .when(!sipiConfig.imageMimeTypes.contains(fileValueContent.fileValue.internalMimeType))
+          case fileValueContent: DocumentFileValueContentV2 =>
+            failBadRequest(fileValueContent)
+              .when(!sipiConfig.documentMimeTypes.contains(fileValueContent.fileValue.internalMimeType))
+          case fileValueContent: ArchiveFileValueContentV2 =>
+            failBadRequest(fileValueContent)
+              .when(!sipiConfig.archiveMimeTypes.contains(fileValueContent.fileValue.internalMimeType))
+          case fileValueContent: TextFileValueContentV2 =>
+            failBadRequest(fileValueContent)
+              .when(!sipiConfig.textMimeTypes.contains(fileValueContent.fileValue.internalMimeType))
+          case fileValueContent: AudioFileValueContentV2 =>
+            failBadRequest(fileValueContent)
+              .when(!sipiConfig.audioMimeTypes.contains(fileValueContent.fileValue.internalMimeType))
+          case fileValueContent: MovingImageFileValueContentV2 =>
+            failBadRequest(fileValueContent)
+              .when(!sipiConfig.videoMimeTypes.contains(fileValueContent.fileValue.internalMimeType))
+          case _ => ZIO.unit
+        }
+      }
+      .unit
   }
 
   private def extractValues(

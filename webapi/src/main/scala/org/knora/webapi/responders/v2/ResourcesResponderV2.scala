@@ -153,9 +153,6 @@ final case class ResourcesResponderV2(
         ) =>
       getResourcePreviewV2(resIris, withDeletedResource, targetSchema, requestingUser)
 
-    case createResourceRequestV2: CreateResourceRequestV2 =>
-      createHandler(createResourceRequestV2)
-
     case resourceHistoryRequest: ResourceVersionHistoryGetRequestV2 =>
       getResourceHistoryV2(resourceHistoryRequest)
 

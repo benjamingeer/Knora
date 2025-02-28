@@ -158,6 +158,14 @@ final case class ResourcesRestService(
       response <- renderer.render(result, formatOptions)
     } yield response
 
+  def createResource(user: User)(formatOptions: FormatOptions, jsonLd: String): Task[(RenderedResponse, MediaType)] =
+    for {
+      uuid          <- Random.nextUUID
+      createRequest <- requestParser.createResourceRequestV2(jsonLd, user, uuid).mapError(BadRequestException.apply)
+      result        <- resourcesService.createResource(createRequest)
+      response      <- renderer.render(result, formatOptions)
+    } yield response
+
   def updateResourceMetadata(
     user: User,
   )(formatOptions: FormatOptions, jsonLd: String): Task[(RenderedResponse, MediaType)] =
