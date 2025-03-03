@@ -1,0 +1,47 @@
+digraph {
+   {
+       // Resources
+       node [style = filled, fontcolor = white, color = navy, fillcolor = slateblue4]
+
+       work [label = "dali_4587"]
+       collection [label = "pompidou"]
+   }
+
+   {
+       // Values
+       node [style = filled, fontcolor = white, color = tomato3, fillcolor = tomato2]
+
+       title [label = "value_A"]
+       artistName [label = "value_B"]
+       collectionName [label = "value_C"]
+       linkValue [label = "value_D"]
+   }
+
+   {
+       // Literals
+       node [shape = box, color = firebrick]
+
+       titleStr [label = "‘The Persistence of Memory’"]
+       artistNameStr [label = "‘Salvador Dali’"]
+       isInCollection [label = "isInCollection"]
+       refCount [label = "1"]
+       collectionNameStr [label = "‘Centre Pompidou’"]
+   }
+
+   edge [fontsize = 11, color = cyan4]
+
+   work -> title [label = "hasTitle"]
+   work -> artistName [label = "hasArtist"]
+   work -> collection [label = "isInCollection"]
+   work -> linkValue [label = "isInCollectionValue"]
+
+   collection -> collectionName [label = "hasCollectionName"]
+
+   title -> titleStr [label = "valueHasString"]
+   artistName -> artistNameStr [label = "valueHasString"]
+   collectionName -> collectionNameStr [label = "valueHasString"]
+   linkValue -> refCount [label = "valueHasRefCount"]
+   linkValue -> work [label = "subject"]
+   linkValue -> isInCollection [label = "predicate"]
+   linkValue -> collection [label = "object"]
+}

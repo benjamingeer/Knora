@@ -1,0 +1,5046 @@
+
+<!doctype html>
+<html lang="en" class="no-js">
+  <head>
+    
+      <meta charset="utf-8">
+      <meta name="viewport" content="width=device-width,initial-scale=1">
+      
+      
+      
+      
+        <link rel="prev" href="../introduction/">
+      
+      
+        <link rel="next" href="../salsah-gui/">
+      
+      
+      <link rel="icon" href="../../assets/icons/logo_bw.svg">
+      <meta name="generator" content="mkdocs-1.5.3, mkdocs-material-9.5.17">
+    
+    
+      
+        <title>The Knora Base Ontology - DSP-API</title>
+      
+    
+    
+      <link rel="stylesheet" href="../../assets/stylesheets/main.bcfcd587.min.css">
+      
+        
+        <link rel="stylesheet" href="../../assets/stylesheets/palette.06af60db.min.css">
+      
+      
+
+
+    
+    
+      
+    
+    
+      
+        
+        
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,300i,400,400i,700,700i%7CRoboto+Mono:400,400i,700,700i&display=fallback">
+        <style>:root{--md-text-font:"Roboto";--md-code-font:"Roboto Mono"}</style>
+      
+    
+    
+      <link rel="stylesheet" href="../../assets/css/theme.css">
+    
+      <link rel="stylesheet" href="../../assets/css/mkdocsoad-v1.0.2.css">
+    
+    <script>__md_scope=new URL("../..",location),__md_hash=e=>[...e].reduce((e,_)=>(e<<5)-e+_.charCodeAt(0),0),__md_get=(e,_=localStorage,t=__md_scope)=>JSON.parse(_.getItem(t.pathname+"."+e)),__md_set=(e,_,t=localStorage,a=__md_scope)=>{try{t.setItem(a.pathname+"."+e,JSON.stringify(_))}catch(e){}}</script>
+    
+      
+
+    
+    
+    
+  </head>
+  
+  
+    
+    
+      
+    
+    
+    
+    
+    <body dir="ltr" data-md-color-scheme="default" data-md-color-primary="indigo" data-md-color-accent="indigo">
+  
+    
+    <input class="md-toggle" data-md-toggle="drawer" type="checkbox" id="__drawer" autocomplete="off">
+    <input class="md-toggle" data-md-toggle="search" type="checkbox" id="__search" autocomplete="off">
+    <label class="md-overlay" for="__drawer"></label>
+    <div data-md-component="skip">
+      
+        
+        <a href="#the-knora-base-ontology" class="md-skip">
+          Skip to content
+        </a>
+      
+    </div>
+    <div data-md-component="announce">
+      
+    </div>
+    
+    
+      
+
+  
+
+<header class="md-header md-header--shadow" data-md-component="header">
+  <nav class="md-header__inner md-grid" aria-label="Header">
+    <a href="../.." title="DSP-API" class="md-header__button md-logo" aria-label="DSP-API" data-md-component="logo">
+      
+  <img src="../../assets/icons/logo_bw.svg" alt="logo">
+
+    </a>
+    <label class="md-header__button md-icon" for="__drawer">
+      
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M3 6h18v2H3V6m0 5h18v2H3v-2m0 5h18v2H3v-2Z"/></svg>
+    </label>
+    <div class="md-header__title" data-md-component="header-title">
+      <div class="md-header__ellipsis">
+        <div class="md-header__topic">
+          <span class="md-ellipsis">
+            DSP-API
+          </span>
+        </div>
+        <div class="md-header__topic" data-md-component="header-topic">
+          <span class="md-ellipsis">
+            
+              The Knora Base Ontology
+            
+          </span>
+        </div>
+      </div>
+    </div>
+    
+      
+        <form class="md-header__option" data-md-component="palette">
+  
+    
+    
+    
+    <input class="md-option" data-md-color-media="" data-md-color-scheme="default" data-md-color-primary="indigo" data-md-color-accent="indigo"  aria-label="Switch to dark mode"  type="radio" name="__palette" id="__palette_0">
+    
+      <label class="md-header__button md-icon" title="Switch to dark mode" for="__palette_1" hidden>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a4 4 0 0 0-4 4 4 4 0 0 0 4 4 4 4 0 0 0 4-4 4 4 0 0 0-4-4m0 10a6 6 0 0 1-6-6 6 6 0 0 1 6-6 6 6 0 0 1 6 6 6 6 0 0 1-6 6m8-9.31V4h-4.69L12 .69 8.69 4H4v4.69L.69 12 4 15.31V20h4.69L12 23.31 15.31 20H20v-4.69L23.31 12 20 8.69Z"/></svg>
+      </label>
+    
+  
+    
+    
+    
+    <input class="md-option" data-md-color-media="" data-md-color-scheme="slate" data-md-color-primary="indigo" data-md-color-accent="indigo"  aria-label="Switch to light mode"  type="radio" name="__palette" id="__palette_1">
+    
+      <label class="md-header__button md-icon" title="Switch to light mode" for="__palette_0" hidden>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 18c-.89 0-1.74-.2-2.5-.55C11.56 16.5 13 14.42 13 12c0-2.42-1.44-4.5-3.5-5.45C10.26 6.2 11.11 6 12 6a6 6 0 0 1 6 6 6 6 0 0 1-6 6m8-9.31V4h-4.69L12 .69 8.69 4H4v4.69L.69 12 4 15.31V20h4.69L12 23.31 15.31 20H20v-4.69L23.31 12 20 8.69Z"/></svg>
+      </label>
+    
+  
+</form>
+      
+    
+    
+      <script>var media,input,key,value,palette=__md_get("__palette");if(palette&&palette.color){"(prefers-color-scheme)"===palette.color.media&&(media=matchMedia("(prefers-color-scheme: light)"),input=document.querySelector(media.matches?"[data-md-color-media='(prefers-color-scheme: light)']":"[data-md-color-media='(prefers-color-scheme: dark)']"),palette.color.media=input.getAttribute("data-md-color-media"),palette.color.scheme=input.getAttribute("data-md-color-scheme"),palette.color.primary=input.getAttribute("data-md-color-primary"),palette.color.accent=input.getAttribute("data-md-color-accent"));for([key,value]of Object.entries(palette.color))document.body.setAttribute("data-md-color-"+key,value)}</script>
+    
+    
+    
+      <label class="md-header__button md-icon" for="__search">
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.516 6.516 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5Z"/></svg>
+      </label>
+      <div class="md-search" data-md-component="search" role="dialog">
+  <label class="md-search__overlay" for="__search"></label>
+  <div class="md-search__inner" role="search">
+    <form class="md-search__form" name="search">
+      <input type="text" class="md-search__input" name="query" aria-label="Search" placeholder="Search" autocapitalize="off" autocorrect="off" autocomplete="off" spellcheck="false" data-md-component="search-query" required>
+      <label class="md-search__icon md-icon" for="__search">
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.516 6.516 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5Z"/></svg>
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11h12Z"/></svg>
+      </label>
+      <nav class="md-search__options" aria-label="Search">
+        
+        <button type="reset" class="md-search__icon md-icon" title="Clear" aria-label="Clear" tabindex="-1">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M19 6.41 17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12 19 6.41Z"/></svg>
+        </button>
+      </nav>
+      
+        <div class="md-search__suggest" data-md-component="search-suggest"></div>
+      
+    </form>
+    <div class="md-search__output">
+      <div class="md-search__scrollwrap" data-md-scrollfix>
+        <div class="md-search-result" data-md-component="search-result">
+          <div class="md-search-result__meta">
+            Initializing search
+          </div>
+          <ol class="md-search-result__list" role="presentation"></ol>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+    
+    
+  </nav>
+  
+</header>
+    
+    <div class="md-container" data-md-component="container">
+      
+      
+        
+          
+        
+      
+      <main class="md-main" data-md-component="main">
+        <div class="md-main__inner md-grid">
+          
+            
+              
+              <div class="md-sidebar md-sidebar--primary" data-md-component="sidebar" data-md-type="navigation" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+
+
+<nav class="md-nav md-nav--primary" aria-label="Navigation" data-md-level="0">
+  <label class="md-nav__title" for="__drawer">
+    <a href="../.." title="DSP-API" class="md-nav__button md-logo" aria-label="DSP-API" data-md-component="logo">
+      
+  <img src="../../assets/icons/logo_bw.svg" alt="logo">
+
+    </a>
+    DSP-API
+  </label>
+  
+  <ul class="md-nav__list" data-md-scrollfix>
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_1" >
+        
+          
+          <label class="md-nav__link" for="__nav_1" id="__nav_1_label" tabindex="0">
+            
+  
+  <span class="md-ellipsis">
+    Introduction
+  </span>
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_1_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_1">
+            <span class="md-nav__icon md-icon"></span>
+            Introduction
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../.." class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Overview
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../01-introduction/what-is-dsp/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    What is DSP?
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../01-introduction/file-formats/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    File Formats in DSP-API
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../01-introduction/standoff-rdf/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Standoff/RDF Text Markup
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../01-introduction/legal-info/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Legal Information for Assets
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../01-introduction/example-project/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    An Example Project
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+    
+  
+  
+  
+    
+    
+    
+    
+    <li class="md-nav__item md-nav__item--active md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_2" checked>
+        
+          
+          <label class="md-nav__link" for="__nav_2" id="__nav_2_label" tabindex="0">
+            
+  
+  <span class="md-ellipsis">
+    DSP Ontologies
+  </span>
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_2_label" aria-expanded="true">
+          <label class="md-nav__title" for="__nav_2">
+            <span class="md-nav__icon md-icon"></span>
+            DSP Ontologies
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../introduction/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Introduction
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+    
+  
+  
+  
+    <li class="md-nav__item md-nav__item--active">
+      
+      <input class="md-nav__toggle md-toggle" type="checkbox" id="__toc">
+      
+      
+        
+      
+      
+        <label class="md-nav__link md-nav__link--active" for="__toc">
+          
+  
+  <span class="md-ellipsis">
+    The Knora Base Ontology
+  </span>
+  
+
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <a href="./" class="md-nav__link md-nav__link--active">
+        
+  
+  <span class="md-ellipsis">
+    The Knora Base Ontology
+  </span>
+  
+
+      </a>
+      
+        
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#overview" class="md-nav__link">
+    <span class="md-ellipsis">
+      Overview
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#the-knora-data-model" class="md-nav__link">
+    <span class="md-ellipsis">
+      The Knora Data Model
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="The Knora Data Model">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#projects" class="md-nav__link">
+    <span class="md-ellipsis">
+      Projects
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#ontologies" class="md-nav__link">
+    <span class="md-ellipsis">
+      Ontologies
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#resources" class="md-nav__link">
+    <span class="md-ellipsis">
+      Resources
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Resources">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#properties-of-resource" class="md-nav__link">
+    <span class="md-ellipsis">
+      Properties of Resource
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#representations" class="md-nav__link">
+    <span class="md-ellipsis">
+      Representations
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#standard-resource-classes" class="md-nav__link">
+    <span class="md-ellipsis">
+      Standard Resource Classes
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#values" class="md-nav__link">
+    <span class="md-ellipsis">
+      Values
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Values">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#properties-of-value" class="md-nav__link">
+    <span class="md-ellipsis">
+      Properties of Value
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#subclasses-of-value" class="md-nav__link">
+    <span class="md-ellipsis">
+      Subclasses of Value
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Subclasses of Value">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#textvalue" class="md-nav__link">
+    <span class="md-ellipsis">
+      TextValue
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#datevalue" class="md-nav__link">
+    <span class="md-ellipsis">
+      DateValue
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#timevalue" class="md-nav__link">
+    <span class="md-ellipsis">
+      TimeValue
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#intvalue" class="md-nav__link">
+    <span class="md-ellipsis">
+      IntValue
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#colorvalue" class="md-nav__link">
+    <span class="md-ellipsis">
+      ColorValue
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#decimalvalue" class="md-nav__link">
+    <span class="md-ellipsis">
+      DecimalValue
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#urivalue" class="md-nav__link">
+    <span class="md-ellipsis">
+      UriValue
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#booleanvalue" class="md-nav__link">
+    <span class="md-ellipsis">
+      BooleanValue
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#geomvalue" class="md-nav__link">
+    <span class="md-ellipsis">
+      GeomValue
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#geonamevalue" class="md-nav__link">
+    <span class="md-ellipsis">
+      GeonameValue
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#intervalvalue" class="md-nav__link">
+    <span class="md-ellipsis">
+      IntervalValue
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#listvalue" class="md-nav__link">
+    <span class="md-ellipsis">
+      ListValue
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#filevalue" class="md-nav__link">
+    <span class="md-ellipsis">
+      FileValue
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#linkvalue" class="md-nav__link">
+    <span class="md-ellipsis">
+      LinkValue
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#externalresvalue" class="md-nav__link">
+    <span class="md-ellipsis">
+      ExternalResValue
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#links-between-resources" class="md-nav__link">
+    <span class="md-ellipsis">
+      Links Between Resources
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#part-whole-relations-between-resources" class="md-nav__link">
+    <span class="md-ellipsis">
+      Part-Whole-Relations between Resources
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Part-Whole-Relations between Resources">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#ispartof" class="md-nav__link">
+    <span class="md-ellipsis">
+      isPartOf
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#segment" class="md-nav__link">
+    <span class="md-ellipsis">
+      Segment
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Segment">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#audiosegment" class="md-nav__link">
+    <span class="md-ellipsis">
+      AudioSegment
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#videosegment" class="md-nav__link">
+    <span class="md-ellipsis">
+      VideoSegment
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#text-with-standoff-markup" class="md-nav__link">
+    <span class="md-ellipsis">
+      Text with Standoff Markup
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Text with Standoff Markup">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#subclasses-of-standofftag" class="md-nav__link">
+    <span class="md-ellipsis">
+      Subclasses of StandoffTag
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Subclasses of StandoffTag">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#standoff-data-type-tags" class="md-nav__link">
+    <span class="md-ellipsis">
+      Standoff Data Type Tags
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#standofflinktag" class="md-nav__link">
+    <span class="md-ellipsis">
+      StandoffLinkTag
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#internal-links-in-a-textvalue" class="md-nav__link">
+    <span class="md-ellipsis">
+      Internal Links in a TextValue
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#mapping-to-create-standoff-from-xml" class="md-nav__link">
+    <span class="md-ellipsis">
+      Mapping to Create Standoff From XML
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#standoff-in-digital-editions" class="md-nav__link">
+    <span class="md-ellipsis">
+      Standoff in Digital Editions
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#querying-standoff-in-sparql" class="md-nav__link">
+    <span class="md-ellipsis">
+      Querying Standoff in SPARQL
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#authorisation" class="md-nav__link">
+    <span class="md-ellipsis">
+      Authorisation
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#users-and-groups" class="md-nav__link">
+    <span class="md-ellipsis">
+      Users and Groups
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#permissions" class="md-nav__link">
+    <span class="md-ellipsis">
+      Permissions
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#consistency-checking" class="md-nav__link">
+    <span class="md-ellipsis">
+      Consistency Checking
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#owl-cardinalities" class="md-nav__link">
+    <span class="md-ellipsis">
+      OWL Cardinalities
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#constraints-on-the-types-of-property-subjects-and-objects" class="md-nav__link">
+    <span class="md-ellipsis">
+      Constraints on the Types of Property Subjects and Objects
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#consistency-constraint-example" class="md-nav__link">
+    <span class="md-ellipsis">
+      Consistency Constraint Example
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#summary-of-restrictions-on-user-created-ontologies" class="md-nav__link">
+    <span class="md-ellipsis">
+      Summary of Restrictions on User-Created Ontologies
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Summary of Restrictions on User-Created Ontologies">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#restrictions-on-classes" class="md-nav__link">
+    <span class="md-ellipsis">
+      Restrictions on Classes
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#restrictions-on-properties" class="md-nav__link">
+    <span class="md-ellipsis">
+      Restrictions on properties
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#standardisation" class="md-nav__link">
+    <span class="md-ellipsis">
+      Standardisation
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#knora-ontology-versions" class="md-nav__link">
+    <span class="md-ellipsis">
+      Knora Ontology Versions
+    </span>
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../salsah-gui/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    The SALSAH GUI Ontology
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_3" >
+        
+          
+          <label class="md-nav__link" for="__nav_3" id="__nav_3_label" tabindex="0">
+            
+  
+  <span class="md-ellipsis">
+    DSP-API Endpoints
+  </span>
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_3_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_3">
+            <span class="md-nav__icon md-icon"></span>
+            DSP-API Endpoints
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    
+    
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_3_1" >
+        
+          
+          <label class="md-nav__link" for="__nav_3_1" id="__nav_3_1_label" tabindex="0">
+            
+  
+  <span class="md-ellipsis">
+    DSP-API V2
+  </span>
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_3_1_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_3_1">
+            <span class="md-nav__icon md-icon"></span>
+            DSP-API V2
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../03-endpoints/api-v2/introduction/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Introduction
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../03-endpoints/api-v2/authentication/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Authentication
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../03-endpoints/api-v2/reading-and-searching-resources/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Reading and Searching Resources
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../03-endpoints/api-v2/reading-user-permissions/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Reading the User's Permissions on Resources and Values
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../03-endpoints/api-v2/getting-lists/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Getting Lists
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../03-endpoints/api-v2/query-language/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Gravsearch - Virtual Graph Search
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../03-endpoints/api-v2/editing-resources/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Creating and Editing Resources
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../03-endpoints/api-v2/editing-values/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Creating and Editing Values
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../03-endpoints/api-v2/ontology-information/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Querying, Creating, and Updating Ontologies
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_3_1_10" >
+        
+          
+          <label class="md-nav__link" for="__nav_3_1_10" id="__nav_3_1_10_label" tabindex="0">
+            
+  
+  <span class="md-ellipsis">
+    Textual Data in DSP-API
+  </span>
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="3" aria-labelledby="__nav_3_1_10_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_3_1_10">
+            <span class="md-nav__icon md-icon"></span>
+            Textual Data in DSP-API
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../03-endpoints/api-v2/text/overview/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Overview
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../03-endpoints/api-v2/text/standard-standoff/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Standard Standoff Markup
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../03-endpoints/api-v2/text/custom-standoff/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Custom Standoff Mapping
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../03-endpoints/api-v2/text/tei-xml/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    TEI XML
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../03-endpoints/api-v2/permalinks/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Permalinks
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../03-endpoints/api-v2/knora-iris/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    IRIs
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_3_2" >
+        
+          
+          <label class="md-nav__link" for="__nav_3_2" id="__nav_3_2_label" tabindex="0">
+            
+  
+  <span class="md-ellipsis">
+    Admin API
+  </span>
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_3_2_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_3_2">
+            <span class="md-nav__icon md-icon"></span>
+            Admin API
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../03-endpoints/api-admin/introduction/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Introduction
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../03-endpoints/api-admin/overview/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Overview
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../03-endpoints/api-admin/users/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Users Endpoint
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../03-endpoints/api-admin/projects/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Projects Endpoint
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../03-endpoints/api-admin/groups/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Groups Endpoint
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../03-endpoints/api-admin/lists/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Lists Endpoint
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../03-endpoints/api-admin/permissions/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Permissions Endpoint
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../03-endpoints/api-admin/stores/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Stores Endpoint
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../03-endpoints/api-admin/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    OpenApi Documentation
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_3_3" >
+        
+          
+          <label class="md-nav__link" for="__nav_3_3" id="__nav_3_3_label" tabindex="0">
+            
+  
+  <span class="md-ellipsis">
+    Util API
+  </span>
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_3_3_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_3_3">
+            <span class="md-nav__icon md-icon"></span>
+            Util API
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../03-endpoints/api-util/version/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Version
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_3_4" >
+        
+          
+          <label class="md-nav__link" for="__nav_3_4" id="__nav_3_4_label" tabindex="0">
+            
+  
+  <span class="md-ellipsis">
+    Instrumentation API
+  </span>
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_3_4_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_3_4">
+            <span class="md-nav__icon md-icon"></span>
+            Instrumentation API
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../03-endpoints/instrumentation/introduction/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Introduction
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../03-endpoints/instrumentation/health/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Health Endpoint
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../03-endpoints/instrumentation/metrics/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Metrics Endpoint
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_4" >
+        
+          
+          <label class="md-nav__link" for="__nav_4" id="__nav_4_label" tabindex="0">
+            
+  
+  <span class="md-ellipsis">
+    Publishing and Deployment
+  </span>
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_4_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_4">
+            <span class="md-nav__icon md-icon"></span>
+            Publishing and Deployment
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../04-publishing-deployment/publishing/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Publishing
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../04-publishing-deployment/configuration/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Configuration
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_5" >
+        
+          
+          <label class="md-nav__link" for="__nav_5" id="__nav_5_label" tabindex="0">
+            
+  
+  <span class="md-ellipsis">
+    DSP Internals
+  </span>
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_5_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_5">
+            <span class="md-nav__icon md-icon"></span>
+            DSP Internals
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    
+    
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_5_1" >
+        
+          
+          <label class="md-nav__link" for="__nav_5_1" id="__nav_5_1_label" tabindex="0">
+            
+  
+  <span class="md-ellipsis">
+    Design
+  </span>
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_5_1_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_5_1">
+            <span class="md-nav__icon md-icon"></span>
+            Design
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    
+    
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_5_1_1" >
+        
+          
+          <label class="md-nav__link" for="__nav_5_1_1" id="__nav_5_1_1_label" tabindex="0">
+            
+  
+  <span class="md-ellipsis">
+    Architectural Decision Records (ADR)
+  </span>
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="3" aria-labelledby="__nav_5_1_1_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_5_1_1">
+            <span class="md-nav__icon md-icon"></span>
+            Architectural Decision Records (ADR)
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../05-internals/design/adr/ADR-0001-record-architecture-decisions/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    0001 Record Architectural Decisions
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../05-internals/design/adr/ADR-0002-change-cache-service-manager-from-akka-actor-to-zlayer/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    0002 Change Cache Service Manager from Akka-Actor to ZLayer
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../05-internals/design/adr/ADR-0003-change-iiif-service-manager-and-sipi-implementation-to-zlayer/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    0003 Change IIIF Service Manager and Sipi implementation to zlayer
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../05-internals/design/adr/ADR-0004-change-triplestore-service-manager-and-fuseki-implementation-to-zlayer/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    0004 Change Triplestore Service Manager and Fuseki implementation to ZLayer
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../05-internals/design/adr/ADR-0005-change-respondermanager-to-a-simple-case-class/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    0005 Change ResponderManager to a simple case class
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../05-internals/design/adr/ADR-0006-use-zio-http/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    0006 Gradually Replace Akka-HTTP with ZIO-HTTP
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../05-internals/design/adr/ADR-0007-zio-fication-of-responders/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    0007 ZIO-fication of Responders
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../05-internals/design/adr/ADR-0008-replace-akka-with-pekko/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    0008 Replace Akka with Pekko
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_5_1_2" >
+        
+          
+          <label class="md-nav__link" for="__nav_5_1_2" id="__nav_5_1_2_label" tabindex="0">
+            
+  
+  <span class="md-ellipsis">
+    DSP-API Design Principles
+  </span>
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="3" aria-labelledby="__nav_5_1_2_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_5_1_2">
+            <span class="md-nav__icon md-icon"></span>
+            DSP-API Design Principles
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../05-internals/design/principles/design-overview/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Design Overview
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../05-internals/design/principles/store-module/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Store Module
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../05-internals/design/principles/triplestore-updates/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Triplestore Updates
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../05-internals/design/principles/consistency-checking/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Consistency Checking
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../05-internals/design/principles/authentication/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Authentication
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../05-internals/design/principles/rdf-api/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    RDF Processing API
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_5_1_3" >
+        
+          
+          <label class="md-nav__link" for="__nav_5_1_3" id="__nav_5_1_3_label" tabindex="0">
+            
+  
+  <span class="md-ellipsis">
+    DSP-API V2 Design
+  </span>
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="3" aria-labelledby="__nav_5_1_3_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_5_1_3">
+            <span class="md-nav__icon md-icon"></span>
+            DSP-API V2 Design
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../05-internals/design/api-v2/overview/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    API v2 Design Overview
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../05-internals/design/api-v2/ontology-schemas/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Ontology Schemas
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../05-internals/design/api-v2/smart-iris/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Smart IRIs
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../05-internals/design/api-v2/content-wrappers/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Content Wrappers
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../05-internals/design/api-v2/how-to-add-a-route/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    How to Add an API v2 Route
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../05-internals/design/api-v2/json-ld/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    JSON-LD Parsing and Formatting
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../05-internals/design/api-v2/ontology-management/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Ontology Management
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../05-internals/design/api-v2/sipi/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    DSP-API and Sipi
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../05-internals/design/api-v2/gravsearch/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Gravsearch Design
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../05-internals/design/api-v2/standoff/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Standoff Markup
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../05-internals/design/api-v2/ark/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Archival Resource Key (ARK)
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../05-internals/design/api-v2/query-design/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    SPARQL Query Design
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../05-internals/design/api-admin/administration/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Admin API Design
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_5_1_5" >
+        
+          
+          <label class="md-nav__link" for="__nav_5_1_5" id="__nav_5_1_5_label" tabindex="0">
+            
+  
+  <span class="md-ellipsis">
+    DSP Domain
+  </span>
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="3" aria-labelledby="__nav_5_1_5_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_5_1_5">
+            <span class="md-nav__icon md-icon"></span>
+            DSP Domain
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../05-internals/design/domain/domain-entities-and-relations/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Domain Entities and Relations
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../05-internals/design/domain/system-instances/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    System Instances
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../05-internals/design/domain/class-and-property-hierarchies/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Class and Property Hierarchies
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_5_2" >
+        
+          
+          <label class="md-nav__link" for="__nav_5_2" id="__nav_5_2_label" tabindex="0">
+            
+  
+  <span class="md-ellipsis">
+    Development
+  </span>
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_5_2_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_5_2">
+            <span class="md-nav__icon md-icon"></span>
+            Development
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../05-internals/development/overview/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Overview
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../05-internals/development/building-and-running/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Build and Running
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../05-internals/development/vscode-config/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Setup Visual Studio Code for development of DSP-API
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../05-internals/development/testing/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Testing
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../05-internals/development/docker-cheat-sheet/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Docker Cheat Sheet
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../05-internals/development/docker-compose/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Starting the DSP-Stack inside Docker Container
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../05-internals/development/updating-repositories/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Updating Repositories
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../05-internals/development/third-party/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Third-Party Dependencies
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_6" >
+        
+          
+          <label class="md-nav__link" for="__nav_6" id="__nav_6_label" tabindex="0">
+            
+  
+  <span class="md-ellipsis">
+    SIPI
+  </span>
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_6_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_6">
+            <span class="md-nav__icon md-icon"></span>
+            SIPI
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../06-sipi/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Overview
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../06-sipi/sipi-and-dsp-api/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Interaction between Sipi and DSP-API
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_7" >
+        
+          
+          <label class="md-nav__link" for="__nav_7" id="__nav_7_label" tabindex="0">
+            
+  
+  <span class="md-ellipsis">
+    Lucene
+  </span>
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_7_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_7">
+            <span class="md-nav__icon md-icon"></span>
+            Lucene
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../07-lucene/lucene-query-parser-syntax/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Lucene Query Parser Syntax
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../08-faq/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Frequently Asked Questions
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_9" >
+        
+          
+          <label class="md-nav__link" for="__nav_9" id="__nav_9_label" tabindex="0">
+            
+  
+  <span class="md-ellipsis">
+    Release Notes
+  </span>
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_9_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_9">
+            <span class="md-nav__icon md-icon"></span>
+            Release Notes
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../09-release-notes/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Changelog
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../10-migration-guides/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Migration Guides and Deprecations
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+    
+  </ul>
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+            
+              
+              <div class="md-sidebar md-sidebar--secondary" data-md-component="sidebar" data-md-type="toc" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#overview" class="md-nav__link">
+    <span class="md-ellipsis">
+      Overview
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#the-knora-data-model" class="md-nav__link">
+    <span class="md-ellipsis">
+      The Knora Data Model
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="The Knora Data Model">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#projects" class="md-nav__link">
+    <span class="md-ellipsis">
+      Projects
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#ontologies" class="md-nav__link">
+    <span class="md-ellipsis">
+      Ontologies
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#resources" class="md-nav__link">
+    <span class="md-ellipsis">
+      Resources
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Resources">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#properties-of-resource" class="md-nav__link">
+    <span class="md-ellipsis">
+      Properties of Resource
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#representations" class="md-nav__link">
+    <span class="md-ellipsis">
+      Representations
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#standard-resource-classes" class="md-nav__link">
+    <span class="md-ellipsis">
+      Standard Resource Classes
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#values" class="md-nav__link">
+    <span class="md-ellipsis">
+      Values
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Values">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#properties-of-value" class="md-nav__link">
+    <span class="md-ellipsis">
+      Properties of Value
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#subclasses-of-value" class="md-nav__link">
+    <span class="md-ellipsis">
+      Subclasses of Value
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Subclasses of Value">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#textvalue" class="md-nav__link">
+    <span class="md-ellipsis">
+      TextValue
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#datevalue" class="md-nav__link">
+    <span class="md-ellipsis">
+      DateValue
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#timevalue" class="md-nav__link">
+    <span class="md-ellipsis">
+      TimeValue
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#intvalue" class="md-nav__link">
+    <span class="md-ellipsis">
+      IntValue
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#colorvalue" class="md-nav__link">
+    <span class="md-ellipsis">
+      ColorValue
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#decimalvalue" class="md-nav__link">
+    <span class="md-ellipsis">
+      DecimalValue
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#urivalue" class="md-nav__link">
+    <span class="md-ellipsis">
+      UriValue
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#booleanvalue" class="md-nav__link">
+    <span class="md-ellipsis">
+      BooleanValue
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#geomvalue" class="md-nav__link">
+    <span class="md-ellipsis">
+      GeomValue
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#geonamevalue" class="md-nav__link">
+    <span class="md-ellipsis">
+      GeonameValue
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#intervalvalue" class="md-nav__link">
+    <span class="md-ellipsis">
+      IntervalValue
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#listvalue" class="md-nav__link">
+    <span class="md-ellipsis">
+      ListValue
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#filevalue" class="md-nav__link">
+    <span class="md-ellipsis">
+      FileValue
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#linkvalue" class="md-nav__link">
+    <span class="md-ellipsis">
+      LinkValue
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#externalresvalue" class="md-nav__link">
+    <span class="md-ellipsis">
+      ExternalResValue
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#links-between-resources" class="md-nav__link">
+    <span class="md-ellipsis">
+      Links Between Resources
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#part-whole-relations-between-resources" class="md-nav__link">
+    <span class="md-ellipsis">
+      Part-Whole-Relations between Resources
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Part-Whole-Relations between Resources">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#ispartof" class="md-nav__link">
+    <span class="md-ellipsis">
+      isPartOf
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#segment" class="md-nav__link">
+    <span class="md-ellipsis">
+      Segment
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Segment">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#audiosegment" class="md-nav__link">
+    <span class="md-ellipsis">
+      AudioSegment
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#videosegment" class="md-nav__link">
+    <span class="md-ellipsis">
+      VideoSegment
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#text-with-standoff-markup" class="md-nav__link">
+    <span class="md-ellipsis">
+      Text with Standoff Markup
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Text with Standoff Markup">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#subclasses-of-standofftag" class="md-nav__link">
+    <span class="md-ellipsis">
+      Subclasses of StandoffTag
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Subclasses of StandoffTag">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#standoff-data-type-tags" class="md-nav__link">
+    <span class="md-ellipsis">
+      Standoff Data Type Tags
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#standofflinktag" class="md-nav__link">
+    <span class="md-ellipsis">
+      StandoffLinkTag
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#internal-links-in-a-textvalue" class="md-nav__link">
+    <span class="md-ellipsis">
+      Internal Links in a TextValue
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#mapping-to-create-standoff-from-xml" class="md-nav__link">
+    <span class="md-ellipsis">
+      Mapping to Create Standoff From XML
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#standoff-in-digital-editions" class="md-nav__link">
+    <span class="md-ellipsis">
+      Standoff in Digital Editions
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#querying-standoff-in-sparql" class="md-nav__link">
+    <span class="md-ellipsis">
+      Querying Standoff in SPARQL
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#authorisation" class="md-nav__link">
+    <span class="md-ellipsis">
+      Authorisation
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#users-and-groups" class="md-nav__link">
+    <span class="md-ellipsis">
+      Users and Groups
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#permissions" class="md-nav__link">
+    <span class="md-ellipsis">
+      Permissions
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#consistency-checking" class="md-nav__link">
+    <span class="md-ellipsis">
+      Consistency Checking
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#owl-cardinalities" class="md-nav__link">
+    <span class="md-ellipsis">
+      OWL Cardinalities
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#constraints-on-the-types-of-property-subjects-and-objects" class="md-nav__link">
+    <span class="md-ellipsis">
+      Constraints on the Types of Property Subjects and Objects
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#consistency-constraint-example" class="md-nav__link">
+    <span class="md-ellipsis">
+      Consistency Constraint Example
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#summary-of-restrictions-on-user-created-ontologies" class="md-nav__link">
+    <span class="md-ellipsis">
+      Summary of Restrictions on User-Created Ontologies
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Summary of Restrictions on User-Created Ontologies">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#restrictions-on-classes" class="md-nav__link">
+    <span class="md-ellipsis">
+      Restrictions on Classes
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#restrictions-on-properties" class="md-nav__link">
+    <span class="md-ellipsis">
+      Restrictions on properties
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#standardisation" class="md-nav__link">
+    <span class="md-ellipsis">
+      Standardisation
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#knora-ontology-versions" class="md-nav__link">
+    <span class="md-ellipsis">
+      Knora Ontology Versions
+    </span>
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+          
+          
+            <div class="md-content" data-md-component="content">
+              <article class="md-content__inner md-typeset">
+                
+                  
+
+
+<!---
+ * Copyright © 2021 - 2025 Swiss National Data and Service Center for the Humanities and/or DaSCH Service Platform contributors.
+ * SPDX-License-Identifier: Apache-2.0
+-->
+
+<h1 id="the-knora-base-ontology">The Knora Base Ontology</h1>
+<h2 id="overview">Overview</h2>
+<p>The Knora base ontology is the main built-in Knora ontology. Each project that uses DSP-API must describe its data model
+by creating ontologies that extend this ontology.</p>
+<p>The Knora base ontology is identified by the IRI <code>http://www.knora.org/ontology/knora-base</code>. In the DSP-API
+documentation in general, it is identified by the prefix <code>knora-base</code>, but for brevity, in this document, we use <code>kb</code> or
+omit the prefix entirely.</p>
+<h2 id="the-knora-data-model">The Knora Data Model</h2>
+<p>The Knora data model is based on the observation that, in the humanities, a value or literal is often itself structured
+and can be highly complex. Moreover, a value may have its own metadata, such as its creation date, information about
+permissions, and so on. Therefore, the Knora base ontology describes structured value types that can store this type of
+metadata. In the diagram below, a book (<code>ex:book2</code>) has a title
+(identified by the predicate <code>ex:title</code>) and a publication date
+(<code>ex:pubdate</code>), each of which has some metadata.</p>
+<p><img alt="Figure 1" src="../knora-base-fig1.dot.png" title="Figure 1" /></p>
+<h3 id="projects">Projects</h3>
+<p>In DSP-API, each item of data belongs to some particular project. Each project using DSP-API must define a
+<code>kb:knoraProject</code>, which has these properties (cardinalities are indicated in parentheses after each property name):</p>
+<ul>
+<li>
+<p><code>projectShortname</code> (1): A short name that can be used to identify the project in configuration files and the like.</p>
+</li>
+<li>
+<p><code>projectLongname</code> (0-1): The full name of the project.</p>
+</li>
+<li>
+<p><code>projectShortcode</code> (1): A hexadecimal code that uniquely identifies the project. These codes are assigned to projects
+  by the <a href="http://dasch.swiss/">DaSCH</a>.</p>
+</li>
+<li>
+<p><code>projectDescription</code> (1-n): A description of the project.</p>
+</li>
+</ul>
+<p>Ontologies and resources are associated with a project by means of the
+<code>kb:attachedToProject</code> property, as described in <a href="#ontologies">Ontologies</a>
+and <a href="#properties-of-resource">Properties of Resource</a>). Users are associated with a project by means of
+the <code>kb:isInProject</code> property, as described in
+<a href="#users-and-groups">Users and Groups</a>.</p>
+<h3 id="ontologies">Ontologies</h3>
+<p>Each user-created ontology must be defined as an <code>owl:Ontology</code> with the properties <code>rdfs:label</code>
+and <code>kb:attachedToProject</code>.
+Since <a href="https://github.com/dasch-swiss/dsp-api/releases/tag/v20.0.0">DSP-API v20</a> <code>kb:lastModificationDate</code> property is
+also required.</p>
+<h3 id="resources">Resources</h3>
+<p>All the content produced by a project (e.g. digitised primary source materials or research data) must be stored in
+objects that belong to subclasses of <code>kb:Resource</code>, so that DSP-API can query and update that content. Each project using
+the Knora base ontology must define its own OWL classes, derived from <code>kb:Resource</code>, to represent the types of data it
+deals with. A subclass of <code>kb:Resource</code> may additionally be a subclass of any other class, e.g. an industry-standard
+class such as <code>foaf:Person</code>; this can facilitate searches across projects.</p>
+<p>Resources have properties that point to different parts of the content they contain. For example, a resource
+representing a book could have a property called <code>hasAuthor</code>, pointing to the author of the book. There are two possible
+kinds of content in a Knora resource: Knora values (see <a href="#values">Values</a>) or links to other resources (see
+<a href="#links-between-resources">Links Between Resources</a>). Properties that point to Knora values must be subproperties
+of <code>kb:hasValue</code>, and properties that point to other resources must be subproperties of <code>kb:hasLinkTo</code>. Either of these
+two types of properties may also be a subproperty of any other property, e.g. an industry-standard property such
+as <code>foaf:name</code>; this can facilitate searches across projects. Each property definition must specify the types that its
+subjects and objects must belong to (see
+<a href="#constraints-on-the-types-of-property-subjects-and-objects">Constraints on the Types of Property Subjects and Objects</a>
+for details).</p>
+<p>Each user-created resource class definition must use OWL cardinality restrictions to specify the properties that
+resources of that class can have (see <a href="#owl-cardinalities">OWL Cardinalities</a> for details).</p>
+<p>Resources are not versioned; only their values are versioned (see
+<a href="#values">Values</a>).</p>
+<p>Every resource is required to have an <code>rdfs:label</code>. The object of this property is an <code>xsd:string</code>, rather than a Knora
+value; hence it is not versioned. A user who has modify permission on a resource (see
+<a href="#authorisation">Authorisation</a>) can change its label.</p>
+<p>A resource can be marked as deleted; DSP-API does this by adding the predicate <code>kb:isDeleted true</code> to the resource. An
+optional <code>kb:deleteComment</code> may be added to explain why the resource has been marked as deleted. Deleted resources are
+normally hidden. They cannot be undeleted, because even though resources are not versioned, it is necessary to be able
+to find out when a resource was deleted. If desired, a new resource can be created by copying data from a deleted
+resource.</p>
+<h4 id="properties-of-resource">Properties of Resource</h4>
+<ul>
+<li>
+<p><code>creationDate</code> (1): The time when the resource was created.</p>
+</li>
+<li>
+<p><code>attachedToUser</code> (1): The user who owns the resource.</p>
+</li>
+<li>
+<p><code>attachedToProject</code> (1): The project that the resource is part of.</p>
+</li>
+<li>
+<p><code>lastModificationDate</code> (0-1): A timestamp indicating when the resource (or one of its values) was last modified.</p>
+</li>
+<li>
+<p><code>seqnum</code> (0-1): The sequence number of the resource, if it is part of an ordered group of resources, such as the pages
+  in a book.</p>
+</li>
+<li>
+<p><code>isDeleted</code> (1): Indicates whether the resource has been deleted.</p>
+</li>
+<li>
+<p><code>deleteDate</code> (0-1): If the resource has been deleted, indicates when it was deleted.</p>
+</li>
+<li>
+<p><code>deleteComment</code> (0-1): If the resource has been deleted, indicates why it was deleted.</p>
+</li>
+</ul>
+<p>Resources can have properties that point to other resources; see
+<a href="#links-between-resources">Links Between Resources</a>. A resource grants permissions to groups of users;
+see <a href="#authorisation">Authorisation</a>.</p>
+<h4 id="representations">Representations</h4>
+<p>It is not practical to store all data in RDF. In particular, RDF is not a good storage medium for binary data such as
+images. Therefore, DSP-API stores such data outside the triplestore, in ordinary files. A resource can have metadata about
+a file attached to it. The technical term for such a resource in the Knora ontology is a <strong>Representation</strong>. For each file, there is
+a <code>kb:FileValue</code> in the triplestore containing metadata about the file (see <a href="#filevalue">FileValue</a>). DSP-API
+uses <a href="https://github.com/dhlab-basel/Sipi">Sipi</a> to store files. The DSP-API provides ways to create file values.</p>
+<p>A resource that has a file value must belong to one of the subclasses of
+<code>kb:Representation</code>. Its subclasses include:</p>
+<ul>
+<li>
+<p><code>StillImageRepresentation</code>: A representation referring to a still image file which can be stored in Sipi or an external IIIF server.</p>
+</li>
+<li>
+<p><code>MovingImageRepresentation</code>: A representation containing a video file.</p>
+</li>
+<li>
+<p><code>AudioRepresentation</code>: A representation containing an audio file.</p>
+</li>
+<li>
+<p><code>DDDrepresentation</code>: A representation containing a 3D image file.</p>
+</li>
+<li>
+<p><code>TextRepresentation</code>: A representation containing a formatted text file, such as an XML file.</p>
+</li>
+<li>
+<p><code>DocumentRepresentation</code>: A representation containing a document (such as a PDF file) that is not a text file.</p>
+</li>
+<li>
+<p><code>ArchiveRepresentation</code>: A representation containing an archive file (such as a zip archive).</p>
+</li>
+</ul>
+<p>These classes can be used directly in data, but it is often better to make subclasses of them, to include metadata about
+the files being stored.</p>
+<p>The base class of all these classes is <code>Representation</code>, which is not intended to be used directly. It has this
+property, which its subclasses override:</p>
+<ul>
+<li><code>hasFileValue</code> (1): Points to a file value.</li>
+</ul>
+<p>There are two ways for a project to design classes for representations. The simpler way is to create a resource class
+that represents a thing in the world (such as <code>ex:Painting</code>) and also belongs to a subclass of <code>Representation</code>. This is
+adequate if the class can have only one type of file attached to it. For example, if paintings are represented only by
+still images, <code>ex:Painting</code> could be a subclass of <code>StillImageRepresentation</code>.</p>
+<p>The more flexible approach, which is supported by DSP-API v2, is for each <code>ex:Painting</code> to
+link (using <code>kb:hasRepresentation</code> or a subproperty) to other resources containing files that represent the painting.
+Each of these other resources can extend a different subclass of <code>Representation</code>. For example, a painting could have a
+<code>StillImageRepresentation</code> as well as a <code>DDDrepresentation</code>.</p>
+<h4 id="standard-resource-classes">Standard Resource Classes</h4>
+<p>In general, each project must define its own subclasses of <code>kb:Resource</code>. However, the Knora base ontology
+provides some standard subclasses of <code>kb:Resource</code>, which are intended to be used by any project:</p>
+<ul>
+<li>
+<p><code>Region</code>: Represents a region of a <code>Representation</code> (see <a href="#representations">Representations</a>).</p>
+</li>
+<li>
+<p><code>Annotation</code>: Represents an annotation of a resource.<br />
+  The <code>hasComment</code> property points to the text of the annotation, represented as a <code>kb:TextValue</code>.</p>
+</li>
+<li>
+<p><code>LinkObj</code>: Represents a link that connects two or more resources.<br />
+  A <code>LinkObj</code> has a <code>hasLinkTo</code> property pointing to each resource that it connects, as well as a <code>hasLinkToValue</code>
+  property pointing to a reification of each of these direct links (
+  see <a href="#links-between-resources">Links Between Resources</a>).<br />
+  A <code>LinkObj</code> is more complex (and hence less convenient and readable) than a simple direct link, but it has the
+  advantage that it can be annotated using an <code>Annotation</code>. For improved readability, a project can make its own
+  subclasses of <code>LinkObj</code> with specific meanings.</p>
+</li>
+</ul>
+<h3 id="values">Values</h3>
+<p>The Knora base ontology defines a set of OWL classes that are derived from <code>kb:Value</code> and represent different types of
+structured values found in humanities data. This set of classes may not be extended by user-created ontologies.</p>
+<p>A value is always part of one particular resource, which points to it using some property derived from <code>hasValue</code>. For
+example, a user-created ontology could specify a <code>Book</code> class with a property <code>hasSummary</code> (derived from <code>hasValue</code>),
+and that property could have a <code>knora-base:objectClassConstraint</code> of <code>TextValue</code>. This would mean that the summary of
+each book is represented as a <code>TextValue</code>.</p>
+<p>Knora values are versioned. Existing values are not modified. Instead, a new version of an existing value is created.
+The new version is linked to the old version via the <code>previousValue</code> property.</p>
+<p>Since each value version has a different IRI, there is no IRI that can be used to cite the value, such that it will
+always refer to the latest version of the value. Therefore, the latest version of each value has a separate UUID, as the
+object of the property <code>valueHasUUID</code>. When a new version of the value is created, this UUID is moved to the new
+version. This makes it possible to cite the latest version of a value by searching for the UUID.</p>
+<p>"Deleting" a value means marking it with <code>kb:isDeleted</code>. An optional <code>kb:deleteComment</code> may be added to explain why the
+value has been marked as deleted. Deleted values are normally hidden.</p>
+<p>Most types of values are marked as deleted without creating a new version of the value. However, link values must be
+treated as a special case. Before a <code>LinkValue</code> can be marked as deleted, its reference count must be decremented to 0.
+Therefore, a new version of the <code>LinkValue</code> is made, with a reference count of 0, and it is this new version that is
+marked as deleted.</p>
+<p>To simplify the enforcement of ontology constraints, and for consistency with resource updates, no new versions of a
+deleted value can be made; it is not possible to undelete. Instead, if desired, a new value can be created by copying
+data from a deleted value.</p>
+<h4 id="properties-of-value">Properties of Value</h4>
+<ul>
+<li>
+<p><code>valueCreationDate</code> (1): The date and time when the value was created.</p>
+</li>
+<li>
+<p><code>attachedToUser</code> (1): The user who owns the value.</p>
+</li>
+<li>
+<p><code>valueHasString</code> (1): A human-readable string representation of the value's contents, which is available to DSP-API's
+  full-text search index.</p>
+</li>
+<li>
+<p><code>valueHasOrder</code> (0-1): A resource may have several properties of the same type with different values (which will be of
+  the same class), and it may be necessary to indicate an order in which these values occur. For example, a book may
+  have several authors which should appear in a defined order. Hence, <code>valueHasOrder</code>, when present, points to an
+  integer literal indicating the order of a given value relative to the other values of the same property. These
+  integers will not necessarily start at any particular number, and will not necessarily be consecutive.</p>
+</li>
+<li>
+<p><code>previousValue</code> (0-1): The previous version of the value.</p>
+</li>
+<li>
+<p><code>valueHasUUID</code> (0-1): The UUID that refers to all versions of the value. Only the latest version of the value has this
+  property.</p>
+</li>
+<li>
+<p><code>isDeleted</code> (1): Indicates whether the value has been deleted.</p>
+</li>
+<li>
+<p><code>deleteDate</code> (0-1): If the value has been deleted, indicates when it was deleted.</p>
+</li>
+<li>
+<p><code>deleteComment</code> (0-1): If the value has been deleted, indicates why it was deleted.</p>
+</li>
+</ul>
+<p>Each Knora value can grant permissions (see <a href="#authorisation">Authorisation</a>).</p>
+<h4 id="subclasses-of-value">Subclasses of Value</h4>
+<h5 id="textvalue">TextValue</h5>
+<p>Represents text, possibly including markup. The text is the object of the <code>valueHasString</code> property. A line break is
+represented as a Unicode line feed character (<code>U+000A</code>). The non-printing Unicode character
+<code>INFORMATION SEPARATOR TWO (U+001E)</code> can be used to separate words that are separated only by standoff markup (see
+below), so they are recognised as separate in a full-text search index.</p>
+<p>Markup is stored using this property:</p>
+<ul>
+<li>
+<p><code>valueHasStandoff</code> (0-n): Points to a standoff markup tag. See
+  <a href="#text-with-standoff-markup">Text with Standoff Markup</a>.</p>
+</li>
+<li>
+<p><code>valueHasMapping</code> (0-1): Points to the mapping used to create the standoff markup and to convert it back to the
+  original XML. See <a href="#mapping-to-create-standoff-from-xml">Mapping to Create Standoff From XML</a>.</p>
+</li>
+</ul>
+<p>A text value can have a specified language:</p>
+<ul>
+<li><code>valueHasLanguage</code> (0-1): An ISO 639-1 code as string specifying the language of the text.</li>
+</ul>
+<h5 id="datevalue">DateValue</h5>
+<p>Humanities data includes many different types of dates. A date has a specified calendar, and is always
+represented as a period with start and end points (which may be equal), each of which has a precision (<code>DAY</code>, <code>MONTH</code>,
+or <code>YEAR</code>). For <code>GREGORIAN</code> and <code>JULIAN</code> calendars, an optional <code>ERA</code> indicator term (<code>BCE</code>, <code>CE</code>, or <code>BC</code>, <code>AD</code>) can be
+added to the date, when no era is provided the default era <code>AD</code> will be considered. Internally, the start and end points
+are stored as two Julian Day Numbers. This calendar-independent representation makes it possible to compare and search
+for dates regardless of the calendar in which they were entered. Properties:</p>
+<ul>
+<li>
+<p><code>valueHasCalendar</code> (1): The name of the calendar in which the date should be displayed. Currently <code>GREGORIAN</code>,
+  <code>JULIAN</code>, and <code>ISLAMIC</code> civil calendars are supported.</p>
+</li>
+<li>
+<p><code>valueHasStartJDN</code> (1): The Julian Day Number of the start of the period (an <code>xsd:integer</code>).</p>
+</li>
+<li>
+<p><code>valueHasStartPrecision</code> (1): The precision of the start of the period.</p>
+</li>
+<li>
+<p><code>valueHasEndJDN</code> (1): The Julian Day Number of the end of the period (an <code>xsd:integer</code>).</p>
+</li>
+<li>
+<p><code>valueHasEndPrecision</code> (1): The precision of the end of the period.</p>
+</li>
+</ul>
+<h5 id="timevalue">TimeValue</h5>
+<p>A Knora time value represents a precise moment in time in the Gregorian calendar. Since nanosecond precision can be
+included, it is suitable for use as a timestamp. Properties:</p>
+<ul>
+<li><code>valueHasTimeStamp</code> (1): An <code>xsd:dateTimeStamp</code>, stored as an <code>xsd:dateTime</code> (because SPARQL does not support
+  <code>xsd:dateTimeStamp</code>).</li>
+</ul>
+<h5 id="intvalue">IntValue</h5>
+<p>Represents an integer. Property:</p>
+<ul>
+<li><code>valueHasInteger</code> (1): An <code>xsd:integer</code>.</li>
+</ul>
+<h5 id="colorvalue">ColorValue</h5>
+<ul>
+<li><code>valueHasColor</code> (1): A string representing a color. The string encodes a color as hexadecimal RGB values, e.g.
+  <code>\#FF0000</code>.</li>
+</ul>
+<h5 id="decimalvalue">DecimalValue</h5>
+<p>Represents an arbitrary-precision decimal number. Property:</p>
+<ul>
+<li><code>valueHasDecimal</code> (1): An <code>xsd:decimal</code>.</li>
+</ul>
+<h5 id="urivalue">UriValue</h5>
+<p>Represents a non-Knora URI. Property:</p>
+<ul>
+<li><code>valueHasUri</code> (1): An <code>xsd:anyURI</code>.</li>
+</ul>
+<h5 id="booleanvalue">BooleanValue</h5>
+<p>Represents a boolean value. Property:</p>
+<ul>
+<li><code>valueHasBoolean</code> (1): An <code>xsd:boolean</code>.</li>
+</ul>
+<h5 id="geomvalue">GeomValue</h5>
+<p>Represents a geometrical object as a JSON string, using normalized coordinates. Property:</p>
+<ul>
+<li><code>valueHasGeometry</code> (1): A JSON string.</li>
+</ul>
+<h5 id="geonamevalue">GeonameValue</h5>
+<p>Represents a geolocation, using the identifiers found at <a href="http://geonames.org">GeoNames</a>. Property:</p>
+<ul>
+<li><code>valueHasGeonameCode</code> (1): The identifier of a geographical feature from <a href="http://geonames.org">GeoNames</a>, represented
+  as an <code>xsd:string</code>.</li>
+</ul>
+<h5 id="intervalvalue">IntervalValue</h5>
+<p>Represents a time interval, with precise start and end times on a timeline, e.g. relative to the beginning of an audio
+or video file. Properties:</p>
+<ul>
+<li>
+<p><code>valueHasIntervalStart</code> (1): An <code>xsd:decimal</code> representing the start of the interval in seconds.</p>
+</li>
+<li>
+<p><code>valueHasIntervalEnd</code> (1): An <code>xsd:decimal</code> representing the end of the interval in seconds.</p>
+</li>
+</ul>
+<h5 id="listvalue">ListValue</h5>
+<p>Projects often need to define lists or hierarchies of categories that can be assigned to many different resources. Then,
+for example, a user interface can provide a drop-down menu to allow the user to assign a category to a resource.
+The <code>ListValue</code> class provides a way to represent these sorts of data structures. It can represent either a flat list or
+a tree.</p>
+<p>A <code>ListValue</code> has this property:</p>
+<ul>
+<li><code>valueHasListNode</code> (1): Points to a <code>ListNode</code>.</li>
+</ul>
+<p>Each <code>ListNode</code> can have the following properties:</p>
+<ul>
+<li>
+<p><code>isRootNode</code> (0-1): Set to <code>true</code> if this is the root node.</p>
+</li>
+<li>
+<p><code>hasSubListNode</code> (0-n): Points to the node's child nodes, if any.</p>
+</li>
+<li>
+<p><code>hasRootNode</code> (0-1): Points to the root node of the list (absent if <code>isRootNode</code> is <code>true</code>).</p>
+</li>
+<li>
+<p><code>listNodePosition</code> (0-1): An integer indicating the node's position in the list of its siblings (absent
+  if <code>isRootNode</code> is <code>true</code>).</p>
+</li>
+<li>
+<p><code>listNodeName</code> (0-1): The node's human-readable name (absent if <code>isRootNode</code> is <code>true</code>).</p>
+</li>
+</ul>
+<h5 id="filevalue">FileValue</h5>
+<p>DSP-API can store certain kinds of data outside the triplestore, in files (see <a href="#representations">Representations</a>). Each
+digital object that is stored outside the triplestore has associated metadata, which is stored in the triplestore in
+a <code>kb:FileValue</code>. The base class <code>FileValue</code>, which is not intended to be used directly, has the following properties:</p>
+<ul>
+<li>
+<p>File metadata:</p>
+<ul>
+<li><code>internalFilename</code> (1): The name of the file as stored by DSP.</li>
+<li><code>internalMimeType</code> (1): The MIME type of the file as stored by DSP.</li>
+<li><code>originalFilename</code> (0-1): The original name of the file when it was uploaded to DSP.</li>
+<li><code>originalMimeType</code> (0-1): The original MIME type of the file when it was uploaded to DSP.</li>
+</ul>
+</li>
+<li>
+<p>Legal info metadata</p>
+<ul>
+<li><code>hasAuthorship</code> (0-n): Indicates the authorship of the file, each author has their own string literal.</li>
+<li><code>hasCopyrightHolder</code> (0-1): The copyright holder of the file, a string literal. The project restricts which values are allowed.</li>
+<li><code>hasLicense</code> (0-1): The license under which the file is published, an IRI to the license. The project restricts which values are allowed.</li>
+</ul>
+</li>
+</ul>
+<p>The subclasses of <code>FileValue</code>, which are intended to be used directly in data, include:</p>
+<ul>
+<li>
+<p><code>StillImageAbstractFileValue</code>: Contains metadata about a still image file, which can be either <code>StillImageFileValue</code> (an image stored in Sipi) or <code>StillImageExternalFileValue</code> (a reference to an image stored in an external IIIF service).</p>
+</li>
+<li>
+<p><code>MovingImageFileValue</code>: Contains metadata about a video file.</p>
+</li>
+<li>
+<p><code>AudioFileValue</code>: Contains metadata about an audio file.</p>
+</li>
+<li>
+<p><code>DDDFileValue</code>: Contains metadata about a 3D image file.</p>
+</li>
+<li>
+<p><code>TextFileValue</code>: Contains metadata about a text file.</p>
+</li>
+<li>
+<p><code>DocumentFileValue</code>: Contains metadata about a document (such as PDF) that is not a text file.</p>
+</li>
+<li>
+<p><code>ArchiveFileValue</code>: Contains metadata about an archive (such as zio archive).</p>
+</li>
+</ul>
+<p>Each of these classes contains properties that are specific to the type of file it describes. For example, still image
+files have dimensions, video files have frame rates, and so on.</p>
+<p><code>FileValue</code> objects are versioned like other values, and the actual files stored by DSP-API are also versioned. Version 1
+of the DSP-API does not provide a way to retrieve a previous version of a file, but this feature will be added in a
+subsequent version of the API.</p>
+<h5 id="linkvalue">LinkValue</h5>
+<p>A <code>LinkValue</code> is an RDF "reification" containing metadata about a link between two resources. It is therefore a subclass
+of <code>rdf:Statement</code> as well as of <code>Value</code>. It has these properties:</p>
+<p><code>rdf:subject</code> (1)</p>
+<p>:   The resource that is the source of the link.</p>
+<p><code>rdf:predicate</code> (1)</p>
+<p>:   The link property.</p>
+<p><code>rdf:object</code> (1)</p>
+<p>:   The resource that is the target of the link.</p>
+<p><code>valueHasRefCount</code> (1)</p>
+<p>:   The reference count of the link. This is meaningful when the
+<code>LinkValue</code> describes resource references in Standoff text markup
+(see <a href="#standofflinktag">StandoffLinkTag</a>). Otherwise, the reference count will always be 1 (if the link exists) or 0 (if
+it has been deleted).</p>
+<p>For details about how links are created in DSP-API, see
+<a href="#links-between-resources">Links Between Resources</a>.</p>
+<h5 id="externalresvalue">ExternalResValue</h5>
+<p>Represents a resource that is not stored in the RDF triplestore managed by DSP-API, but instead resides in an external
+repository managed by some other software. The <code>ExternalResValue</code> contains the information that DSP-API needs in order to
+access the resource, assuming that a suitable gateway plugin is installed.</p>
+<p><code>extResAccessInfo</code> (1)</p>
+<p>:   The location of the repository containing the external resource
+(e.g. its URL).</p>
+<p><code>extResId</code> (1)</p>
+<p>:   The repository-specific ID of the external resource.</p>
+<p><code>extResProvider</code> (1)</p>
+<p>:   The name of the external provider of the resource.</p>
+<h3 id="links-between-resources">Links Between Resources</h3>
+<p>A link between two resources is expressed, first of all, as a triple, in which the subject is the resource that is the
+source of the link, the predicate is a "link property" (a subproperty of <code>kb:hasLinkTo</code>), and the object is the resource
+that is the target of the link.</p>
+<p>It is also useful to store metadata about links. For example, DSP-API needs to know who owns the link, who has permission
+to modify it, when it was created, and so on. Such metadata cannot simply describe the link property, because then it
+would refer to that property in general, not to any particular instance in which that property is used to connect two
+particular resources. To attach metadata to a specific link in RDF, it is necessary to create an RDF "reification". A
+reification makes statements about a particular triple (subject, predicate, object), in this case the triple that
+expresses the link between the resources. DSP-API uses reifications of type <code>kb:LinkValue</code> (described in
+<a href="#linkvalue">LinkValue</a>) to store metadata about links.</p>
+<p>For example, suppose a project describes paintings that belong to collections. The project can define an ontology as
+follows (expressed here in <a href="http://www.w3.org/TR/turtle/">Turtle</a> format, and simplified for the purposes of
+illustration):</p>
+<div class="highlight"><pre><span></span><code>@prefix kb &lt;http://www.knora.org/ontology/knora-base#&gt; .
+@prefix : &lt;http://www.knora.org/ontology/paintings#&gt; .
+
+:Painting rdf:type owl:Class ;
+    rdfs:subClassOf kb:Resource ,
+        [ rdf:type owl:Restriction ;
+            owl:onProperty :hasArtist ;
+            owl:cardinality 1 ] ,
+        [ rdf:type owl:Restriction ;
+              owl:onProperty :hasTitle ;
+              owl:cardinality 1 ] ;
+        [ rdf:type owl:Restriction ;
+              owl:onProperty :isInCollection ;
+              owl:minCardinality 1 ] ;
+        [ rdf:type owl:Restriction ;
+              owl:onProperty :isInCollectionValue ;
+              owl:minCardinality 1 ] .
+
+:Collection rdf:type owl:Class ;
+    rdfs:subClassOf kb:Resource ,
+        [ rdf:type owl:Restriction ;
+            owl:onProperty :hasCollectionName ;
+            owl:cardinality 1 ] .
+
+:hasArtist rdf:type owl:ObjectProperty ;
+    rdfs:label &quot;Name of artist&quot; ;
+    kb:subjectClassConstraint :Painting ;
+    kb:objectClassConstraint kb:TextValue .
+
+:hasTitle rdf:type owl:ObjectProperty ;
+    rdfs:label &quot;Title of painting&quot;
+    kb:subjectClassConstraint :Painting ;
+    kb:objectClassConstraint kb:TextValue .
+
+:hasCollectionName rdf:type owl:ObjectProperty ;
+    rdfs:label &quot;Name of collection&quot; ;
+    kb:subjectClassConstraint :Collection ;
+    kb:objectClassConstraint kb:TextValue .
+</code></pre></div>
+<p>To link the paintings to the collection, we must add a "link property"
+to the ontology. In this case, the link property will point from a painting to the collection it belongs to. Every link
+property must be a subproperty of <code>kb:hasLinkTo</code>.</p>
+<div class="highlight"><pre><span></span><code>:isInCollection rdf:type owl:ObjectProperty ;
+    rdfs:subPropertyOf kb:hasLinkTo ;
+    kb:subjectClassConstraint :Painting ;
+    kb:objectClassConstraint :Collection .
+</code></pre></div>
+<p>We must then add a "link value property", which will point from a painting to a <code>kb:LinkValue</code> (described in
+<a href="#linkvalue">LinkValue</a>), which will contain metadata about the link between the property and the collection. In
+particular, the link value specifies the creator of the link, the date when it was created, and the permissions that
+determine who can view or modify it. The name of the link value property is constructed using a simple naming
+convention: the word <code>Value</code> is appended to the name of the link property. In this case, since our link property is
+called
+<code>:isInCollection</code>, the link value property must be called
+<code>:isInCollectionValue</code>. Every link value property must be a subproperty of <code>kb:hasLinkToValue</code>.</p>
+<div class="highlight"><pre><span></span><code>:isInCollectionValue rdf:type owl:ObjectProperty ;
+    rdfs:subPropertyOf kb:hasLinkToValue ;
+    kb:subjectClassConstraint :Painting ;
+    kb:objectClassConstraint kb:LinkValue .
+</code></pre></div>
+<p>Given this ontology, we can create some RDF data describing a painting and a collection:</p>
+<div class="highlight"><pre><span></span><code>@prefix paintings &lt;http://www.knora.org/ontology/paintings#&gt; .
+@prefix data &lt;http://www.knora.org/ontology/paintings/data#&gt; .
+
+data:dali_4587 rdf:type paintings:Painting ;
+    paintings:hasTitle data:value_A ;
+    paintings:hasArtist data:value_B .
+
+data:value_A rdf:type kb:TextValue ;
+    kb:valueHasString &quot;The Persistence of Memory&quot; .
+
+data:value_B rdf:type kb:TextValue ;
+    kb:valueHasString &quot;Salvador Dali&quot; .
+
+data:pompidou rdf:type paintings:Collection ;
+    paintings:hasCollectionName data:value_C .
+
+data:value_C rdf:type kb:TextValue ;
+    kb:valueHasString &quot;Centre Pompidou, Paris&quot; .
+</code></pre></div>
+<p>We can then state that the painting is in the collection:</p>
+<div class="highlight"><pre><span></span><code>data:dali_4587 paintings:isInCollection data:pompidou ;
+    paintings:isinCollectionValue data:value_D .
+
+data:value_D rdf:type kb:LinkValue ;
+    rdf:subject data:dali_4587 ;
+    rdf:predicate paintings:isInCollection ;
+    rdf:object data:pompidou ;
+    kb:valueHasRefCount 1 .
+</code></pre></div>
+<p>This creates a link (<code>paintings:isInCollection</code>) between the painting and the collection, along with a reification
+containing metadata about the link. We can visualise the result as the following graph:</p>
+<p><img alt="Figure 2" src="../knora-base-fig2.dot.png" title="Figure 2" /></p>
+<p>DSP-API allows a user to see a link if the requesting user has permission to see the source and target resources as well
+as the <code>kb:LinkValue</code>.</p>
+<h3 id="part-whole-relations-between-resources">Part-Whole-Relations between Resources</h3>
+<h4 id="ispartof">isPartOf</h4>
+<p>A special case of linked resources are <em>part-of related resources</em>, i.e. a resource consisting of several other
+resources. In order to create a part-of relation between two resources, the resource that is part of another resource
+needs to have a property that is either <code>kb:isPartOf</code> or a subproperty thereof.
+<code>kb:isPartOf</code> itself is a subproperty of <code>kb:hasLinkTo</code>. Same as described above for link properties, a corresponding
+part-of value property is created automatically. This value property has the same name as the part-of property with
+<code>Value</code> appended. For example, if in an ontology <code>data</code> a property <code>data:partOf</code> was defined, the corresponding value
+property would be named <code>data:partOfValue</code>. This newly created property <code>data:partOfValue</code> is defined as a subproperty
+of <code>kb:isPartOfValue</code>.</p>
+<p>Part-of relations are recommended for resources of type <code>kb:StillImageRepresentation</code>. In that case, the resource that
+is part of another resource needs to have a property <code>kb:seqnum</code> or a subproperty thereof, with an integer as value. A
+client can then use this information to leaf through the parts of the compound resource (p.ex. to leaf through the pages
+of a book like in <a href="../../01-introduction/example-project/#resource-classes">this</a> example).</p>
+<h4 id="segment">Segment</h4>
+<p>DSP-API supports the creation of segment resources.
+A segment is a part of a resource which has a temporal extent;
+the segment is defined by a start and end time relative to the resource.
+Segments are modelled as resources of type <code>kb:Segment</code>,
+having the properties <code>kb:isSegmentOf</code>, a <a href="#linkvalue">LinkValue</a> pointing to the resource the segment is part of,
+and <code>kb:hasSegmentBounds</code>, a <a href="#intervalvalue">IntervalValue</a> representing the temporal extent of the segment.
+However, <code>kb:Segment</code> is "abstract" and cannot be used directly in data.</p>
+<p>Segments have a number of optional, generic properties to add additional information:
+<code>kb:hasTitle</code> (0-1), <code>kb:hasDescription</code> (0-n), <code>kb:hasKeyword</code> (0-n),
+<code>kb:relatesTo</code>/<code>kb:relatesToValue</code> (0-n), and <code>kb:hasComment</code> (0-1).</p>
+<p>There are two concrete subclasses of <code>kb:Segment</code> for video and audio resources.</p>
+<p>It is possible to create subclasses of <code>kb:AudioSegment</code> and <code>kb:VideoSegment</code> to add additional properties,
+but this is discouraged and may not be supported in future versions of DSP-API.
+Instead, instances of <code>kb:Annotation</code> pointing to the segment should be used to add additional information.</p>
+<h5 id="audiosegment">AudioSegment</h5>
+<p>Audio segments are defined by the following properties:</p>
+<ul>
+<li><code>kb:isAudioSegmentOf</code> (1): A <a href="#linkvalue">LinkValue</a> pointing to an <a href="#representations">AudioRepresentation</a>.</li>
+<li><code>kb:hasSegmentBounds</code> (1): An <a href="#intervalvalue">IntervalValue</a> representing the temporal extent of the segment.</li>
+<li><code>kb:hasTitle</code> (0-1): A <a href="#textvalue">TextValue</a> for adding a title or name to the segment.</li>
+<li><code>kb:hasDescription</code> (0-n): A <a href="#textvalue">TextValue</a> for providing one or more descriptions of the segment.</li>
+<li><code>kb:hasKeyword</code> (0-n): A <a href="#textvalue">TextValue</a> for adding one or more keywords to the segment.</li>
+<li><code>kb:relatesTo</code>/<code>kb:relatesToValue</code> (0-n): A <a href="#linkvalue">LinkValue</a> for relating the segment to another resource.</li>
+<li><code>kb:hasComment</code> (0-1): A <a href="#textvalue">TextValue</a> for a comment on the segment.</li>
+</ul>
+<h5 id="videosegment">VideoSegment</h5>
+<p>Video segments are defined by the following properties:</p>
+<ul>
+<li><code>kb:isVideoSegmentOf</code> (1): A <a href="#linkvalue">LinkValue</a> pointing to a <a href="#representations">MovingImageRepresentation</a>.</li>
+<li><code>kb:hasSegmentBounds</code> (1): An <a href="#intervalvalue">IntervalValue</a> representing the temporal extent of the segment.</li>
+<li><code>kb:hasTitle</code> (0-1): A <a href="#textvalue">TextValue</a> for adding a title or name to the segment.</li>
+<li><code>kb:hasDescription</code> (0-n): A <a href="#textvalue">TextValue</a> for providing one or more descriptions of the segment.</li>
+<li><code>kb:hasKeyword</code> (0-n): A <a href="#textvalue">TextValue</a> for adding one or more keywords to the segment.</li>
+<li><code>kb:relatesTo</code>/<code>kb:relatesToValue</code> (0-n): A <a href="#linkvalue">LinkValue</a> for relating the segment to another resource.</li>
+<li><code>kb:hasComment</code> (0-1): A <a href="#textvalue">TextValue</a> for a comment on the segment.</li>
+</ul>
+<h3 id="text-with-standoff-markup">Text with Standoff Markup</h3>
+<p>DSP-API is designed to be able to store text with markup, which can indicate formatting and structure, as well as the
+complex observations involved in transcribing handwritten manuscripts. One popular way of representing text in the
+humanities is to encode it in XML using the Text Encoding
+Initiative (<a href="http://www.tei-c.org/release/doc/tei-p5-doc/en/html/index.html">TEI</a>)
+guidelines. In DSP-API, a TEI/XML document can be stored as a file with attached metadata, but this is not recommended,
+because it does not allow to perform searches across multiple documents.</p>
+<p>The recommended way to store text with markup in DSP-API is to use the built-in support for "standoff" markup, which
+is stored separately from the text. This has some advantages over embedded markup such as XML. While XML requires markup
+to have a hierarchical structure, and does not allow overlapping tags, standoff nodes do not have these limitations
+(see 
+<a href="https://doi.org/10.1515/itit-2015-0030">Using Standoff Properties for Marking-up Historical Documents in the Humanities</a>).
+A standoff tag can be attached to any substring in the text by giving its start and end positions. Unlike in corpus
+linguistics, we do not use any tokenisation resulting in a form of predefined segmentation, which would limit the user's
+ability to freely annotate any ranges in the text.</p>
+<p>For example, suppose we have the following text:</p>
+<div class="highlight"><pre><span></span><code><span class="nt">&lt;blockquote&gt;</span>This<span class="w"> </span><span class="nt">&lt;i&gt;</span>sentence<span class="w"> </span><span class="nt">&lt;strong&gt;</span>has<span class="w"> </span>overlapping<span class="nt">&lt;/strong&gt;&lt;/i&gt;</span><span class="w"> </span><span class="nt">&lt;strong&gt;</span>visual<span class="nt">&lt;/strong&gt;</span><span class="w"> </span>attributes.<span class="nt">&lt;/blockquote&gt;</span>
+</code></pre></div>
+<p>This would require just two standoff tags: <code>(italic, start=5, end=29)</code> and <code>(bold, start=14, end=36)</code>.</p>
+<p>Moreover, standoff makes it possible to mark up the same text in different, possibly incompatible ways, allowing for
+different interpretations without making redundant copies of the text. In the Knora base ontology, any text value can
+have standoff tags.</p>
+<p>By representing standoff as RDF triples, DSP-API makes markup searchable across multiple text documents in a repository.
+For example, if a repository contains documents in which references to persons are indicated in standoff, it is
+straightforward to find all the documents mentioning a particular person. DSP-API's standoff support is intended to make
+it possible to convert documents with embedded, hierarchical markup, such as TEI/XML, into RDF standoff and back again,
+with no data loss, thus bringing the benefits of RDF to existing TEI-encoded documents.</p>
+<p>In the Knora base ontology, a <code>TextValue</code> can have one or more standoff tags. Each standoff tag indicates the start and
+end positions of a substring in the text that has a particular attribute. The OWL class
+<code>kb:StandoffTag</code>, which is the base class of all standoff node classes, has these properties:</p>
+<ul>
+<li><code>standoffTagHasStart</code> (1): The index of the first character in the text that has the attribute.</li>
+<li><code>standoffTagHasEnd</code> (1): The index of the last character in the text that has the attribute, plus 1.</li>
+<li><code>standoffTagHasUUID</code> (1): A UUID identifying this instance and those corresponding to it in later versions of
+  the <code>TextValue</code> it belongs to.
+  The UUID is a means to maintain a reference to a particular range of a text also when new versions are made and
+  standoff
+  tag IRIs change.</li>
+<li><code>standoffTagHasOriginalXMLID</code> (0-1): The original ID of the XML element that the standoff tag represents, if any.</li>
+<li><code>standoffTagHasStartIndex</code> (1): The start index of the standoff tag. Start indexes are numbered from 0 within the
+  context of a particular text.
+  When several standoff tags share the same start position, they can be nested correctly with this information when
+  transforming them to XML.</li>
+<li><code>standoffTagHasEndIndex</code> (1): The end index of the standoff tag. Start indexes are numbered from 0 within the context
+  of a particular text.
+  When several standoff tags share the same end position, they can be nested correctly with this information when
+  transforming
+  them to XML.</li>
+<li><code>standoffTagHasStartParent</code> (0-1): Points to the parent standoff tag. This corresponds to the original nesting of tags
+  in XML. If a standoff tag has no parent, it represents the XML root element.
+  If the original XML element is a CLIX tag, it represents the start of a virtual (non syntactical) hierarchy.</li>
+<li><code>standoffTagHasEndParent</code> (0-1): Points to the parent standoff tag if the original XML element is a CLIX tag and
+  represents the end of a virtual (non syntactical) hierarchy.</li>
+</ul>
+<p>The <code>StandoffTag</code> class is not used directly in RDF data; instead, its subclasses are used. A few subclasses are
+currently provided in <code>standoff-onto.ttl</code>.
+Projects are able to define their own custom standoff tag classes (direct subclasses of <code>StandoffTag</code>
+or one of the standoff data type classes or subclasses of one of the standoff classes defined in <code>standoff-onto.ttl</code>).</p>
+<h4 id="subclasses-of-standofftag">Subclasses of StandoffTag</h4>
+<h5 id="standoff-data-type-tags">Standoff Data Type Tags</h5>
+<p>Associates data in some Knora value type with a substring in a text. Standoff data type tags are subclasses
+of <code>ValueBase</code> classes.</p>
+<ul>
+<li><code>StandoffLinkTag</code> Indicates that a substring refers to another <code>kb:Resource</code>. See <a href="#standofflinktag">StandoffLinkTag</a>.</li>
+<li><code>StandoffInternalReferenceTag</code> Indicates that a substring refers to another standoff tag in the same text value.
+  See <a href="#internal-links-in-a-textvalue">Internal Links in a TextValue</a>.</li>
+<li><code>StandoffUriTag</code> Indicates that a substring is associated with a URI, which is stored in the same form that is used
+  for <code>kb:UriValue</code>. See <a href="#urivalue">UriValue</a>.</li>
+<li><code>StandoffDateTag</code> Indicates that a substring represents a date, which is stored in the same form that is used
+  for <code>kb:DateValue</code>. See <a href="#datevalue">DateValue</a>.</li>
+<li><code>StandoffColorTag</code> Indicates that a substring represents a color, which is stored in the same form that is used
+  for <code>kb:ColorValue</code>. See <a href="#colorvalue">ColorValue</a>.</li>
+<li><code>StandoffIntegerTag</code> Indicates that a substring represents an integer, which is stored in the same form that is used
+  for <code>kb:IntegerValue</code>. See <a href="#intvalue">IntValue</a>.</li>
+<li><code>StandoffDecimalTag</code> Indicates that a substring represents a number with fractions, which is stored in the same form
+  that is used for <code>kb:DecimalValue</code>. See <a href="#decimalvalue">DecimalValue</a>.</li>
+<li><code>StandoffIntervalTag</code> Indicates that a substring represents an interval, which is stored in the same form that is used
+  for <code>kb:IntervalValue</code>. See <a href="#intervalvalue">IntervalValue</a>.</li>
+<li><code>StandoffBooleanTag</code> Indicates that a substring represents a Boolean, which is stored in the same form that is used
+  for <code>kb:BooleanValue</code>. See <a href="#booleanvalue">BooleanValue</a>.</li>
+<li><code>StandoffTimeTag</code> Indicates that a substring represents a timestamp, which is stored in the same form that is used
+  for <code>kb:TimeValue</code>. See <a href="#timevalue">TimeValue</a>.</li>
+</ul>
+<h5 id="standofflinktag">StandoffLinkTag</h5>
+<p>A <code>StandoffLinkTag</code> Indicates that a substring is associated with a Knora resource. For example, if a repository
+contains resources representing persons, a text could be marked up so that each time a person's name is mentioned,
+a <code>StandoffLinkTag</code> connects the name to the Knora resource describing that person. It has the following property:</p>
+<p><code>standoffTagHasLink</code> (1): The IRI of the resource that is referred to.</p>
+<p>One of the design goals of the Knora base ontology is to make it easy and efficient to find out which resources contain
+references to a given resource. Direct links are easier and more efficient to query than indirect links. Therefore, when
+a text value contains a resource reference in its standoff nodes, DSP-API automatically creates a direct link between the
+containing resource and the target resource, along with an RDF reification (a <code>kb:LinkValue</code>) describing the link, as
+discussed in <a href="#links-between-resources">Links Between Resources</a>. In this case, the link property is
+always <code>kb:hasStandoffLinkTo</code>, and the link value property (which points to the <code>LinkValue</code>) is always
+<code>kb:hasStandoffLinkToValue</code>.</p>
+<p>DSP-API automatically updates direct links and reifications for standoff resource references when text values are
+updated.
+To do this, it keeps track of the number of text values in each resource that contain at least one standoff reference to
+a given target resource. It stores this number as the reference count of the <code>LinkValue</code> (see
+<a href="#linkvalue">LinkValue</a>) describing the direct link. Each time this number changes, it makes a new version of
+the <code>LinkValue</code>, with an updated reference count. When the reference count reaches zero, it removes the direct link and
+makes a new version of the <code>LinkValue</code>, marked with <code>kb:isDeleted</code>.</p>
+<p>For example, if <code>data:R1</code> is a resource with a text value in which the resource <code>data:R2</code> is referenced, the repository
+could contain the following triples:</p>
+<div class="highlight"><pre><span></span><code><span class="nn">data</span><span class="p">:</span><span class="nt">R1</span>
+    <span class="nn">ex</span><span class="p">:</span><span class="nt">hasComment</span> <span class="nn">data</span><span class="p">:</span><span class="nt">V1</span> <span class="p">.</span>
+
+<span class="nn">data</span><span class="p">:</span><span class="nt">V1</span>
+    <span class="nn">rdf</span><span class="p">:</span><span class="nt">type</span>            <span class="nn">kb</span><span class="p">:</span><span class="nt">TextValue</span> <span class="p">;</span>
+    <span class="nn">kb</span><span class="p">:</span><span class="nt">valueHasString</span>   <span class="s">&quot;This link is internal.&quot;</span> <span class="p">;</span>
+    <span class="nn">kb</span><span class="p">:</span><span class="nt">valueHasStandoff</span> <span class="nn">data</span><span class="p">:</span><span class="nt">SO1</span> <span class="p">.</span>
+
+<span class="nn">data</span><span class="p">:</span><span class="nt">SO1</span>
+    <span class="nn">rdf</span><span class="p">:</span><span class="nt">type</span>                <span class="nn">kb</span><span class="p">:</span><span class="nt">StandoffLinkTag</span> <span class="p">;</span>
+    <span class="nn">kb</span><span class="p">:</span><span class="nt">standoffTagHasStart:</span> <span class="mi">5</span> <span class="p">;</span>
+    <span class="nn">kb</span><span class="p">:</span><span class="nt">standoffTagHasEnd:</span>   <span class="mi">9</span> <span class="p">;</span>
+    <span class="nn">kb</span><span class="p">:</span><span class="nt">standoffTagHasLink</span>   <span class="nn">data</span><span class="p">:</span><span class="nt">R2</span> <span class="p">.</span>
+
+<span class="nn">data</span><span class="p">:</span><span class="nt">R1</span>
+    <span class="nn">kb</span><span class="p">:</span><span class="nt">hasStandoffLinkTo</span> <span class="nn">data</span><span class="p">:</span><span class="nt">R2</span> <span class="p">.</span>
+
+<span class="nn">data</span><span class="p">:</span><span class="nt">R1</span>
+    <span class="nn">kb</span><span class="p">:</span><span class="nt">hasStandoffLinkToValue</span> <span class="nn">data</span><span class="p">:</span><span class="nt">LV1</span> <span class="p">.</span>
+
+<span class="nn">data</span><span class="p">:</span><span class="nt">LV1</span>
+    <span class="nn">rdf</span><span class="p">:</span><span class="nt">type</span>            <span class="nn">kb</span><span class="p">:</span><span class="nt">LinkValue</span> <span class="p">;</span>
+    <span class="nn">rdf</span><span class="p">:</span><span class="nt">subject</span>         <span class="nn">data</span><span class="p">:</span><span class="nt">R1</span> <span class="p">;</span>
+    <span class="nn">rdf</span><span class="p">:</span><span class="nt">predicate</span>       <span class="nn">kb</span><span class="p">:</span><span class="nt">hasStandoffLinkTo</span> <span class="p">;</span>
+    <span class="nn">rdf</span><span class="p">:</span><span class="nt">object</span>          <span class="nn">data</span><span class="p">:</span><span class="nt">R2</span> <span class="p">;</span>
+    <span class="nn">kb</span><span class="p">:</span><span class="nt">valueHasRefCount</span> <span class="mi">1</span> <span class="p">.</span>
+</code></pre></div>
+<p>The result can be visualized like this:</p>
+<p><img alt="Figure 3" src="../knora-base-fig3.dot.png" title="Figure 3" /></p>
+<p>Link values created automatically for resource references in standoff are visible to all users, and the creator of these
+link values is always
+<code>kb:SystemUser</code> (see <a href="#users-and-groups">Users and Groups</a>). The DSP-API server allows a user to see a standoff link if
+the user has permission to see the source and target resources.</p>
+<h4 id="internal-links-in-a-textvalue">Internal Links in a TextValue</h4>
+<p>Internal links in a <code>TextValue</code> can be represented using the data type standoff class <code>StandoffInternalReferenceTag</code> or
+a subclass of it. It has the following property:</p>
+<p><code>standoffTagHasInternalReference</code> (1): Points to a <code>StandoffTag</code> that belongs to the same <code>TextValue</code>. It has
+an <code>objectClassConstraint</code> of <code>StandoffTag</code>.</p>
+<p>For links to a <code>kb:Resource</code>, see <a href="#standofflinktag">StandoffLinkTag</a>.</p>
+<h4 id="mapping-to-create-standoff-from-xml">Mapping to Create Standoff From XML</h4>
+<p>A mapping allows for the conversion of an XML document to RDF-standoff and back. A mapping defines one-to-one relations
+between XML elements (with or without a class) and attributes and standoff classes and properties (see
+<a href="../../03-endpoints/api-v2/text/custom-standoff/">XML to Standoff Mapping</a>).</p>
+<p>A mapping is represented by a <code>kb:XMLToStandoffMapping</code> which contains one or more <code>kb:MappingElement</code>.
+A <code>kb:MappingElement</code> maps an XML element (including attributes) to a standoff class and standoff properties. It has the
+following properties:</p>
+<ul>
+<li><code>mappingHasXMLTagname</code> (1): The name of the XML element that is mapped to a standoff class.</li>
+<li><code>mappingHasXMLNamespace</code> (1): The XML namespace of the XML element that is mapped to a standoff class. If no namespace
+  is given, <code>noNamespace</code> is used.</li>
+<li><code>mappingHasXMLClass</code> (1): The name of the class of the XML element. If it has no class, <code>noClass</code> is used.</li>
+<li><code>mappingHasStandoffClass</code> (1): The standoff class the XML element is mapped to.</li>
+<li><code>mappingHasXMLAttribute</code> (0-n): Maps XML attributes to standoff properties using <code>MappingXMLAttribute</code>. See below.</li>
+<li><code>mappingHasStandoffDataTypeClass</code> (0-1): Indicates the standoff data type class of the standoff class the XML element
+  is mapped to.</li>
+<li><code>mappingElementRequiresSeparator</code> (1): Indicates if there should be an invisible word separator inserted after the XML
+  element in the RDF-standoff representation.
+  Once the markup is stripped, text segments that belonged to different elements may be concatenated.</li>
+</ul>
+<p>A <code>MappingXMLAttribute</code> has the following properties:</p>
+<ul>
+<li><code>mappingHasXMLAttributename</code>: The name of the XML attribute that is mapped to a standoff property.</li>
+<li><code>mappingHasXMLNamespace</code>: The namespace of the XML attribute that is mapped to a standoff property. If no namespace is
+  given, <code>noNamespace</code> is used.</li>
+<li><code>mappingHasStandoffProperty</code>: The standoff property the XML attribute is mapped to.</li>
+</ul>
+<p>DSP-API includes a standard mapping used by the DSP APP. It has the
+IRI <code>http://rdfh.ch/standoff/mappings/StandardMapping</code> and defines mappings for a few elements used to write texts with
+simple markup.</p>
+<h4 id="standoff-in-digital-editions">Standoff in Digital Editions</h4>
+<p>DSP-API's standoff is designed to make it possible to convert XML documents to standoff and back. One application for
+this
+feature is an editing workflow in which an editor works in an XML editor, and the resulting XML documents are converted
+to standoff and stored in the DSP, where they can be searched and annotated.</p>
+<p>If an editor wants to correct text that has been imported from XML into standoff, the text can be exported as XML,
+edited, and imported again. To preserve annotations on standoff tags across edits, each tag can automatically be given a
+UUID. In a future version of the Knora base ontology, it may be possible to create annotations that point to UUIDs
+rather than to IRIs. When a text is exported to XML, the UUIDs can be included in the XML. When the edited XML is
+imported again, it can be converted to new standoff tags with the same UUIDs. Annotations that applied to standoff tags
+in the previous version of the text will therefore also apply to equivalent tags in the new version.</p>
+<p>When text is converted from XML into standoff, tags are also given indexes, which are numbered from 0 within the context
+of a particular text. This makes it possible to order tags that share the same position, and to preserve the hierarchy
+of the original XML document. An ordinary, hierarchical XML tag is converted to a standoff tag that has one index, as
+well as the index of its parent tag, if any. The Knora base ontology also supports non-hierarchical markup such as
+<a href="https://en.wikipedia.org/wiki/CLIX_(markup)">CLIX</a>, which enables overlapping
+markup to be represented in XML. When non-hierarchical markup is converted to standoff, both the start position and the
+end position of the standoff tag have indexes and parent indexes.</p>
+<p>To support these features, a standoff tag can have these additional properties:</p>
+<ul>
+<li><code>standoffTagHasStartIndex</code> (0-1): The index of the start position.</li>
+<li><code>standoffTagHasEndIndex</code> (0-1): The index of the end position, if this is a non-hierarchical tag.</li>
+<li><code>standoffTagHasStartParent</code> (0-1): The IRI of the tag, if any, that contains the start position.</li>
+<li><code>standoffTagHasEndParent</code> (0-1): The IRI of the tag, if any, that contains the end position, if this is a
+  non-hierarchical tag.</li>
+<li><code>standoffTagHasUUID</code> (0-1): A UUID that can be used to annotate a standoff tag that may be present in different
+  versions of a text,
+  or in different layers of a text (such as a diplomatic transcription and an edited critical text).</li>
+</ul>
+<h4 id="querying-standoff-in-sparql">Querying Standoff in SPARQL</h4>
+<p>A future version of DSP-API may provide an API for querying standoff markup. In the meantime, it is possible to query it
+directly in SPARQL. For example, here is a SPARQL query (using RDFS inference) that finds all the text values that
+have a standoff date tag referring to Christmas Eve 2016, contained in a <code>StandoffItalicTag</code>:</p>
+<div class="highlight"><pre><span></span><code><span class="k">PREFIX</span> <span class="nn">knora-base</span><span class="p">:</span> <span class="nl">&lt;http://www.knora.org/ontology/knora-base#&gt;</span>
+<span class="k">PREFIX</span> <span class="nn">standoff</span><span class="p">:</span> <span class="nl">&lt;http://www.knora.org/ontology/standoff#&gt;</span>
+
+<span class="k">select</span> <span class="o">*</span> <span class="k">where</span> <span class="p">{</span>
+    <span class="nv">?standoffTag</span> <span class="k">a</span> <span class="nn">knora-base</span><span class="p">:</span><span class="nt">StandoffDateTag</span>  <span class="p">.</span>
+
+    <span class="nv">?standoffTag</span> <span class="nn">knora-base</span><span class="p">:</span><span class="nt">valueHasStartJDN</span> <span class="nv">?dateStart</span> <span class="p">.</span>
+    <span class="nv">?standoffTag</span> <span class="nn">knora-base</span><span class="p">:</span><span class="nt">valueHasEndJDN</span> <span class="nv">?dateEnd</span> <span class="p">.</span>
+
+    <span class="k">FILTER</span> <span class="p">(</span><span class="mi">2457747</span>  <span class="o">&lt;=</span> <span class="nv">?dateEnd</span> <span class="o">&amp;&amp;</span> <span class="mi">2457747</span>  <span class="o">&gt;=</span> <span class="nv">?dateStart</span><span class="p">)</span>
+
+    <span class="nv">?standoffTag</span> <span class="nn">knora-base</span><span class="p">:</span><span class="nt">standoffTagHasStartParent</span> <span class="nv">?parent</span> <span class="p">.</span>
+    <span class="nv">?parent</span> <span class="k">a</span> <span class="nn">standoff</span><span class="p">:</span><span class="nt">StandoffItalicTag</span> <span class="p">.</span>
+
+    <span class="nv">?textValue</span> <span class="nn">knora-base</span><span class="p">:</span><span class="nt">valueHasStandoff</span> <span class="nv">?standoffTag</span> <span class="p">.</span>
+    <span class="nv">?textValue</span> <span class="nn">knora-base</span><span class="p">:</span><span class="nt">valueHasString</span> <span class="nv">?string</span> <span class="p">.</span>
+
+    <span class="nv">?standoffTag</span> <span class="nn">knora-base</span><span class="p">:</span><span class="nt">standoffTagHasStart</span> <span class="nv">?startPos</span> <span class="p">.</span>
+    <span class="nv">?standoffTag</span> <span class="nn">knora-base</span><span class="p">:</span><span class="nt">standoffTagHasEnd</span> <span class="nv">?endPos</span> <span class="p">.</span>  
+<span class="p">}</span>
+</code></pre></div>
+<h3 id="authorisation">Authorisation</h3>
+<h3 id="users-and-groups">Users and Groups</h3>
+<p>Each DSP-API user is represented by an object belonging to the class
+<code>kb:User</code>, which is a subclass of <code>foaf:Person</code>, and has the following properties:</p>
+<p><code>userid</code> (1)</p>
+<p>:   A unique identifier that the user must provide when logging in.</p>
+<p><code>password</code> (1)</p>
+<p>:   A cryptographic hash of the user's password.</p>
+<p><code>email</code> (0-n)</p>
+<p>:   Email addresses belonging to the user.</p>
+<p><code>isInProject</code> (0-n)</p>
+<p>:   Projects that the user is a member of.</p>
+<p><code>isInGroup</code> (0-n)</p>
+<p>:   user-created groups that the user is a member of.</p>
+<p><code>foaf:familyName</code> (1)</p>
+<p>:   The user's family name.</p>
+<p><code>foaf:givenName</code> (1)</p>
+<p>:   The user's given name.</p>
+<p>DSP-API's concept of access control is that an object (a resource or value) can grant permissions to groups of users (but
+not to individual users). There are several built-in groups:</p>
+<p><code>knora-admin:UnknownUser</code></p>
+<p>:   Any user who has not logged into DSP-API is automatically assigned to this group.</p>
+<p><code>knora-admin:KnownUser</code></p>
+<p>:   Any user who has logged into DSP-API is automatically assigned to this group.</p>
+<p><code>knora-admin:ProjectMember</code></p>
+<p>:   When checking a user's permissions on an object, the user is automatically assigned to this group if she is a member
+of the project that the object belongs to.</p>
+<p><code>knora-admin:Creator</code></p>
+<p>:   When checking a user's permissions on an object, the user is automatically assigned to this group if he is the
+creator of the object.</p>
+<p><code>knora-admin:ProjectAdmin</code></p>
+<p>:   When checking a user's permissions on an object, the user is automatically assigned to this group if she is an
+administrator of the project that the object belongs to.</p>
+<p><code>knora-admin:SystemAdmin</code></p>
+<p>:   The group of DSP-API system administrators.</p>
+<p>A user-created ontology can define additional groups, which must belong to the OWL class <code>knora-admin:UserGroup</code>.</p>
+<p>There is one built-in <code>knora-admin:SystemUser</code>, which is the creator of link values created automatically for resource
+references in standoff markup (see <a href="#standofflinktag">StandoffLinkTag</a>).</p>
+<h3 id="permissions">Permissions</h3>
+<p>Each resource or value can grant certain permissions to specified user groups. These permissions are represented as the
+object of the predicate <code>kb:hasPermissions</code>, which is required on every <code>kb:Resource</code>
+and on the current version of every <code>kb:Value</code>. The permissions attached to the current version of a value also apply to
+previous versions of the value. Value versions other than the current one do not have this predicate.</p>
+<p>The following permissions can be granted:</p>
+<ol>
+<li><strong>Restricted view permission (RV)</strong> Allows a restricted view of the object, e.g. a view of an image with a watermark.</li>
+<li><strong>View permission (V)</strong> Allows an unrestricted view of the object. Having view permission on a resource only affects
+   the user's ability to view information about the resource other than its values. To view a value, she must have view
+   permission on the value itself.</li>
+<li><strong>Modify permission (M)</strong> For values, this permission allows a new version of a value to be created. For resources,
+   this allows the user to create a new value (as opposed to a new version of an existing value), or to change
+   information about the resource other than its values. When he wants to make a new version of a value, his permissions
+   on the containing resource are not relevant. However, when he wants to change the target of a link, the old link must
+   be deleted and a new one created, so he needs modify permission on the resource.</li>
+<li><strong>Delete permission (D)</strong> Allows the item to be marked as deleted.</li>
+<li><strong>Change rights permission (CR)</strong> Allows the permissions granted by the object to be changed.</li>
+</ol>
+<p>Each permission in the above list implies all lower-numbered permissions. A user's permission level on a particular
+object is calculated in the following way:</p>
+<ol>
+<li>Make a list of the groups that the user belongs to, including
+   <code>Creator</code> and/or <code>ProjectMember</code> if applicable.</li>
+<li>Make a list of the permissions that she can obtain on the object, by iterating over the permissions that the object
+   grants. For each permission, if she is in the specified group, add the specified permission to the list of
+   permissions she can obtain.</li>
+<li>From the resulting list, select the highest-level permission.</li>
+<li>If the result is that she would have no permissions, give her whatever permission <code>UnknownUser</code> would have.</li>
+</ol>
+<p>To view a link between resources, a user needs permission to view the source and target resources. He also needs
+permission to view the
+<code>LinkValue</code> representing the link, unless the link property is
+<code>hasStandoffLinkTo</code> (see <a href="#standofflinktag">StandoffLinkTag</a>).</p>
+<p>The format of the object of <code>kb:hasPermissions</code> is as follows:</p>
+<ul>
+<li>Each permission is represented by the one-letter or two-letter abbreviation given above.</li>
+<li>Each permission abbreviation is followed by a space, then a comma-separated list of groups that the permission is
+  granted to.</li>
+<li>The IRIs of built-in groups are shortened using the <code>knora-admin</code>
+  prefix.</li>
+<li>Multiple permissions are separated by a vertical bar (<code>|</code>).</li>
+</ul>
+<p>For example, if an object grants view permission to unknown and known users, and modify permission to project members,
+the resulting permission literal would be:</p>
+<div class="highlight"><pre><span></span><code>V knora-admin:UnknownUser,knora-admin:KnownUser|M knora-admin:ProjectMember
+</code></pre></div>
+<h3 id="consistency-checking">Consistency Checking</h3>
+<p>DSP-API tries to enforce repository consistency by checking constraints that are specified in the Knora base ontology and
+in user-created ontologies. Three types of consistency rules are enforced:</p>
+<ul>
+<li>Cardinalities in OWL class definitions must be satisfied.</li>
+<li>Constraints on the types of the subjects and objects of OWL object properties must be satisfied.</li>
+<li>A datatype property may not have an empty string as an object.</li>
+</ul>
+<h3 id="owl-cardinalities">OWL Cardinalities</h3>
+<p>As noted in <a href="#resources">Resources</a>, each subclass of
+<code>Resource</code> must use OWL cardinality restrictions to specify the properties it can have. More specifically, a resource is
+allowed to have a property that is a subproperty of <code>kb:hasValue</code> or <code>kb:hasLinkTo</code> only if the resource's class has
+some cardinality for that property. Similarly, a value is allowed to have a subproperty of <code>kb:valueHas</code>
+only if the value's class has some cardinality for that property.</p>
+<p>DSP-API supports, and attempts to enforce, the following cardinality constraints:</p>
+<ul>
+<li>
+<p><code>owl:cardinality 1</code>:
+  <em>Exactly One <code>1</code></em> - A resource of this class must have exactly one instance of the specified property.</p>
+</li>
+<li>
+<p><code>owl:minCardinality 1</code>:
+  <em>At Least One <code>1-n</code></em> - A resource of this class must have at least one instance of the specified property.</p>
+</li>
+<li>
+<p><code>owl:maxCardinality 1</code>:
+  <em>Zero Or One <code>0-1</code></em> - A resource of this class must have either zero or one instance of the specified property.</p>
+</li>
+<li>
+<p><code>owl:minCardinality 0</code>:
+  <em>Unbounded <code>0-n</code></em> - A resource of this class may have zero or more instances of the specified property.</p>
+</li>
+</ul>
+<p>DSP-API requires cardinalities to be defined using blank nodes, as in the following example from <code>knora-base</code>:</p>
+<div class="highlight"><pre><span></span><code>:Representation rdf:type owl:Class ;
+    rdfs:subClassOf :Resource ,
+        [ rdf:type owl:Restriction ;
+          owl:onProperty :hasFileValue ;
+          owl:minCardinality &quot;1&quot;^^xsd:nonNegativeInteger ] .
+
+:StillImageRepresentation rdf:type owl:Class ;
+    rdfs:subClassOf :Representation ,
+        [ rdf:type owl:Restriction ;
+          owl:onProperty :hasStillImageFileValue ;
+          owl:minCardinality &quot;1&quot;^^xsd:nonNegativeInteger ] .
+</code></pre></div>
+<p>The cardinality of a link property must be the same as the cardinality of the corresponding link value property.</p>
+<p>Each <code>owl:Restriction</code> may have the predicate <code>salsah-gui:guiOrder</code> to indicate the order in which properties should be
+displayed in a GUI
+(see <a href="../salsah-gui/">The SALSAH GUI Ontology</a>).</p>
+<p>A resource class inherits cardinalities from its superclasses. This follows from the rules of
+<a href="http://www.w3.org/TR/2014/REC-rdf-schema-20140225/">RDFS</a> inference. Also, in DSP-API, cardinalities in the subclass can
+override cardinalities that would otherwise be inherited from the superclass. Specifically, if a superclass has a
+cardinality on a property P, and a subclass has a cardinality on a subproperty of P, the subclass's cardinality
+overrides the superclass's cardinality. In the example above,
+<code>hasStillImageFileValue</code> is a subproperty of <code>hasFileValue</code>. Therefore, the cardinality on <code>hasStillImageFileValue</code>
+overrides (i.e. replaces)
+the one on <code>hasFileValue</code>.</p>
+<p>Note that, unlike cardinalities, predicates of properties are not inherited. If <code>:foo rdfs:subPropertyOf :bar</code>, this
+does not mean that
+<code>:foo</code> inherits anything from <code>:bar</code>. Any predicates of <code>:foo</code> that are also needed by <code>:bar</code> must be defined explicitly
+on <code>:bar</code>. This design decision was made because property predicate inheritance is not provided by RDFS inference, and
+would make it more difficult to check the correctness of ontologies, while providing little practical benefit.</p>
+<p>For more information about OWL cardinalities, see
+the <a href="http://www.w3.org/TR/2012/REC-owl2-primer-20121211/">OWL 2 Primer</a>.</p>
+<h3 id="constraints-on-the-types-of-property-subjects-and-objects">Constraints on the Types of Property Subjects and Objects</h3>
+<p>When a user-created ontology defines a property, it must indicate the types that are allowed as objects (and, if
+possible, as subjects) of the property. This is done using the following Knora-specific properties:</p>
+<p><code>subjectClassConstraint</code></p>
+<p>:   Specifies the class that subjects of the property must belong to. This constraint is recommended but not required.
+DSP-API will attempt to enforce this constraint.</p>
+<p><code>objectClassConstraint</code></p>
+<p>:   If the property is an object property, specifies the class that objects of the property must belong to. Every
+subproperty of
+<code>kb:hasValue</code> or a <code>kb:hasLinkTo</code> (i.e. every property of a resource that points to a <code>kb:Value</code> or to another resource)
+is required to have this constraint, because DSP-API relies on it to know what type of object to expect for the property.
+DSP-API will attempt to enforce this constraint.</p>
+<p><code>objectDatatypeConstraint</code></p>
+<p>:   If the property is a datatype property, specifies the type of literals that can be objects of the property. DSP-API
+will not attempt to enforce this constraint, but it is useful for documentation purposes.</p>
+<p>Note that it is possible for a subproperty to have a more restrictive contraint than its base property, by specifing a
+subject or object class that is a subclass of the one specified in the base property. However, it is not possible for
+the subproperty to make the base property's constraint less restrictive.</p>
+<p>See
+also <a href="../../08-faq/#why-doesnt-dsp-api-use-rdfsdomain-and-rdfsrange-for-consistency-checking">Why doesn't DSP-API use <code>rdfs:domain</code> and <code>rdfs:range</code> for consistency checking?</a></p>
+<h3 id="consistency-constraint-example">Consistency Constraint Example</h3>
+<p>A user-created ontology could define consistency constraints as in this simplified example:</p>
+<div class="highlight"><pre><span></span><code>:book rdf:type owl:Class ;
+    rdfs:subClassOf knora-base:Resource ,
+        [ rdf:type owl:Restriction ;
+          owl:onProperty :hasTitle ;
+          owl:cardinality &quot;1&quot;^^xsd:nonNegativeInteger ] ,
+        [ rdf:type owl:Restriction ;
+          owl:onProperty :hasAuthor ;
+          owl:minCardinality &quot;0&quot;^^xsd:nonNegativeInteger ] .
+
+:hasTitle rdf:type owl:ObjectProperty ;
+    knora-base:subjectClassConstraint :book ;
+    knora-base:objectClassConstraint knora-base:TextValue .
+
+:hasAuthor rdf:type owl:ObjectProperty ;
+    knora-base:subjectClassConstraint :book ;
+    knora-base:objectClassConstraint knora-base:TextValue .
+</code></pre></div>
+<h2 id="summary-of-restrictions-on-user-created-ontologies">Summary of Restrictions on User-Created Ontologies</h2>
+<p>An ontology can refer to a Knora ontology in another project only if the other ontology is built-in or shared
+(see <a href="../introduction/#shared-ontologies">Shared Ontologies</a>).</p>
+<h3 id="restrictions-on-classes">Restrictions on Classes</h3>
+<ul>
+<li>Each class must be a subclass of either <code>kb:Resource</code> or
+  <code>kb:StandoffTag</code>, but not both (note that this forbids user-created subclasses of <code>kb:Value</code>).</li>
+<li>All the cardinalities that a class defines directly (i.e. does not inherit from <code>kb:Resource</code>) must be on properties
+  that are defined in the triplestore.</li>
+<li>Within the cardinalities of a class, there must be a link value property for each link property and vice versa.</li>
+<li>The cardinality of a link property must be the same as the cardinality of the corresponding link value property.</li>
+<li>A cardinality on a property with a boolean value must be
+  <code>owl:cardinality 1</code> or <code>owl:maxCardinality 1</code>.</li>
+<li>Each class must be a subclass of all the classes that are subject class constraints of the properties in its
+  cardinalities.</li>
+<li>If it's a resource class, all its directly defined cardinalities must be on Knora resource properties (subproperties
+  of <code>kb:hasValue</code>
+  or <code>kb:hasLinkTo</code>), and all its base classes with Knora IRIs must also be resource classes. A cardinality
+  on <code>kb:resourceProperty</code> or
+  <code>kb:hasValue</code> is forbidden. It must also have an <code>rdfs:label</code>.</li>
+<li>If it's a standoff class, none of its cardinalities may be on Knora resource properties, and all its base classes with
+  Knora IRIs must also be standoff classes.</li>
+<li>A class cannot have a cardinality on property P as well as a cardinality on a subproperty of P.</li>
+</ul>
+<h3 id="restrictions-on-properties">Restrictions on properties</h3>
+<ul>
+<li>The property's subject class constraint, if provided, must be a subclass of <code>kb:Resource</code> or <code>kb:StandoffTag</code>, and
+  must be a subclass of the subject class constraints of all its base properties.</li>
+<li>Its object class constraint, if provided, must be a subclass of the object class constraints of all its base
+  properties.</li>
+<li>If the property is a Knora resource property, it must have an object class constraint and an <code>rdfs:label</code>.</li>
+<li>It can't be a subproperty of both <code>kb:hasValue</code> and <code>kb:hasLinkTo</code>.</li>
+<li>It can't be a subproperty of <code>kb:hasFileValue</code>.</li>
+<li>Each of its base properties that has a Knora IRI must also be a Knora resource property.</li>
+</ul>
+<h2 id="standardisation">Standardisation</h2>
+<p>The <a href="http://dasch.swiss/">DaSCH</a> intends to coordinate the standardisation of generally useful entities proposed in
+user-created ontologies. We envisage a process in which two or more projects would initiate the process by starting a
+public discussion on proposed entities to be shared. Once a consensus was reached, the
+<a href="http://dasch.swiss/">DaSCH</a> would publish these entities in a
+<a href="../introduction/#shared-ontologies">Shared Ontology</a>).</p>
+<h2 id="knora-ontology-versions">Knora Ontology Versions</h2>
+<p>The Knora base ontology has the property <code>kb:ontologyVersion</code>, whose object is a string that indicates the deployed
+version of all the DSP-API built-in ontologies. This allows the
+repository update program to determine which repository updates are needed
+when DSP-API is upgraded.</p>
+
+
+
+
+
+
+
+  
+    
+  
+  
+
+
+  <aside class="md-source-file">
+    
+      
+  <span class="md-source-file__fact">
+    <span class="md-icon" title="Last update">
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M21 13.1c-.1 0-.3.1-.4.2l-1 1 2.1 2.1 1-1c.2-.2.2-.6 0-.8l-1.3-1.3c-.1-.1-.2-.2-.4-.2m-1.9 1.8-6.1 6V23h2.1l6.1-6.1-2.1-2M12.5 7v5.2l4 2.4-1 1L11 13V7h1.5M11 21.9c-5.1-.5-9-4.8-9-9.9C2 6.5 6.5 2 12 2c5.3 0 9.6 4.1 10 9.3-.3-.1-.6-.2-1-.2s-.7.1-1 .2C19.6 7.2 16.2 4 12 4c-4.4 0-8 3.6-8 8 0 4.1 3.1 7.5 7.1 7.9l-.1.2v1.8Z"/></svg>
+    </span>
+    <span class="git-revision-date-localized-plugin git-revision-date-localized-plugin-date">February 20, 2025</span>
+  </span>
+
+    
+    
+    
+    
+  </aside>
+
+
+
+
+
+                
+              </article>
+            </div>
+          
+          
+<script>var target=document.getElementById(location.hash.slice(1));target&&target.name&&(target.checked=target.name.startsWith("__tabbed_"))</script>
+        </div>
+        
+          <button type="button" class="md-top md-icon" data-md-component="top" hidden>
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M13 20h-2V8l-5.5 5.5-1.42-1.42L12 4.16l7.92 7.92-1.42 1.42L13 8v12Z"/></svg>
+  Back to top
+</button>
+        
+      </main>
+      
+        <footer class="md-footer">
+  
+  <div class="md-footer-meta md-typeset">
+    <div class="md-footer-meta__inner md-grid">
+      <div class="md-copyright">
+  
+  
+    Made with
+    <a href="https://squidfunk.github.io/mkdocs-material/" target="_blank" rel="noopener">
+      Material for MkDocs
+    </a>
+  
+</div>
+      
+    </div>
+  </div>
+</footer>
+      
+    </div>
+    <div class="md-dialog" data-md-component="dialog">
+      <div class="md-dialog__inner md-typeset"></div>
+    </div>
+    
+    
+    <script id="__config" type="application/json">{"base": "../..", "features": ["navigation.instant", "navigation.tracking", "navigation.top", "search.suggest", "version"], "search": "../../assets/javascripts/workers/search.b8dbb3d2.min.js", "translations": {"clipboard.copied": "Copied to clipboard", "clipboard.copy": "Copy to clipboard", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.placeholder": "Type to start searching", "search.result.term.missing": "Missing", "select.version": "Select version"}}</script>
+    
+    
+      <script src="../../assets/javascripts/bundle.1e8ae164.min.js"></script>
+      
+    
+  </body>
+</html>

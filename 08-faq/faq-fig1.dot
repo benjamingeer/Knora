@@ -1,0 +1,11 @@
+digraph {
+   rankdir = LR
+
+   node [style = filled, fontcolor = white]
+
+   Foo1 [color = navy, fillcolor = slateblue4]
+   Foo2 [color = navy, fillcolor = slateblue4]
+
+   Foo1 -> Foo2 [label = "hasLinkToFoo", fontsize = 11, color = cyan4]
+
+}

@@ -1,0 +1,3597 @@
+
+<!doctype html>
+<html lang="en" class="no-js">
+  <head>
+    
+      <meta charset="utf-8">
+      <meta name="viewport" content="width=device-width,initial-scale=1">
+      
+      
+      
+      
+        <link rel="prev" href="../sipi/">
+      
+      
+        <link rel="next" href="../standoff/">
+      
+      
+      <link rel="icon" href="../../../../assets/icons/logo_bw.svg">
+      <meta name="generator" content="mkdocs-1.5.3, mkdocs-material-9.5.17">
+    
+    
+      
+        <title>Gravsearch Design - DSP-API</title>
+      
+    
+    
+      <link rel="stylesheet" href="../../../../assets/stylesheets/main.bcfcd587.min.css">
+      
+        
+        <link rel="stylesheet" href="../../../../assets/stylesheets/palette.06af60db.min.css">
+      
+      
+
+
+    
+    
+      
+    
+    
+      
+        
+        
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,300i,400,400i,700,700i%7CRoboto+Mono:400,400i,700,700i&display=fallback">
+        <style>:root{--md-text-font:"Roboto";--md-code-font:"Roboto Mono"}</style>
+      
+    
+    
+      <link rel="stylesheet" href="../../../../assets/css/theme.css">
+    
+      <link rel="stylesheet" href="../../../../assets/css/mkdocsoad-v1.0.2.css">
+    
+    <script>__md_scope=new URL("../../../..",location),__md_hash=e=>[...e].reduce((e,_)=>(e<<5)-e+_.charCodeAt(0),0),__md_get=(e,_=localStorage,t=__md_scope)=>JSON.parse(_.getItem(t.pathname+"."+e)),__md_set=(e,_,t=localStorage,a=__md_scope)=>{try{t.setItem(a.pathname+"."+e,JSON.stringify(_))}catch(e){}}</script>
+    
+      
+
+    
+    
+    
+  </head>
+  
+  
+    
+    
+      
+    
+    
+    
+    
+    <body dir="ltr" data-md-color-scheme="default" data-md-color-primary="indigo" data-md-color-accent="indigo">
+  
+    
+    <input class="md-toggle" data-md-toggle="drawer" type="checkbox" id="__drawer" autocomplete="off">
+    <input class="md-toggle" data-md-toggle="search" type="checkbox" id="__search" autocomplete="off">
+    <label class="md-overlay" for="__drawer"></label>
+    <div data-md-component="skip">
+      
+        
+        <a href="#gravsearch-design" class="md-skip">
+          Skip to content
+        </a>
+      
+    </div>
+    <div data-md-component="announce">
+      
+    </div>
+    
+    
+      
+
+  
+
+<header class="md-header md-header--shadow" data-md-component="header">
+  <nav class="md-header__inner md-grid" aria-label="Header">
+    <a href="../../../.." title="DSP-API" class="md-header__button md-logo" aria-label="DSP-API" data-md-component="logo">
+      
+  <img src="../../../../assets/icons/logo_bw.svg" alt="logo">
+
+    </a>
+    <label class="md-header__button md-icon" for="__drawer">
+      
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M3 6h18v2H3V6m0 5h18v2H3v-2m0 5h18v2H3v-2Z"/></svg>
+    </label>
+    <div class="md-header__title" data-md-component="header-title">
+      <div class="md-header__ellipsis">
+        <div class="md-header__topic">
+          <span class="md-ellipsis">
+            DSP-API
+          </span>
+        </div>
+        <div class="md-header__topic" data-md-component="header-topic">
+          <span class="md-ellipsis">
+            
+              Gravsearch Design
+            
+          </span>
+        </div>
+      </div>
+    </div>
+    
+      
+        <form class="md-header__option" data-md-component="palette">
+  
+    
+    
+    
+    <input class="md-option" data-md-color-media="" data-md-color-scheme="default" data-md-color-primary="indigo" data-md-color-accent="indigo"  aria-label="Switch to dark mode"  type="radio" name="__palette" id="__palette_0">
+    
+      <label class="md-header__button md-icon" title="Switch to dark mode" for="__palette_1" hidden>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a4 4 0 0 0-4 4 4 4 0 0 0 4 4 4 4 0 0 0 4-4 4 4 0 0 0-4-4m0 10a6 6 0 0 1-6-6 6 6 0 0 1 6-6 6 6 0 0 1 6 6 6 6 0 0 1-6 6m8-9.31V4h-4.69L12 .69 8.69 4H4v4.69L.69 12 4 15.31V20h4.69L12 23.31 15.31 20H20v-4.69L23.31 12 20 8.69Z"/></svg>
+      </label>
+    
+  
+    
+    
+    
+    <input class="md-option" data-md-color-media="" data-md-color-scheme="slate" data-md-color-primary="indigo" data-md-color-accent="indigo"  aria-label="Switch to light mode"  type="radio" name="__palette" id="__palette_1">
+    
+      <label class="md-header__button md-icon" title="Switch to light mode" for="__palette_0" hidden>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 18c-.89 0-1.74-.2-2.5-.55C11.56 16.5 13 14.42 13 12c0-2.42-1.44-4.5-3.5-5.45C10.26 6.2 11.11 6 12 6a6 6 0 0 1 6 6 6 6 0 0 1-6 6m8-9.31V4h-4.69L12 .69 8.69 4H4v4.69L.69 12 4 15.31V20h4.69L12 23.31 15.31 20H20v-4.69L23.31 12 20 8.69Z"/></svg>
+      </label>
+    
+  
+</form>
+      
+    
+    
+      <script>var media,input,key,value,palette=__md_get("__palette");if(palette&&palette.color){"(prefers-color-scheme)"===palette.color.media&&(media=matchMedia("(prefers-color-scheme: light)"),input=document.querySelector(media.matches?"[data-md-color-media='(prefers-color-scheme: light)']":"[data-md-color-media='(prefers-color-scheme: dark)']"),palette.color.media=input.getAttribute("data-md-color-media"),palette.color.scheme=input.getAttribute("data-md-color-scheme"),palette.color.primary=input.getAttribute("data-md-color-primary"),palette.color.accent=input.getAttribute("data-md-color-accent"));for([key,value]of Object.entries(palette.color))document.body.setAttribute("data-md-color-"+key,value)}</script>
+    
+    
+    
+      <label class="md-header__button md-icon" for="__search">
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.516 6.516 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5Z"/></svg>
+      </label>
+      <div class="md-search" data-md-component="search" role="dialog">
+  <label class="md-search__overlay" for="__search"></label>
+  <div class="md-search__inner" role="search">
+    <form class="md-search__form" name="search">
+      <input type="text" class="md-search__input" name="query" aria-label="Search" placeholder="Search" autocapitalize="off" autocorrect="off" autocomplete="off" spellcheck="false" data-md-component="search-query" required>
+      <label class="md-search__icon md-icon" for="__search">
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.516 6.516 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5Z"/></svg>
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11h12Z"/></svg>
+      </label>
+      <nav class="md-search__options" aria-label="Search">
+        
+        <button type="reset" class="md-search__icon md-icon" title="Clear" aria-label="Clear" tabindex="-1">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M19 6.41 17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12 19 6.41Z"/></svg>
+        </button>
+      </nav>
+      
+        <div class="md-search__suggest" data-md-component="search-suggest"></div>
+      
+    </form>
+    <div class="md-search__output">
+      <div class="md-search__scrollwrap" data-md-scrollfix>
+        <div class="md-search-result" data-md-component="search-result">
+          <div class="md-search-result__meta">
+            Initializing search
+          </div>
+          <ol class="md-search-result__list" role="presentation"></ol>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+    
+    
+  </nav>
+  
+</header>
+    
+    <div class="md-container" data-md-component="container">
+      
+      
+        
+          
+        
+      
+      <main class="md-main" data-md-component="main">
+        <div class="md-main__inner md-grid">
+          
+            
+              
+              <div class="md-sidebar md-sidebar--primary" data-md-component="sidebar" data-md-type="navigation" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+
+
+<nav class="md-nav md-nav--primary" aria-label="Navigation" data-md-level="0">
+  <label class="md-nav__title" for="__drawer">
+    <a href="../../../.." title="DSP-API" class="md-nav__button md-logo" aria-label="DSP-API" data-md-component="logo">
+      
+  <img src="../../../../assets/icons/logo_bw.svg" alt="logo">
+
+    </a>
+    DSP-API
+  </label>
+  
+  <ul class="md-nav__list" data-md-scrollfix>
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_1" >
+        
+          
+          <label class="md-nav__link" for="__nav_1" id="__nav_1_label" tabindex="0">
+            
+  
+  <span class="md-ellipsis">
+    Introduction
+  </span>
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_1_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_1">
+            <span class="md-nav__icon md-icon"></span>
+            Introduction
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../.." class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Overview
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../../01-introduction/what-is-dsp/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    What is DSP?
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../../01-introduction/file-formats/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    File Formats in DSP-API
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../../01-introduction/standoff-rdf/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Standoff/RDF Text Markup
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../../01-introduction/legal-info/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Legal Information for Assets
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../../01-introduction/example-project/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    An Example Project
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_2" >
+        
+          
+          <label class="md-nav__link" for="__nav_2" id="__nav_2_label" tabindex="0">
+            
+  
+  <span class="md-ellipsis">
+    DSP Ontologies
+  </span>
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_2_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_2">
+            <span class="md-nav__icon md-icon"></span>
+            DSP Ontologies
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../../02-dsp-ontologies/introduction/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Introduction
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../../02-dsp-ontologies/knora-base/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    The Knora Base Ontology
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../../02-dsp-ontologies/salsah-gui/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    The SALSAH GUI Ontology
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_3" >
+        
+          
+          <label class="md-nav__link" for="__nav_3" id="__nav_3_label" tabindex="0">
+            
+  
+  <span class="md-ellipsis">
+    DSP-API Endpoints
+  </span>
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_3_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_3">
+            <span class="md-nav__icon md-icon"></span>
+            DSP-API Endpoints
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    
+    
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_3_1" >
+        
+          
+          <label class="md-nav__link" for="__nav_3_1" id="__nav_3_1_label" tabindex="0">
+            
+  
+  <span class="md-ellipsis">
+    DSP-API V2
+  </span>
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_3_1_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_3_1">
+            <span class="md-nav__icon md-icon"></span>
+            DSP-API V2
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../../03-endpoints/api-v2/introduction/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Introduction
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../../03-endpoints/api-v2/authentication/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Authentication
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../../03-endpoints/api-v2/reading-and-searching-resources/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Reading and Searching Resources
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../../03-endpoints/api-v2/reading-user-permissions/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Reading the User's Permissions on Resources and Values
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../../03-endpoints/api-v2/getting-lists/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Getting Lists
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../../03-endpoints/api-v2/query-language/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Gravsearch - Virtual Graph Search
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../../03-endpoints/api-v2/editing-resources/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Creating and Editing Resources
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../../03-endpoints/api-v2/editing-values/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Creating and Editing Values
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../../03-endpoints/api-v2/ontology-information/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Querying, Creating, and Updating Ontologies
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_3_1_10" >
+        
+          
+          <label class="md-nav__link" for="__nav_3_1_10" id="__nav_3_1_10_label" tabindex="0">
+            
+  
+  <span class="md-ellipsis">
+    Textual Data in DSP-API
+  </span>
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="3" aria-labelledby="__nav_3_1_10_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_3_1_10">
+            <span class="md-nav__icon md-icon"></span>
+            Textual Data in DSP-API
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../../03-endpoints/api-v2/text/overview/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Overview
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../../03-endpoints/api-v2/text/standard-standoff/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Standard Standoff Markup
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../../03-endpoints/api-v2/text/custom-standoff/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Custom Standoff Mapping
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../../03-endpoints/api-v2/text/tei-xml/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    TEI XML
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../../03-endpoints/api-v2/permalinks/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Permalinks
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../../03-endpoints/api-v2/knora-iris/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    IRIs
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_3_2" >
+        
+          
+          <label class="md-nav__link" for="__nav_3_2" id="__nav_3_2_label" tabindex="0">
+            
+  
+  <span class="md-ellipsis">
+    Admin API
+  </span>
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_3_2_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_3_2">
+            <span class="md-nav__icon md-icon"></span>
+            Admin API
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../../03-endpoints/api-admin/introduction/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Introduction
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../../03-endpoints/api-admin/overview/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Overview
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../../03-endpoints/api-admin/users/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Users Endpoint
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../../03-endpoints/api-admin/projects/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Projects Endpoint
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../../03-endpoints/api-admin/groups/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Groups Endpoint
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../../03-endpoints/api-admin/lists/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Lists Endpoint
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../../03-endpoints/api-admin/permissions/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Permissions Endpoint
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../../03-endpoints/api-admin/stores/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Stores Endpoint
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../../03-endpoints/api-admin/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    OpenApi Documentation
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_3_3" >
+        
+          
+          <label class="md-nav__link" for="__nav_3_3" id="__nav_3_3_label" tabindex="0">
+            
+  
+  <span class="md-ellipsis">
+    Util API
+  </span>
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_3_3_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_3_3">
+            <span class="md-nav__icon md-icon"></span>
+            Util API
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../../03-endpoints/api-util/version/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Version
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_3_4" >
+        
+          
+          <label class="md-nav__link" for="__nav_3_4" id="__nav_3_4_label" tabindex="0">
+            
+  
+  <span class="md-ellipsis">
+    Instrumentation API
+  </span>
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_3_4_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_3_4">
+            <span class="md-nav__icon md-icon"></span>
+            Instrumentation API
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../../03-endpoints/instrumentation/introduction/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Introduction
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../../03-endpoints/instrumentation/health/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Health Endpoint
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../../03-endpoints/instrumentation/metrics/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Metrics Endpoint
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_4" >
+        
+          
+          <label class="md-nav__link" for="__nav_4" id="__nav_4_label" tabindex="0">
+            
+  
+  <span class="md-ellipsis">
+    Publishing and Deployment
+  </span>
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_4_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_4">
+            <span class="md-nav__icon md-icon"></span>
+            Publishing and Deployment
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../../04-publishing-deployment/publishing/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Publishing
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../../04-publishing-deployment/configuration/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Configuration
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+    
+  
+  
+  
+    
+    
+    
+    
+    <li class="md-nav__item md-nav__item--active md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_5" checked>
+        
+          
+          <label class="md-nav__link" for="__nav_5" id="__nav_5_label" tabindex="0">
+            
+  
+  <span class="md-ellipsis">
+    DSP Internals
+  </span>
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_5_label" aria-expanded="true">
+          <label class="md-nav__title" for="__nav_5">
+            <span class="md-nav__icon md-icon"></span>
+            DSP Internals
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+    
+  
+  
+  
+    
+    
+    
+    
+    <li class="md-nav__item md-nav__item--active md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_5_1" checked>
+        
+          
+          <label class="md-nav__link" for="__nav_5_1" id="__nav_5_1_label" tabindex="0">
+            
+  
+  <span class="md-ellipsis">
+    Design
+  </span>
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_5_1_label" aria-expanded="true">
+          <label class="md-nav__title" for="__nav_5_1">
+            <span class="md-nav__icon md-icon"></span>
+            Design
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    
+    
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_5_1_1" >
+        
+          
+          <label class="md-nav__link" for="__nav_5_1_1" id="__nav_5_1_1_label" tabindex="0">
+            
+  
+  <span class="md-ellipsis">
+    Architectural Decision Records (ADR)
+  </span>
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="3" aria-labelledby="__nav_5_1_1_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_5_1_1">
+            <span class="md-nav__icon md-icon"></span>
+            Architectural Decision Records (ADR)
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../adr/ADR-0001-record-architecture-decisions/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    0001 Record Architectural Decisions
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../adr/ADR-0002-change-cache-service-manager-from-akka-actor-to-zlayer/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    0002 Change Cache Service Manager from Akka-Actor to ZLayer
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../adr/ADR-0003-change-iiif-service-manager-and-sipi-implementation-to-zlayer/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    0003 Change IIIF Service Manager and Sipi implementation to zlayer
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../adr/ADR-0004-change-triplestore-service-manager-and-fuseki-implementation-to-zlayer/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    0004 Change Triplestore Service Manager and Fuseki implementation to ZLayer
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../adr/ADR-0005-change-respondermanager-to-a-simple-case-class/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    0005 Change ResponderManager to a simple case class
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../adr/ADR-0006-use-zio-http/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    0006 Gradually Replace Akka-HTTP with ZIO-HTTP
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../adr/ADR-0007-zio-fication-of-responders/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    0007 ZIO-fication of Responders
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../adr/ADR-0008-replace-akka-with-pekko/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    0008 Replace Akka with Pekko
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_5_1_2" >
+        
+          
+          <label class="md-nav__link" for="__nav_5_1_2" id="__nav_5_1_2_label" tabindex="0">
+            
+  
+  <span class="md-ellipsis">
+    DSP-API Design Principles
+  </span>
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="3" aria-labelledby="__nav_5_1_2_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_5_1_2">
+            <span class="md-nav__icon md-icon"></span>
+            DSP-API Design Principles
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../principles/design-overview/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Design Overview
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../principles/store-module/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Store Module
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../principles/triplestore-updates/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Triplestore Updates
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../principles/consistency-checking/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Consistency Checking
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../principles/authentication/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Authentication
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../principles/rdf-api/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    RDF Processing API
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+    
+  
+  
+  
+    
+    
+    
+    
+    <li class="md-nav__item md-nav__item--active md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_5_1_3" checked>
+        
+          
+          <label class="md-nav__link" for="__nav_5_1_3" id="__nav_5_1_3_label" tabindex="0">
+            
+  
+  <span class="md-ellipsis">
+    DSP-API V2 Design
+  </span>
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="3" aria-labelledby="__nav_5_1_3_label" aria-expanded="true">
+          <label class="md-nav__title" for="__nav_5_1_3">
+            <span class="md-nav__icon md-icon"></span>
+            DSP-API V2 Design
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../overview/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    API v2 Design Overview
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../ontology-schemas/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Ontology Schemas
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../smart-iris/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Smart IRIs
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../content-wrappers/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Content Wrappers
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../how-to-add-a-route/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    How to Add an API v2 Route
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../json-ld/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    JSON-LD Parsing and Formatting
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../ontology-management/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Ontology Management
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../sipi/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    DSP-API and Sipi
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+    
+  
+  
+  
+    <li class="md-nav__item md-nav__item--active">
+      
+      <input class="md-nav__toggle md-toggle" type="checkbox" id="__toc">
+      
+      
+        
+      
+      
+        <label class="md-nav__link md-nav__link--active" for="__toc">
+          
+  
+  <span class="md-ellipsis">
+    Gravsearch Design
+  </span>
+  
+
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <a href="./" class="md-nav__link md-nav__link--active">
+        
+  
+  <span class="md-ellipsis">
+    Gravsearch Design
+  </span>
+  
+
+      </a>
+      
+        
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#type-inspection" class="md-nav__link">
+    <span class="md-ellipsis">
+      Type Inspection
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Type Inspection">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#identifying-typeable-entities" class="md-nav__link">
+    <span class="md-ellipsis">
+      Identifying Typeable Entities
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#the-type-inspection-pipeline" class="md-nav__link">
+    <span class="md-ellipsis">
+      The Type Inspection Pipeline
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="The Type Inspection Pipeline">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#annotationreadinggravsearchtypeinspector" class="md-nav__link">
+    <span class="md-ellipsis">
+      AnnotationReadingGravsearchTypeInspector
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#inferringgravsearchtypeinspector" class="md-nav__link">
+    <span class="md-ellipsis">
+      InferringGravsearchTypeInspector
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#transformation-of-a-gravsearch-query" class="md-nav__link">
+    <span class="md-ellipsis">
+      Transformation of a Gravsearch Query
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Transformation of a Gravsearch Query">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#query-transformers" class="md-nav__link">
+    <span class="md-ellipsis">
+      Query Transformers
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#prequery" class="md-nav__link">
+    <span class="md-ellipsis">
+      Prequery
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#main-query" class="md-nav__link">
+    <span class="md-ellipsis">
+      Main Query
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Main Query">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#generating-the-main-query" class="md-nav__link">
+    <span class="md-ellipsis">
+      Generating the Main Query
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#processing-the-main-querys-results" class="md-nav__link">
+    <span class="md-ellipsis">
+      Processing the Main Query's results
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#inference" class="md-nav__link">
+    <span class="md-ellipsis">
+      Inference
+    </span>
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../standoff/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Standoff Markup
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../ark/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Archival Resource Key (ARK)
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../query-design/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    SPARQL Query Design
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../api-admin/administration/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Admin API Design
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_5_1_5" >
+        
+          
+          <label class="md-nav__link" for="__nav_5_1_5" id="__nav_5_1_5_label" tabindex="0">
+            
+  
+  <span class="md-ellipsis">
+    DSP Domain
+  </span>
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="3" aria-labelledby="__nav_5_1_5_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_5_1_5">
+            <span class="md-nav__icon md-icon"></span>
+            DSP Domain
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../domain/domain-entities-and-relations/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Domain Entities and Relations
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../domain/system-instances/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    System Instances
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../domain/class-and-property-hierarchies/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Class and Property Hierarchies
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_5_2" >
+        
+          
+          <label class="md-nav__link" for="__nav_5_2" id="__nav_5_2_label" tabindex="0">
+            
+  
+  <span class="md-ellipsis">
+    Development
+  </span>
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_5_2_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_5_2">
+            <span class="md-nav__icon md-icon"></span>
+            Development
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../development/overview/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Overview
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../development/building-and-running/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Build and Running
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../development/vscode-config/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Setup Visual Studio Code for development of DSP-API
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../development/testing/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Testing
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../development/docker-cheat-sheet/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Docker Cheat Sheet
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../development/docker-compose/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Starting the DSP-Stack inside Docker Container
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../development/updating-repositories/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Updating Repositories
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../development/third-party/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Third-Party Dependencies
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_6" >
+        
+          
+          <label class="md-nav__link" for="__nav_6" id="__nav_6_label" tabindex="0">
+            
+  
+  <span class="md-ellipsis">
+    SIPI
+  </span>
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_6_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_6">
+            <span class="md-nav__icon md-icon"></span>
+            SIPI
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../../06-sipi/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Overview
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../../06-sipi/sipi-and-dsp-api/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Interaction between Sipi and DSP-API
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_7" >
+        
+          
+          <label class="md-nav__link" for="__nav_7" id="__nav_7_label" tabindex="0">
+            
+  
+  <span class="md-ellipsis">
+    Lucene
+  </span>
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_7_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_7">
+            <span class="md-nav__icon md-icon"></span>
+            Lucene
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../../07-lucene/lucene-query-parser-syntax/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Lucene Query Parser Syntax
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../../08-faq/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Frequently Asked Questions
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_9" >
+        
+          
+          <label class="md-nav__link" for="__nav_9" id="__nav_9_label" tabindex="0">
+            
+  
+  <span class="md-ellipsis">
+    Release Notes
+  </span>
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_9_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_9">
+            <span class="md-nav__icon md-icon"></span>
+            Release Notes
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../../09-release-notes/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Changelog
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../../10-migration-guides/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Migration Guides and Deprecations
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+    
+  </ul>
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+            
+              
+              <div class="md-sidebar md-sidebar--secondary" data-md-component="sidebar" data-md-type="toc" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#type-inspection" class="md-nav__link">
+    <span class="md-ellipsis">
+      Type Inspection
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Type Inspection">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#identifying-typeable-entities" class="md-nav__link">
+    <span class="md-ellipsis">
+      Identifying Typeable Entities
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#the-type-inspection-pipeline" class="md-nav__link">
+    <span class="md-ellipsis">
+      The Type Inspection Pipeline
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="The Type Inspection Pipeline">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#annotationreadinggravsearchtypeinspector" class="md-nav__link">
+    <span class="md-ellipsis">
+      AnnotationReadingGravsearchTypeInspector
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#inferringgravsearchtypeinspector" class="md-nav__link">
+    <span class="md-ellipsis">
+      InferringGravsearchTypeInspector
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#transformation-of-a-gravsearch-query" class="md-nav__link">
+    <span class="md-ellipsis">
+      Transformation of a Gravsearch Query
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Transformation of a Gravsearch Query">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#query-transformers" class="md-nav__link">
+    <span class="md-ellipsis">
+      Query Transformers
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#prequery" class="md-nav__link">
+    <span class="md-ellipsis">
+      Prequery
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#main-query" class="md-nav__link">
+    <span class="md-ellipsis">
+      Main Query
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Main Query">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#generating-the-main-query" class="md-nav__link">
+    <span class="md-ellipsis">
+      Generating the Main Query
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#processing-the-main-querys-results" class="md-nav__link">
+    <span class="md-ellipsis">
+      Processing the Main Query's results
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#inference" class="md-nav__link">
+    <span class="md-ellipsis">
+      Inference
+    </span>
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+          
+          
+            <div class="md-content" data-md-component="content">
+              <article class="md-content__inner md-typeset">
+                
+                  
+
+
+<!---
+ * Copyright © 2021 - 2025 Swiss National Data and Service Center for the Humanities and/or DaSCH Service Platform contributors.
+ * SPDX-License-Identifier: Apache-2.0
+-->
+
+<h1 id="gravsearch-design">Gravsearch Design</h1>
+<p>For a detailed overview of Gravsearch, see
+<a href="https://doi.org/10.3233/SW-200386">Gravsearch: Transforming SPARQL to query humanities data</a>.</p>
+<h2 id="type-inspection">Type Inspection</h2>
+<p>The code that converts Gravsearch queries into SPARQL queries, and processes the query results, needs to know the
+types of the entities that are used in the input query. As explained in
+<a href="../../../../03-endpoints/api-v2/query-language/#type-inference">Type Inference</a>, these types can be inferred,
+or they can be specified in the query using type annotations.</p>
+<p>Type inspection is implemented in the package <code>org.knora.webapi.messages.util.search.gravsearch.types</code>.
+The entry point to this package is <code>GravsearchTypeInspectionRunner</code>, which is instantiated by <code>SearchResponderV2</code>.
+The result of type inspection is a <code>GravsearchTypeInspectionResult</code>, in which each typeable entity in the input query is
+associated with a <code>GravsearchEntityTypeInfo</code>, which can be either:</p>
+<ul>
+<li>A <code>PropertyTypeInfo</code>, which specifies the type of object that a property is expected to have.</li>
+<li>A <code>NonPropertyTypeInfo</code>, which specifies the type of a variable, or the type of an IRI representing a resource or value.</li>
+</ul>
+<h3 id="identifying-typeable-entities">Identifying Typeable Entities</h3>
+<p>After parsing a Gravsearch query, <code>SearchResponderV2</code> calls <code>GravsearchTypeInspectionRunner.inspectTypes</code>, passing
+the WHERE clause of the input query. This method first identifies the entities whose types need to be determined. Each
+of these entities is represented as a <code>TypeableEntity</code>. To do this, <code>GravsearchTypeInspectionRunner</code> uses <code>QueryTraverser</code>
+to traverse the WHERE clause, collecting typeable entities in a visitor called <code>TypeableEntityCollectingWhereVisitor</code>.
+The entities that are considered to need type information are:</p>
+<ul>
+<li>All variables.</li>
+<li>All IRIs except for those that represent type annotations or types.</li>
+</ul>
+<h3 id="the-type-inspection-pipeline">The Type Inspection Pipeline</h3>
+<p><code>GravsearchTypeInspectionRunner</code> contains a pipeline of type inspectors, each of which extends <code>GravsearchTypeInspector</code>.
+There are two type inspectors in the pipeline:</p>
+<ul>
+<li><code>AnnotationReadingGravsearchTypeInspector</code>: reads
+   <a href="../../../../03-endpoints/api-v2/query-language/#type-annotations">type annotations</a> included in a Gravsearch query.</li>
+<li><code>InferringGravsearchTypeInspector</code>: infers the types of entities from the context in which they are used, as well
+  as from ontology information that it requests from <code>OntologyResponderV2</code>.</li>
+</ul>
+<p>Each type inspector takes as input, and returns as output, an <code>IntermediateTypeInspectionResult</code>, which
+associates each <code>TypeableEntity</code> with zero or more types. Initially, each <code>TypeableEntity</code> has no types. 
+Each type inspector adds whatever types it finds for each entity. </p>
+<p>At the end of the pipeline, each entity should
+have exactly one type. Therefore, to only keep the most specific type for an entity, 
+the method <code>refineDeterminedTypes</code> refines the determined types by removing those that are base classes of others. However,
+it can be that inconsistent types are determined for entities. For example, in cases where multiple resource class types 
+are determined, but one is not a base class of the others. From the following statement </p>
+<div class="highlight"><pre><span></span><code>{ ?document a beol:manuscript . } UNION { ?document a beol:letter .}
+</code></pre></div>
+<p>two inconsistent types can be inferred for <code>?document</code>: <code>beol:letter</code> and <code>beol:manuscript</code>.
+In these cases, a sanitizer <code>sanitizeInconsistentResourceTypes</code> replaces the inconsistent resource types by 
+their common base resource class (in the above example, it would be <code>beol:writtenSource</code>). </p>
+<p>Lastly, an error is returned if</p>
+<ul>
+<li>An entity's type could not be determined. The client must add a type annotation to make the query work.</li>
+<li>Inconsistent types could not be sanitized (an entity appears to have more than one type). The client must correct the query.</li>
+</ul>
+<p>If there are no errors, <code>GravsearchTypeInspectionRunner</code> converts the pipeline's output to a
+<code>GravsearchTypeInspectionResult</code>, in which each entity is associated with exactly one type.</p>
+<h4 id="annotationreadinggravsearchtypeinspector">AnnotationReadingGravsearchTypeInspector</h4>
+<p>This inspector uses <code>QueryTraverser</code> to traverse the WHERE clause, collecting type annotations in a visitor called
+<code>AnnotationCollectingWhereVisitor</code>. It then converts each annotation to a <code>GravsearchEntityTypeInfo</code>.</p>
+<h4 id="inferringgravsearchtypeinspector">InferringGravsearchTypeInspector</h4>
+<p>This inspector first uses <code>QueryTraverser</code> to traverse the WHERE clause, assembling an index of
+usage information about typeable entities in a visitor called <code>UsageIndexCollectingWhereVisitor</code>. The <code>UsageIndex</code> contains,
+for example, an index of all the entities that are used as subjects, predicates, or objects, along with the
+statements in which they are used. It also contains sets of all the Knora class and property IRIs
+that are used in the WHERE clause. <code>InferringGravsearchTypeInspector</code> then asks <code>OntologyResponderV2</code> for information
+about those classes and properties, as well as about the classes that are subject types or object types of those properties.</p>
+<p>Next, the inspector runs inference rules (which extend <code>InferenceRule</code>) on each <code>TypeableEntity</code>. Each rule
+takes as input a <code>TypeableEntity</code>, the usage index, the ontology information, and the <code>IntermediateTypeInspectionResult</code>,
+and returns a new <code>IntermediateTypeInspectionResult</code>. For example, <code>TypeOfObjectFromPropertyRule</code> infers an entity's type
+if the entity is used as the object of a statement and the predicate's <code>knora-api:objectType</code> is known. For each <code>TypeableEntity</code>, 
+if a type is inferred from a property, the entity and the inferred type are added to 
+<code>IntermediateTypeInspectionResult.entitiesInferredFromProperty</code>.</p>
+<p>The inference rules are run repeatedly, because the output of one rule may allow another rule to infer additional
+information. There are two pipelines of rules: a pipeline for the first iteration of type inference, and a
+pipeline for subsequent iterations. This is because some rules can return additional information if they are run
+more than once on the same entity, while others cannot.</p>
+<p>The number of iterations is limited to <code>InferringGravsearchTypeInspector.MAX_ITERATIONS</code>, but in practice
+two iterations are sufficient for most realistic queries, and it is difficult to design a query that requires more than
+six iterations.</p>
+<h2 id="transformation-of-a-gravsearch-query">Transformation of a Gravsearch Query</h2>
+<p>A Gravsearch query submitted by the client is parsed by <code>GravsearchParser</code> and preprocessed by <code>GravsearchTypeInspector</code>
+to get type information about the elements used in the query (resources, values, properties etc.)
+and do some basic sanity checks.</p>
+<p>In <code>SearchResponderV2</code>, two queries are generated from a given Gravsearch query: a prequery and a main query.</p>
+<h3 id="query-transformers">Query Transformers</h3>
+<p>The Gravsearch query is passed to <code>QueryTraverser</code> along with a query transformer. Query transformers are classes
+that implement traits supported by <code>QueryTraverser</code>:</p>
+<ul>
+<li><code>WhereTransformer</code>: instructions how to convert statements in the WHERE clause of a SPARQL query 
+  (to generate the prequery's Where clause).</li>
+</ul>
+<p>To improve query performance, this trait defines the method <code>optimiseQueryPatterns</code> whose implementation can call 
+private methods to optimise the generated SPARQL. For example, before transformation of statements in WHERE clause, query 
+pattern orders must be optimised by moving <code>LuceneQueryPatterns</code> to the beginning and <code>isDeleted</code> statement patterns to the end of the WHERE clause. </p>
+<ul>
+<li><code>AbstractPrequeryGenerator</code> (extends <code>WhereTransformer</code>): converts a Gravsearch query into a prequery; 
+  this one has two implementations for regular search queries and for count queries.</li>
+<li><code>SelectTransformer</code> (extends <code>WhereTransformer</code>): transforms a Select query into a Select query with simulated RDF inference.</li>
+<li><code>ConstructTransformer</code>: transforms a Construct query into a Construct query with simulated RDF inference.</li>
+</ul>
+<h3 id="prequery">Prequery</h3>
+<p>The purpose of the prequery is to get an ordered collection of results representing only the IRIs of one page of matching resources and values.
+Sort criteria can be submitted by the user, but the result is always deterministic also without sort criteria.
+This is necessary to support paging.
+A prequery is a SPARQL SELECT query.</p>
+<p>The classes involved in generating prequeries can be found in <code>org.knora.webapi.messages.util.search.gravsearch.prequery</code>.</p>
+<p>If the client submits a count query, the prequery returns the overall number of hits, but not the results themselves.</p>
+<p>In a first step, before transforming the WHERE clause, query patterns must be further optimised by removing
+the <code>rdfs:type</code> statement for entities whose type could be inferred from their use with a property IRI, since there would be no need 
+for explicit <code>rdfs:type</code> statements for them (unless the property IRI from which the type of an entity must be inferred from 
+is wrapped in an <code>OPTIONAL</code> block). This optimisation takes the Gravsearch query as input (rather than the generated SPARQL),
+because it uses type information that refers to entities in the Gravsearch query, and the generated SPARQL might
+have different entities.</p>
+<p>Next, the Gravsearch query's WHERE clause is transformed and the prequery (SELECT and WHERE clause) is generated from this result.
+The transformation of the Gravsearch query's WHERE clause relies on the implementation of the abstract class <code>AbstractPrequeryGenerator</code>.</p>
+<p><code>AbstractPrequeryGenerator</code> contains members whose state is changed during the iteration over the statements of the input query.
+They can then be used to create the converted query.</p>
+<ul>
+<li><code>mainResourceVariable: Option[QueryVariable]</code>: 
+  SPARQL variable representing the main resource of the input query. 
+  Present in the prequery's SELECT clause.</li>
+<li><code>dependentResourceVariables: mutable.Set[QueryVariable]</code>: 
+  a set of SPARQL variables representing dependent resources in the input query. 
+  Used in an aggregation function in the prequery's SELECT clause (see below).</li>
+<li><code>dependentResourceVariablesGroupConcat: Set[QueryVariable]</code>: 
+  a set of SPARQL variables representing an aggregation of dependent resources. 
+  Present in the prequery's SELECT clause.</li>
+<li><code>valueObjectVariables: mutable.Set[QueryVariable]</code>: 
+  a set of SPARQL variables representing value objects. 
+  Used in an aggregation function in the prequery's SELECT clause (see below).</li>
+<li><code>valueObjectVarsGroupConcat: Set[QueryVariable]</code>: 
+  a set of SPARQL variables representing an aggregation of value objects. 
+  Present in the prequery's SELECT clause.</li>
+</ul>
+<p>The variables mentioned above are present in the prequery's result rows because they are part of the prequery's SELECT clause.</p>
+<p>The following example illustrates the handling of variables.
+The following Gravsearch query looks for pages with a sequence number of 10 that are part of a book:</p>
+<div class="highlight"><pre><span></span><code><span class="k">PREFIX</span> <span class="nn">incunabula</span><span class="p">:</span> <span class="nl">&lt;http://0.0.0.0:3333/ontology/0803/incunabula/simple/v2#&gt;</span>
+<span class="k">PREFIX</span> <span class="nn">knora-api</span><span class="p">:</span> <span class="nl">&lt;http://api.knora.org/ontology/knora-api/simple/v2#&gt;</span>
+
+    <span class="k">CONSTRUCT</span> <span class="p">{</span>
+        <span class="nv">?page</span> <span class="nn">knora-api</span><span class="p">:</span><span class="nt">isMainResource</span> <span class="kc">true</span> <span class="p">.</span>
+
+        <span class="nv">?page</span> <span class="nn">knora-api</span><span class="p">:</span><span class="nt">isPartOf</span> <span class="nv">?book</span> <span class="p">.</span>
+
+        <span class="nv">?page</span> <span class="nn">incunabula</span><span class="p">:</span><span class="nt">seqnum</span> <span class="nv">?seqnum</span> <span class="p">.</span>
+    <span class="p">}</span> <span class="k">WHERE</span> <span class="p">{</span>
+
+        <span class="nv">?page</span> <span class="k">a</span> <span class="nn">incunabula</span><span class="p">:</span><span class="nt">page</span> <span class="p">.</span>
+
+        <span class="nv">?page</span> <span class="nn">knora-api</span><span class="p">:</span><span class="nt">isPartOf</span> <span class="nv">?book</span> <span class="p">.</span>
+
+        <span class="nv">?book</span> <span class="k">a</span> <span class="nn">incunabula</span><span class="p">:</span><span class="nt">book</span> <span class="p">.</span>
+
+        <span class="nv">?page</span> <span class="nn">incunabula</span><span class="p">:</span><span class="nt">seqnum</span> <span class="nv">?seqnum</span> <span class="p">.</span>
+
+        <span class="k">FILTER</span><span class="p">(</span><span class="nv">?seqnum</span> <span class="o">=</span> <span class="mi">10</span><span class="p">)</span>
+
+    <span class="p">}</span>
+</code></pre></div>
+<p>The prequery's SELECT clause is built by
+<code>NonTriplestoreSpecificGravsearchToPrequeryTransformer.getSelectColumns</code>,
+based on the variables used in the input query's <code>CONSTRUCT</code> clause.
+The resulting SELECT clause looks as follows:</p>
+<div class="highlight"><pre><span></span><code><span class="k">SELECT</span> <span class="k">DISTINCT</span>
+    <span class="nv">?page</span>
+    <span class="p">(</span><span class="nf">GROUP_CONCAT</span><span class="p">(</span><span class="k">DISTINCT</span><span class="p">(</span><span class="nf">IF</span><span class="p">(</span><span class="nf">BOUND</span><span class="p">(</span><span class="nv">?book</span><span class="p">),</span> <span class="nf">STR</span><span class="p">(</span><span class="nv">?book</span><span class="p">),</span> <span class="s">&quot;&quot;</span><span class="p">));</span> <span class="nf">SEPARATOR</span><span class="o">=</span><span class="s">&#39;&#39;</span><span class="p">)</span> <span class="k">AS</span> <span class="nv">?book__Concat</span><span class="p">)</span>
+    <span class="p">(</span><span class="nf">GROUP_CONCAT</span><span class="p">(</span><span class="k">DISTINCT</span><span class="p">(</span><span class="nf">IF</span><span class="p">(</span><span class="nf">BOUND</span><span class="p">(</span><span class="nv">?seqnum</span><span class="p">),</span> <span class="nf">STR</span><span class="p">(</span><span class="nv">?seqnum</span><span class="p">),</span> <span class="s">&quot;&quot;</span><span class="p">));</span> <span class="nf">SEPARATOR</span><span class="o">=</span><span class="s">&#39;&#39;</span><span class="p">)</span> <span class="k">AS</span> <span class="nv">?seqnum__Concat</span><span class="p">)</span>
+    <span class="p">(</span><span class="nf">GROUP_CONCAT</span><span class="p">(</span><span class="k">DISTINCT</span><span class="p">(</span><span class="nf">IF</span><span class="p">(</span><span class="nf">BOUND</span><span class="p">(</span><span class="nv">?book__LinkValue</span><span class="p">),</span> <span class="nf">STR</span><span class="p">(</span><span class="nv">?book__LinkValue</span><span class="p">),</span> <span class="s">&quot;&quot;</span><span class="p">));</span> <span class="nf">SEPARATOR</span><span class="o">=</span><span class="s">&#39;&#39;</span><span class="p">)</span> <span class="k">AS</span> <span class="nv">?book__LinkValue__Concat</span><span class="p">)</span>
+    <span class="k">WHERE</span> <span class="p">{...}</span>
+    <span class="k">GROUP BY</span> <span class="nv">?page</span>
+    <span class="k">ORDER BY</span> <span class="k">ASC</span><span class="p">(</span><span class="nv">?page</span><span class="p">)</span>
+    <span class="k">LIMIT</span> <span class="mi">25</span>
+</code></pre></div>
+<p><code>?page</code> represents the main resource. When accessing the prequery's result rows, <code>?page</code> contains the IRI of the main resource.
+The prequery's results are grouped by the main resource so that there is exactly one result row per matching main resource.
+<code>?page</code> is also used as a sort criterion although none has been defined in the input query.
+This is necessary to make paging work: results always have to be returned in the same order (the prequery is always deterministic).
+Like this, results can be fetched page by page using LIMIT and OFFSET.</p>
+<p>Grouping by main resource requires other results to be aggregated using the function <code>GROUP_CONCAT</code>.
+<code>?book</code> is used as an argument of the aggregation function.
+The aggregation's result is accessible in the prequery's result rows as <code>?book__Concat</code>.
+The variable <code>?book</code> is bound to an IRI.
+Since more than one IRI could be bound to a variable representing a dependent resource, the results have to be aggregated.
+<code>GROUP_CONCAT</code> takes two arguments: a collection of strings (IRIs in our use case) and a separator
+(we use the non-printing Unicode character <code>INFORMATION SEPARATOR ONE</code>).
+When accessing <code>?book__Concat</code> in the prequery's results containing the IRIs of dependent resources, 
+the string has to be split with the separator used in the aggregation function.
+The result is a collection of IRIs representing dependent resources.
+The same logic applies to value objects.</p>
+<p>Each <code>GROUP_CONCAT</code> checks whether the concatenated variable is bound in each result in the group; if a variable
+is unbound, we concatenate an empty string. This is necessary because, in Apache Jena (and perhaps other
+triplestores), "If <code>GROUP_CONCAT</code> has an unbound value in the list of values to concat, the overall result is 'error'"
+(see <a href="https://issues.apache.org/jira/browse/JENA-1856">this Jena issue</a>).</p>
+<p>If the input query contains a <code>UNION</code>, and a variable is bound in one branch
+of the <code>UNION</code> and not in another branch, it is possible that the prequery
+will return more than one row per main resource. To deal with this situation,
+<code>SearchResponderV2</code> merges rows that contain the same main resource IRI.</p>
+<h3 id="main-query">Main Query</h3>
+<p>The purpose of the main query is to get all requested information 
+about the main resource, dependent resources, and value objects.
+The IRIs of those resources and value objects were returned by the prequery.
+Since the prequery only returns resources and value objects matching the input query's criteria,
+the main query can specifically ask for more detailed information on these resources and values 
+without having to reconsider these criteria.</p>
+<h4 id="generating-the-main-query">Generating the Main Query</h4>
+<p>The main query is a SPARQL CONSTRUCT query. Its generation is handled by the
+method <code>GravsearchMainQueryGenerator.createMainQuery</code>.
+It takes three arguments:
+<code>mainResourceIris: Set[IriRef], dependentResourceIris: Set[IriRef], valueObjectIris: Set[IRI]</code>.</p>
+<p>These sets are constructed based on information about variables representing
+dependent resources and value objects in the prequery, which is provided by
+<code>NonTriplestoreSpecificGravsearchToPrequeryTransformer</code>:</p>
+<ul>
+<li><code>dependentResourceVariablesGroupConcat</code>: <code>Set(QueryVariable(book__Concat))</code></li>
+<li><code>valueObjectVariablesGroupConcat</code>: <code>Set(QueryVariable(seqnum__Concat), QueryVariable(book__LinkValue__Concat))</code></li>
+</ul>
+<p>From the given Iris, statements are
+generated that ask for complete information on <em>exactly</em> these resources and
+values. For any given resource Iri, only the values present in
+<code>valueObjectIris</code> are to be queried. This is achieved by using SPARQL's
+<code>VALUES</code> expression for the main resource and dependent resources as well as
+for values.</p>
+<h4 id="processing-the-main-querys-results">Processing the Main Query's results</h4>
+<p>To do the permission checking, the results of the main query are passed to
+<code>ConstructResponseUtilV2.splitMainResourcesAndValueRdfData</code>,
+which transforms a <code>SparqlConstructResponse</code> (a set of RDF triples)
+into a structure organized by main resource Iris. In this structure, dependent
+resources and values are nested and can be accessed via their main resource,
+and resources and values that the user does not have permission to see are
+filtered out. As a result, a page of results may contain fewer than the maximum
+allowed number of results per page, even if more pages of results are available.</p>
+<p><code>MainQueryResultProcessor.getRequestedValuesFromResultsWithFullGraphPattern</code>
+then filters out values that the user did not explicitly ask for in the input
+query.</p>
+<p>Finally, <code>ConstructResponseUtilV2.createApiResponse</code> transforms the query
+results into an API response (a <code>ReadResourcesSequenceV2</code>). If the number
+of main resources found (even if filtered out because of permissions) is equal
+to the maximum allowed page size, the predicate
+<code>knora-api:mayHaveMoreResults: true</code> is included in the response.</p>
+<h2 id="inference">Inference</h2>
+<p>Gravsearch queries support a subset of RDFS reasoning 
+(see <a href="../../../../03-endpoints/api-v2/query-language/#inference">Inference</a> in the API documentation on Gravsearch). 
+This is implemented as follows:</p>
+<p>To simulate RDF inference, the API expands all <code>rdfs:subClassOf</code> and <code>rdfs:subPropertyOf</code> statements 
+using <code>UNION</code> statements for all subclasses and subproperties from the ontologies 
+(equivalent to <code>rdfs:subClassOf*</code> and <code>rdfs:subPropertyOf*</code>). 
+Similarly, the API replaces <code>knora-api:standoffTagHasStartAncestor</code> with <code>knora-base:standoffTagHasStartParent*</code>.</p>
+<h1 id="optimisation-of-generated-sparql">Optimisation of generated SPARQL</h1>
+<p>The triplestore-specific transformers in <code>SparqlTransformer.scala</code> can run optimisations on the generated SPARQL, in
+the method <code>optimiseQueryPatterns</code> inherited from <code>WhereTransformer</code>. For example, <code>moveLuceneToBeginning</code> moves
+Lucene queries to the beginning of the block in which they occur.</p>
+<h2 id="query-optimization-by-topological-sorting-of-statements">Query Optimization by Topological Sorting of Statements</h2>
+<p>In Jena Fuseki, the performance of a query highly depends on the order of the query statements. 
+For example, a query such as the one below:</p>
+<div class="highlight"><pre><span></span><code><span class="k">PREFIX</span> <span class="nn">beol</span><span class="p">:</span> <span class="nl">&lt;http://0.0.0.0:3333/ontology/0801/beol/v2#&gt;</span>
+<span class="k">PREFIX</span> <span class="nn">knora-api</span><span class="p">:</span> <span class="nl">&lt;http://api.knora.org/ontology/knora-api/v2#&gt;</span>
+
+<span class="k">CONSTRUCT</span> <span class="p">{</span>
+  <span class="nv">?letter</span> <span class="nn">knora-api</span><span class="p">:</span><span class="nt">isMainResource</span> <span class="kc">true</span> <span class="p">.</span>
+  <span class="nv">?letter</span> <span class="nv">?linkingProp1</span>  <span class="nv">?person1</span> <span class="p">.</span>
+  <span class="nv">?letter</span> <span class="nv">?linkingProp2</span>  <span class="nv">?person2</span> <span class="p">.</span>
+  <span class="nv">?letter</span> <span class="nn">beol</span><span class="p">:</span><span class="nt">creationDate</span> <span class="nv">?date</span> <span class="p">.</span>
+<span class="p">}</span> <span class="k">WHERE</span> <span class="p">{</span>
+  <span class="nv">?letter</span> <span class="nn">beol</span><span class="p">:</span><span class="nt">creationDate</span> <span class="nv">?date</span> <span class="p">.</span>
+
+  <span class="nv">?letter</span> <span class="nv">?linkingProp1</span> <span class="nv">?person1</span> <span class="p">.</span>
+  <span class="k">FILTER</span><span class="p">(</span><span class="nv">?linkingProp1</span> <span class="o">=</span> <span class="nn">beol</span><span class="p">:</span><span class="nt">hasAuthor</span> <span class="o">||</span> <span class="nv">?linkingProp1</span> <span class="o">=</span> <span class="nn">beol</span><span class="p">:</span><span class="nt">hasRecipient</span> <span class="p">)</span>
+
+  <span class="nv">?letter</span> <span class="nv">?linkingProp2</span> <span class="nv">?person2</span> <span class="p">.</span>
+  <span class="k">FILTER</span><span class="p">(</span><span class="nv">?linkingProp2</span> <span class="o">=</span> <span class="nn">beol</span><span class="p">:</span><span class="nt">hasAuthor</span> <span class="o">||</span> <span class="nv">?linkingProp2</span> <span class="o">=</span> <span class="nn">beol</span><span class="p">:</span><span class="nt">hasRecipient</span> <span class="p">)</span>
+
+  <span class="nv">?person1</span> <span class="nn">beol</span><span class="p">:</span><span class="nt">hasIAFIdentifier</span> <span class="nv">?gnd1</span> <span class="p">.</span>
+  <span class="nv">?gnd1</span> <span class="nn">knora-api</span><span class="p">:</span><span class="nt">valueAsString</span> <span class="s">&quot;(DE-588)118531379&quot;</span> <span class="p">.</span>
+
+  <span class="nv">?person2</span> <span class="nn">beol</span><span class="p">:</span><span class="nt">hasIAFIdentifier</span> <span class="nv">?gnd2</span> <span class="p">.</span>
+  <span class="nv">?gnd2</span> <span class="nn">knora-api</span><span class="p">:</span><span class="nt">valueAsString</span> <span class="s">&quot;(DE-588)118696149&quot;</span> <span class="p">.</span>
+<span class="p">}</span> <span class="k">ORDER BY</span> <span class="nv">?date</span>
+</code></pre></div>
+<p>takes a very long time with Fuseki. The performance of this query can be improved
+by moving up the statements with literal objects that are not dependent on any other statement:</p>
+<div class="highlight"><pre><span></span><code>  ?gnd1 knora-api:valueAsString &quot;(DE-588)118531379&quot; .
+  ?gnd2 knora-api:valueAsString &quot;(DE-588)118696149&quot; .
+</code></pre></div>
+<p>The rest of the query then reads:</p>
+<div class="highlight"><pre><span></span><code>  ?person1 beol:hasIAFIdentifier ?gnd1 .
+  ?person2 beol:hasIAFIdentifier ?gnd2 .
+  ?letter ?linkingProp1 ?person1 .
+  FILTER(?linkingProp1 = beol:hasAuthor || ?linkingProp1 = beol:hasRecipient )
+
+  ?letter ?linkingProp2 ?person2 .
+  FILTER(?linkingProp2 = beol:hasAuthor || ?linkingProp2 = beol:hasRecipient )
+ ?letter beol:creationDate ?date .
+</code></pre></div>
+<p>Since users cannot be expected to know about performance of triplestores in order to write efficient queries, 
+an optimization method to automatically rearrange the statements of the given queries has been implemented. 
+Upon receiving the Gravsearch query, the algorithm converts the query to a graph. For each statement pattern,
+the subject of the statement is the origin node, the predicate is a directed edge, and the object 
+is the target node. For the query above, this conversion would result in the following graph:</p>
+<p><img alt="query_graph" src="../figures/query_graph.png" /></p>
+<p>The <a href="http://www.scala-graph.org/">Graph for Scala</a> library is used to construct the graph and sort it using <a href="https://en.wikipedia.org/wiki/Topological_sorting#Kahn's_algorithm">Kahn's 
+topological sorting algorithm</a>.</p>
+<p>The algorithm returns the nodes of the graph ordered in several layers, where the 
+root element <code>?letter</code> is in layer 0, <code>[?date, ?person1, ?person2]</code> are in layer 1, <code>[?gnd1, ?gnd2]</code> in layer 2, and the 
+leaf nodes <code>[(DE-588)118531379, (DE-588)118696149]</code> are given in the last layer (i.e. layer 3). 
+According to Kahn's algorithm, there are multiple valid permutations of the topological order. The graph in the example
+above has 24 valid permutations of topological order. Here are two of them (nodes are ordered from left to right with the 
+highest order to the lowest):</p>
+<ul>
+<li><code>(?letter, ?date, ?person2, ?person1, ?gnd2, ?gnd1, (DE-588)118696149, (DE-588)118531379)</code>   </li>
+<li><code>(?letter, ?date, ?person1, ?person2, ?gnd1, ?gnd2, (DE-588)118531379, (DE-588)118696149)</code>.   </li>
+</ul>
+<p>From all valid topological orders, one is chosen based on certain criteria; for example, the leaf node should not 
+belong to a statement that has predicate <code>rdf:type</code>, since that could match all resources of the specified type.
+Once the best order is chosen, it is used to re-arrange the query statements. Starting from the last leaf node, i.e. 
+<code>(DE-588)118696149</code>, the method finds the statement pattern which has this node as its object, and brings this statement 
+to the top of the query. This rearrangement continues so that the statements with the fewest dependencies on other 
+statements are all brought to the top of the query. The resulting query is as follows:</p>
+<div class="highlight"><pre><span></span><code><span class="k">PREFIX</span> <span class="nn">beol</span><span class="p">:</span> <span class="nl">&lt;http://0.0.0.0:3333/ontology/0801/beol/v2#&gt;</span>
+<span class="k">PREFIX</span> <span class="nn">knora-api</span><span class="p">:</span> <span class="nl">&lt;http://api.knora.org/ontology/knora-api/v2#&gt;</span>
+
+<span class="k">CONSTRUCT</span> <span class="p">{</span>
+  <span class="nv">?letter</span> <span class="nn">knora-api</span><span class="p">:</span><span class="nt">isMainResource</span> <span class="kc">true</span> <span class="p">.</span>
+  <span class="nv">?letter</span> <span class="nv">?linkingProp1</span>  <span class="nv">?person1</span> <span class="p">.</span>
+  <span class="nv">?letter</span> <span class="nv">?linkingProp2</span>  <span class="nv">?person2</span> <span class="p">.</span>
+  <span class="nv">?letter</span> <span class="nn">beol</span><span class="p">:</span><span class="nt">creationDate</span> <span class="nv">?date</span> <span class="p">.</span>
+<span class="p">}</span> <span class="k">WHERE</span> <span class="p">{</span>
+  <span class="nv">?gnd2</span> <span class="nn">knora-api</span><span class="p">:</span><span class="nt">valueAsString</span> <span class="s">&quot;(DE-588)118696149&quot;</span> <span class="p">.</span>
+  <span class="nv">?gnd1</span> <span class="nn">knora-api</span><span class="p">:</span><span class="nt">valueAsString</span> <span class="s">&quot;(DE-588)118531379&quot;</span> <span class="p">.</span>
+  <span class="nv">?person2</span> <span class="nn">beol</span><span class="p">:</span><span class="nt">hasIAFIdentifier</span> <span class="nv">?gnd2</span> <span class="p">.</span>
+  <span class="nv">?person1</span> <span class="nn">beol</span><span class="p">:</span><span class="nt">hasIAFIdentifier</span> <span class="nv">?gnd1</span> <span class="p">.</span>
+  <span class="nv">?letter</span> <span class="nv">?linkingProp2</span> <span class="nv">?person2</span> <span class="p">.</span>
+  <span class="nv">?letter</span> <span class="nv">?linkingProp1</span> <span class="nv">?person1</span> <span class="p">.</span>
+  <span class="nv">?letter</span> <span class="nn">beol</span><span class="p">:</span><span class="nt">creationDate</span> <span class="nv">?date</span> <span class="p">.</span>
+  <span class="k">FILTER</span><span class="p">(</span><span class="nv">?linkingProp1</span> <span class="o">=</span> <span class="nn">beol</span><span class="p">:</span><span class="nt">hasAuthor</span> <span class="o">||</span> <span class="nv">?linkingProp1</span> <span class="o">=</span> <span class="nn">beol</span><span class="p">:</span><span class="nt">hasRecipient</span> <span class="p">)</span>
+  <span class="k">FILTER</span><span class="p">(</span><span class="nv">?linkingProp2</span> <span class="o">=</span> <span class="nn">beol</span><span class="p">:</span><span class="nt">hasAuthor</span> <span class="o">||</span> <span class="nv">?linkingProp2</span> <span class="o">=</span> <span class="nn">beol</span><span class="p">:</span><span class="nt">hasRecipient</span> <span class="p">)</span>
+<span class="p">}</span> <span class="k">ORDER BY</span> <span class="nv">?date</span>
+</code></pre></div>
+<p>Note that position of the FILTER statements does not play a significant role in the optimization. </p>
+<p>If a Gravsearch query contains statements in <code>UNION</code>, <code>OPTIONAL</code>, <code>MINUS</code>, or <code>FILTER NOT EXISTS</code>, they are reordered 
+by defining a graph per block. For example, consider the following query with <code>UNION</code>:</p>
+<div class="highlight"><pre><span></span><code><span class="p">{</span>
+    <span class="nv">?thing</span> <span class="nn">anything</span><span class="p">:</span><span class="nt">hasRichtext</span> <span class="nv">?richtext</span> <span class="p">.</span>
+    <span class="k">FILTER</span> <span class="nn">knora-api</span><span class="p">:</span><span class="nt">matchText</span><span class="p">(</span><span class="nv">?richtext</span><span class="p">,</span> <span class="s">&quot;test&quot;</span><span class="p">)</span>
+    <span class="nv">?thing</span> <span class="nn">anything</span><span class="p">:</span><span class="nt">hasInteger</span> <span class="nv">?int</span> <span class="p">.</span>
+    <span class="nv">?int</span> <span class="nn">knora-api</span><span class="p">:</span><span class="nt">intValueAsInt</span> <span class="mi">1</span> <span class="p">.</span>
+<span class="p">}</span>
+<span class="k">UNION</span>
+<span class="p">{</span>
+    <span class="nv">?thing</span> <span class="nn">anything</span><span class="p">:</span><span class="nt">hasText</span> <span class="nv">?text</span> <span class="p">.</span>
+    <span class="k">FILTER</span> <span class="nn">knora-api</span><span class="p">:</span><span class="nt">matchText</span><span class="p">(</span><span class="nv">?text</span><span class="p">,</span> <span class="s">&quot;test&quot;</span><span class="p">)</span>
+    <span class="nv">?thing</span> <span class="nn">anything</span><span class="p">:</span><span class="nt">hasInteger</span> <span class="nv">?int</span> <span class="p">.</span>
+    <span class="nv">?int</span> <span class="nn">knora-api</span><span class="p">:</span><span class="nt">intValueAsInt</span> <span class="mi">3</span> <span class="p">.</span>
+<span class="p">}</span>
+</code></pre></div>
+<p>This would result in one graph per block of the <code>UNION</code>. Each graph is then sorted, and the statements of its 
+block are rearranged according to the topological order of graph. This is the result:</p>
+<div class="highlight"><pre><span></span><code><span class="p">{</span>
+   <span class="nv">?int</span> <span class="nn">knora-api</span><span class="p">:</span><span class="nt">intValueAsInt</span> <span class="mi">1</span> <span class="p">.</span>
+    <span class="nv">?thing</span> <span class="nn">anything</span><span class="p">:</span><span class="nt">hasRichtext</span> <span class="nv">?richtext</span> <span class="p">.</span>
+    <span class="nv">?thing</span> <span class="nn">anything</span><span class="p">:</span><span class="nt">hasInteger</span> <span class="nv">?int</span> <span class="p">.</span>
+    <span class="k">FILTER</span><span class="p">(</span><span class="nn">knora-api</span><span class="p">:</span><span class="nt">matchText</span><span class="p">(</span><span class="nv">?richtext</span><span class="p">,</span> <span class="s">&quot;test&quot;</span><span class="p">))</span>
+<span class="p">}</span> <span class="k">UNION</span> <span class="p">{</span>
+    <span class="nv">?int</span> <span class="nn">knora-api</span><span class="p">:</span><span class="nt">intValueAsInt</span> <span class="mi">3</span> <span class="p">.</span>
+    <span class="nv">?thing</span> <span class="nn">anything</span><span class="p">:</span><span class="nt">hasText</span> <span class="nv">?text</span> <span class="p">.</span>
+    <span class="nv">?thing</span> <span class="nn">anything</span><span class="p">:</span><span class="nt">hasInteger</span> <span class="nv">?int</span> <span class="p">.</span>
+    <span class="k">FILTER</span><span class="p">(</span><span class="nn">knora-api</span><span class="p">:</span><span class="nt">matchText</span><span class="p">(</span><span class="nv">?text</span><span class="p">,</span> <span class="s">&quot;test&quot;</span><span class="p">))</span>
+<span class="p">}</span>
+</code></pre></div>
+<h3 id="cyclic-graphs">Cyclic Graphs</h3>
+<p>The topological sorting algorithm can only be used for DAGs (directed acyclic graphs). However,
+a Gravsearch query can contains statements that result in a cyclic graph, e.g.:</p>
+<div class="highlight"><pre><span></span><code>PREFIX anything: &lt;http://0.0.0.0:3333/ontology/0001/anything/simple/v2#&gt;
+PREFIX knora-api: &lt;http://api.knora.org/ontology/knora-api/simple/v2#&gt;
+
+CONSTRUCT {
+    ?thing knora-api:isMainResource true .
+} WHERE {
+  ?thing anything:hasOtherThing ?thing1 .
+  ?thing1 anything:hasOtherThing ?thing2 .
+  ?thing2 anything:hasOtherThing ?thing . 
+}
+</code></pre></div>
+<p>In this case, the algorithm tries to break the cycles in order to sort the graph. If this is not possible,
+the query statements are not reordered.</p>
+
+
+
+
+
+
+
+  
+    
+  
+  
+
+
+  <aside class="md-source-file">
+    
+      
+  <span class="md-source-file__fact">
+    <span class="md-icon" title="Last update">
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M21 13.1c-.1 0-.3.1-.4.2l-1 1 2.1 2.1 1-1c.2-.2.2-.6 0-.8l-1.3-1.3c-.1-.1-.2-.2-.4-.2m-1.9 1.8-6.1 6V23h2.1l6.1-6.1-2.1-2M12.5 7v5.2l4 2.4-1 1L11 13V7h1.5M11 21.9c-5.1-.5-9-4.8-9-9.9C2 6.5 6.5 2 12 2c5.3 0 9.6 4.1 10 9.3-.3-.1-.6-.2-1-.2s-.7.1-1 .2C19.6 7.2 16.2 4 12 4c-4.4 0-8 3.6-8 8 0 4.1 3.1 7.5 7.1 7.9l-.1.2v1.8Z"/></svg>
+    </span>
+    <span class="git-revision-date-localized-plugin git-revision-date-localized-plugin-date">February 20, 2025</span>
+  </span>
+
+    
+    
+    
+    
+  </aside>
+
+
+
+
+
+                
+              </article>
+            </div>
+          
+          
+<script>var target=document.getElementById(location.hash.slice(1));target&&target.name&&(target.checked=target.name.startsWith("__tabbed_"))</script>
+        </div>
+        
+          <button type="button" class="md-top md-icon" data-md-component="top" hidden>
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M13 20h-2V8l-5.5 5.5-1.42-1.42L12 4.16l7.92 7.92-1.42 1.42L13 8v12Z"/></svg>
+  Back to top
+</button>
+        
+      </main>
+      
+        <footer class="md-footer">
+  
+  <div class="md-footer-meta md-typeset">
+    <div class="md-footer-meta__inner md-grid">
+      <div class="md-copyright">
+  
+  
+    Made with
+    <a href="https://squidfunk.github.io/mkdocs-material/" target="_blank" rel="noopener">
+      Material for MkDocs
+    </a>
+  
+</div>
+      
+    </div>
+  </div>
+</footer>
+      
+    </div>
+    <div class="md-dialog" data-md-component="dialog">
+      <div class="md-dialog__inner md-typeset"></div>
+    </div>
+    
+    
+    <script id="__config" type="application/json">{"base": "../../../..", "features": ["navigation.instant", "navigation.tracking", "navigation.top", "search.suggest", "version"], "search": "../../../../assets/javascripts/workers/search.b8dbb3d2.min.js", "translations": {"clipboard.copied": "Copied to clipboard", "clipboard.copy": "Copy to clipboard", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.placeholder": "Type to start searching", "search.result.term.missing": "Missing", "select.version": "Select version"}}</script>
+    
+    
+      <script src="../../../../assets/javascripts/bundle.1e8ae164.min.js"></script>
+      
+    
+  </body>
+</html>

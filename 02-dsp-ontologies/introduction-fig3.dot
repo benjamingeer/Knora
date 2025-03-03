@@ -1,0 +1,23 @@
+digraph {
+   {
+       node [color = navy, fillcolor = slateblue4, style = filled, fontcolor = white]
+
+       book [label = "ex:book1"]
+       page [label = "ex:page1"]
+   }
+
+   {
+       node [shape = box, color = firebrick]
+
+       title [label = "‘Das Narrenschiff’"]
+       author [label = "‘Sebastian Brant’"]
+       pagename [label = "‘a4r’"]
+   }
+
+   edge [fontsize = 11, color = cyan4]
+
+   book -> title [label = "ex:title"]
+   book -> author [label = "ex:author"]
+   page -> book [label = "ex:pageOf"]
+   page -> pagename [label = "ex:pagename"]
+}

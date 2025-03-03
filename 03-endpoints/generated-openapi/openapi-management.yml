@@ -1,0 +1,203 @@
+openapi: 3.1.0
+info:
+  title: webapi-management
+  version: v31.8.0
+servers:
+- url: http://localhost:3333
+  description: Local development server
+- url: https://api.dasch.swiss
+  description: Production server
+paths:
+  /version:
+    get:
+      tags:
+      - Management
+      operationId: getVersion
+      responses:
+        '200':
+          description: ''
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/VersionResponse'
+              example:
+                webapi: v31.8.0
+                buildCommit: 84a300632
+                buildTime: '2025-03-03T10:12:20.976227088Z'
+                fuseki: 5.2.0
+                pekkoHttp: 1.1.0
+                scala: 3.3.5
+                sipi: v3.15.0
+                name: version
+        '400':
+          description: ''
+          content:
+            application/json:
+              schema:
+                anyOf:
+                - $ref: '#/components/schemas/BadRequestException'
+                - $ref: '#/components/schemas/ValidationException'
+                - $ref: '#/components/schemas/DuplicateValueException'
+                - $ref: '#/components/schemas/GravsearchException'
+        '401':
+          description: ''
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/BadCredentialsException'
+        '403':
+          description: ''
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ForbiddenException'
+        '404':
+          description: ''
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/NotFoundException'
+  /health:
+    get:
+      tags:
+      - Management
+      operationId: getHealth
+      responses:
+        '200':
+          description: ''
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HealthResponse'
+        '400':
+          description: ''
+          content:
+            application/json:
+              schema:
+                anyOf:
+                - $ref: '#/components/schemas/BadRequestException'
+                - $ref: '#/components/schemas/ValidationException'
+                - $ref: '#/components/schemas/DuplicateValueException'
+                - $ref: '#/components/schemas/GravsearchException'
+        '401':
+          description: ''
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/BadCredentialsException'
+        '403':
+          description: ''
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ForbiddenException'
+        '404':
+          description: ''
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/NotFoundException'
+components:
+  schemas:
+    BadCredentialsException:
+      title: BadCredentialsException
+      type: object
+      required:
+      - message
+      properties:
+        message:
+          type: string
+    BadRequestException:
+      title: BadRequestException
+      type: object
+      required:
+      - message
+      properties:
+        message:
+          type: string
+    DuplicateValueException:
+      title: DuplicateValueException
+      type: object
+      required:
+      - message
+      properties:
+        message:
+          type: string
+    ForbiddenException:
+      title: ForbiddenException
+      type: object
+      required:
+      - message
+      properties:
+        message:
+          type: string
+    GravsearchException:
+      title: GravsearchException
+      type: object
+      required:
+      - message
+      properties:
+        message:
+          type: string
+    HealthResponse:
+      title: HealthResponse
+      type: object
+      required:
+      - name
+      - severity
+      - status
+      - message
+      properties:
+        name:
+          type: string
+        severity:
+          type: string
+        status:
+          type: boolean
+        message:
+          type: string
+    NotFoundException:
+      title: NotFoundException
+      type: object
+      required:
+      - message
+      properties:
+        message:
+          type: string
+    ValidationException:
+      title: ValidationException
+      type: object
+      required:
+      - msg
+      properties:
+        msg:
+          type: string
+    VersionResponse:
+      title: VersionResponse
+      type: object
+      required:
+      - webapi
+      - buildCommit
+      - buildTime
+      - fuseki
+      - pekkoHttp
+      - scala
+      - sipi
+      - name
+      properties:
+        webapi:
+          type: string
+        buildCommit:
+          type: string
+        buildTime:
+          type: string
+        fuseki:
+          type: string
+        pekkoHttp:
+          type: string
+        scala:
+          type: string
+        sipi:
+          type: string
+        name:
+          type: string

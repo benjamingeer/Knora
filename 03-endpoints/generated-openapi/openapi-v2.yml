@@ -1,0 +1,1705 @@
+openapi: 3.1.0
+info:
+  title: webapi-v2
+  version: v31.8.0
+servers:
+- url: http://localhost:3333
+  description: Local development server
+- url: https://api.dasch.swiss
+  description: Production server
+paths:
+  /v2/lists/{listIri}:
+    get:
+      tags:
+      - v2
+      description: Returns a list (a graph with all list nodes).
+      operationId: getV2ListsListiri
+      parameters:
+      - name: KnoraAuthenticationMFYGSLTEMFZWG2BOON3WS43THI2DIMY9
+        in: cookie
+        required: false
+        schema:
+          type: string
+      - name: listIri
+        in: path
+        description: The iri to a list.
+        required: true
+        schema:
+          type: string
+        example: http://rdfh.ch/lists/0001/ILB8MYjaSby_icrkW6Lv6w
+      - name: Accept
+        in: header
+        description: |-
+          The RDF format to be used for the request. Valid values are: List(JSON-LD, Turtle, TriG, RDF/XML, N-Quads)
+          If not specified or unknown, the fallback RDF format JSON-LD will be used.
+        required: false
+        schema:
+          type: string
+      - name: x-knora-accept-schema
+        in: header
+        description: |-
+          The ontology schema to be used for the request.
+          If not specified, the default schema ApiV2Complex will be used.
+        required: false
+        schema:
+          type: string
+      - name: schema
+        in: query
+        description: |-
+          The ontology schema to be used for the request.
+          If not specified, the default schema ApiV2Complex will be used.
+        required: false
+        schema:
+          type: string
+      - name: x-knora-json-ld-rendering
+        in: header
+        description: |-
+          The JSON-LD rendering to be used for the request (flat or hierarchical).
+          If not specified, hierarchical JSON-LD will be used.
+        required: false
+        schema:
+          type: string
+      - name: markup
+        in: query
+        description: The markup rendering to be used for the request (XML or standoff).
+        required: false
+        schema:
+          type: string
+      - name: x-knora-accept-markup
+        in: header
+        description: The markup rendering to be used for the request (XML or standoff).
+        required: false
+        schema:
+          type: string
+      responses:
+        '200':
+          description: ''
+          headers:
+            Content-Type:
+              required: true
+              schema:
+                type: string
+          content:
+            text/plain:
+              schema:
+                type: string
+              example:
+                rdfs:label: Listenwurzel
+                knora-api:attachedToProject:
+                  '@id': http://rdfh.ch/projects/0001
+                knora-api:hasSubListNode:
+                - rdfs:label: Tree list node 01
+                  knora-api:hasRootNode:
+                    '@id': http://rdfh.ch/lists/0001/treeList
+                  knora-api:listNodePosition: 0
+                  '@type': knora-api:ListNode
+                  '@id': http://rdfh.ch/lists/0001/treeList01
+                - rdfs:label: Baumlistenknoten 02
+                  knora-api:hasRootNode:
+                    '@id': http://rdfh.ch/lists/0001/treeList
+                  knora-api:listNodePosition: 1
+                  '@type': knora-api:ListNode
+                  '@id': http://rdfh.ch/lists/0001/treeList02
+                - rdfs:label: Tree list node 03
+                  knora-api:hasRootNode:
+                    '@id': http://rdfh.ch/lists/0001/treeList
+                  knora-api:hasSubListNode:
+                  - rdfs:label: Tree list node 10
+                    knora-api:hasRootNode:
+                      '@id': http://rdfh.ch/lists/0001/treeList
+                    knora-api:listNodePosition: 0
+                    '@type': knora-api:ListNode
+                    '@id': http://rdfh.ch/lists/0001/treeList10
+                  - rdfs:label: Tree list node 11
+                    knora-api:hasRootNode:
+                      '@id': http://rdfh.ch/lists/0001/treeList
+                    knora-api:listNodePosition: 1
+                    '@type': knora-api:ListNode
+                    '@id': http://rdfh.ch/lists/0001/treeList11
+                  knora-api:listNodePosition: 2
+                  '@type': knora-api:ListNode
+                  '@id': http://rdfh.ch/lists/0001/treeList03
+                knora-api:isRootNode: true
+                rdfs:comment: Anything Tree List
+                '@type': knora-api:ListNode
+                '@id': http://rdfh.ch/lists/0001/treeList
+                '@context':
+                  rdf: http://www.w3.org/1999/02/22-rdf-syntax-ns#
+                  knora-api: http://api.knora.org/ontology/knora-api/v2#
+                  owl: http://www.w3.org/2002/07/owl#
+                  rdfs: http://www.w3.org/2000/01/rdf-schema#
+                  xsd: http://www.w3.org/2001/XMLSchema#
+        '400':
+          description: ''
+          content:
+            application/json:
+              schema:
+                anyOf:
+                - $ref: '#/components/schemas/BadRequestException'
+                - $ref: '#/components/schemas/ValidationException'
+                - $ref: '#/components/schemas/DuplicateValueException'
+                - $ref: '#/components/schemas/GravsearchException'
+        '401':
+          description: ''
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/BadCredentialsException'
+        '403':
+          description: ''
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ForbiddenException'
+        '404':
+          description: ''
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/NotFoundException'
+      security:
+      - httpAuth: []
+      - httpAuth1: []
+  /v2/node/{listIri}:
+    get:
+      tags:
+      - v2
+      description: Returns a list node.
+      operationId: getV2NodeListiri
+      parameters:
+      - name: KnoraAuthenticationMFYGSLTEMFZWG2BOON3WS43THI2DIMY9
+        in: cookie
+        required: false
+        schema:
+          type: string
+      - name: listIri
+        in: path
+        description: The iri to a list.
+        required: true
+        schema:
+          type: string
+        example: http://rdfh.ch/lists/0001/ILB8MYjaSby_icrkW6Lv6w
+      - name: Accept
+        in: header
+        description: |-
+          The RDF format to be used for the request. Valid values are: List(JSON-LD, Turtle, TriG, RDF/XML, N-Quads)
+          If not specified or unknown, the fallback RDF format JSON-LD will be used.
+        required: false
+        schema:
+          type: string
+      - name: x-knora-accept-schema
+        in: header
+        description: |-
+          The ontology schema to be used for the request.
+          If not specified, the default schema ApiV2Complex will be used.
+        required: false
+        schema:
+          type: string
+      - name: schema
+        in: query
+        description: |-
+          The ontology schema to be used for the request.
+          If not specified, the default schema ApiV2Complex will be used.
+        required: false
+        schema:
+          type: string
+      - name: x-knora-json-ld-rendering
+        in: header
+        description: |-
+          The JSON-LD rendering to be used for the request (flat or hierarchical).
+          If not specified, hierarchical JSON-LD will be used.
+        required: false
+        schema:
+          type: string
+      - name: markup
+        in: query
+        description: The markup rendering to be used for the request (XML or standoff).
+        required: false
+        schema:
+          type: string
+      - name: x-knora-accept-markup
+        in: header
+        description: The markup rendering to be used for the request (XML or standoff).
+        required: false
+        schema:
+          type: string
+      responses:
+        '200':
+          description: ''
+          headers:
+            Content-Type:
+              required: true
+              schema:
+                type: string
+          content:
+            text/plain:
+              schema:
+                type: string
+              example:
+                rdfs:label: Tree list node 11
+                knora-api:hasRootNode:
+                  '@id': http://rdfh.ch/lists/0001/treeList
+                knora-api:listNodePosition: 1
+                '@type': knora-api:ListNode
+                '@id': http://rdfh.ch/lists/0001/treeList11
+                '@context':
+                  rdf: http://www.w3.org/1999/02/22-rdf-syntax-ns#
+                  knora-api: http://api.knora.org/ontology/knora-api/v2#
+                  owl: http://www.w3.org/2002/07/owl#
+                  rdfs: http://www.w3.org/2000/01/rdf-schema#
+                  xsd: http://www.w3.org/2001/XMLSchema#
+        '400':
+          description: ''
+          content:
+            application/json:
+              schema:
+                anyOf:
+                - $ref: '#/components/schemas/BadRequestException'
+                - $ref: '#/components/schemas/ValidationException'
+                - $ref: '#/components/schemas/DuplicateValueException'
+                - $ref: '#/components/schemas/GravsearchException'
+        '401':
+          description: ''
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/BadCredentialsException'
+        '403':
+          description: ''
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ForbiddenException'
+        '404':
+          description: ''
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/NotFoundException'
+      security:
+      - httpAuth: []
+      - httpAuth1: []
+  /v2/resources/info:
+    get:
+      tags:
+      - V2 Resources
+      operationId: getV2ResourcesInfo
+      parameters:
+      - name: x-knora-accept-project
+        in: header
+        required: true
+        schema:
+          type: string
+      - name: resourceClass
+        in: query
+        required: true
+        schema:
+          type: string
+      - name: order
+        in: query
+        required: false
+        schema:
+          type: string
+      - name: orderBy
+        in: query
+        required: false
+        schema:
+          type: string
+      responses:
+        '200':
+          description: ''
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ListResponseDto'
+        '400':
+          description: ''
+          content:
+            application/json:
+              schema:
+                anyOf:
+                - $ref: '#/components/schemas/BadRequestException'
+                - $ref: '#/components/schemas/ValidationException'
+                - $ref: '#/components/schemas/DuplicateValueException'
+                - $ref: '#/components/schemas/GravsearchException'
+        '401':
+          description: ''
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/BadCredentialsException'
+        '403':
+          description: ''
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ForbiddenException'
+        '404':
+          description: ''
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/NotFoundException'
+  /v2/searchextended:
+    post:
+      tags:
+      - V2 Search
+      description: Search for resources using a Gravsearch query.
+      operationId: postV2Searchextended
+      parameters:
+      - name: KnoraAuthenticationMFYGSLTEMFZWG2BOON3WS43THI2DIMY9
+        in: cookie
+        required: false
+        schema:
+          type: string
+      - name: Accept
+        in: header
+        description: |-
+          The RDF format to be used for the request. Valid values are: List(JSON-LD, Turtle, TriG, RDF/XML, N-Quads)
+          If not specified or unknown, the fallback RDF format JSON-LD will be used.
+        required: false
+        schema:
+          type: string
+      - name: x-knora-accept-schema
+        in: header
+        description: |-
+          The ontology schema to be used for the request.
+          If not specified, the default schema ApiV2Complex will be used.
+        required: false
+        schema:
+          type: string
+      - name: schema
+        in: query
+        description: |-
+          The ontology schema to be used for the request.
+          If not specified, the default schema ApiV2Complex will be used.
+        required: false
+        schema:
+          type: string
+      - name: x-knora-json-ld-rendering
+        in: header
+        description: |-
+          The JSON-LD rendering to be used for the request (flat or hierarchical).
+          If not specified, hierarchical JSON-LD will be used.
+        required: false
+        schema:
+          type: string
+      - name: markup
+        in: query
+        description: The markup rendering to be used for the request (XML or standoff).
+        required: false
+        schema:
+          type: string
+      - name: x-knora-accept-markup
+        in: header
+        description: The markup rendering to be used for the request (XML or standoff).
+        required: false
+        schema:
+          type: string
+      requestBody:
+        description: The Gravsearch query. See https://docs.dasch.swiss/latest/DSP-API/03-endpoints/api-v2/query-language/
+        content:
+          text/plain:
+            schema:
+              type: string
+        required: true
+      responses:
+        '200':
+          description: ''
+          headers:
+            Content-Type:
+              required: true
+              schema:
+                type: string
+          content:
+            text/plain:
+              schema:
+                type: string
+        '400':
+          description: ''
+          content:
+            application/json:
+              schema:
+                anyOf:
+                - $ref: '#/components/schemas/BadRequestException'
+                - $ref: '#/components/schemas/ValidationException'
+                - $ref: '#/components/schemas/DuplicateValueException'
+                - $ref: '#/components/schemas/GravsearchException'
+        '401':
+          description: ''
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/BadCredentialsException'
+        '403':
+          description: ''
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ForbiddenException'
+        '404':
+          description: ''
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/NotFoundException'
+      security:
+      - httpAuth: []
+      - httpAuth1: []
+  /v2/searchextended/{p1}:
+    get:
+      tags:
+      - V2 Search
+      description: Search for resources using a Gravsearch query.
+      operationId: getV2SearchextendedP1
+      parameters:
+      - name: KnoraAuthenticationMFYGSLTEMFZWG2BOON3WS43THI2DIMY9
+        in: cookie
+        required: false
+        schema:
+          type: string
+      - name: p1
+        in: path
+        description: The Gravsearch query. See https://docs.dasch.swiss/latest/DSP-API/03-endpoints/api-v2/query-language/
+        required: true
+        schema:
+          type: string
+      - name: Accept
+        in: header
+        description: |-
+          The RDF format to be used for the request. Valid values are: List(JSON-LD, Turtle, TriG, RDF/XML, N-Quads)
+          If not specified or unknown, the fallback RDF format JSON-LD will be used.
+        required: false
+        schema:
+          type: string
+      - name: x-knora-accept-schema
+        in: header
+        description: |-
+          The ontology schema to be used for the request.
+          If not specified, the default schema ApiV2Complex will be used.
+        required: false
+        schema:
+          type: string
+      - name: schema
+        in: query
+        description: |-
+          The ontology schema to be used for the request.
+          If not specified, the default schema ApiV2Complex will be used.
+        required: false
+        schema:
+          type: string
+      - name: x-knora-json-ld-rendering
+        in: header
+        description: |-
+          The JSON-LD rendering to be used for the request (flat or hierarchical).
+          If not specified, hierarchical JSON-LD will be used.
+        required: false
+        schema:
+          type: string
+      - name: markup
+        in: query
+        description: The markup rendering to be used for the request (XML or standoff).
+        required: false
+        schema:
+          type: string
+      - name: x-knora-accept-markup
+        in: header
+        description: The markup rendering to be used for the request (XML or standoff).
+        required: false
+        schema:
+          type: string
+      responses:
+        '200':
+          description: ''
+          headers:
+            Content-Type:
+              required: true
+              schema:
+                type: string
+          content:
+            text/plain:
+              schema:
+                type: string
+        '400':
+          description: ''
+          content:
+            application/json:
+              schema:
+                anyOf:
+                - $ref: '#/components/schemas/BadRequestException'
+                - $ref: '#/components/schemas/ValidationException'
+                - $ref: '#/components/schemas/DuplicateValueException'
+                - $ref: '#/components/schemas/GravsearchException'
+        '401':
+          description: ''
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/BadCredentialsException'
+        '403':
+          description: ''
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ForbiddenException'
+        '404':
+          description: ''
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/NotFoundException'
+      security:
+      - httpAuth: []
+      - httpAuth1: []
+  /v2/searchextended/count:
+    post:
+      tags:
+      - V2 Search
+      description: Count resources using a Gravsearch query.
+      operationId: postV2SearchextendedCount
+      parameters:
+      - name: KnoraAuthenticationMFYGSLTEMFZWG2BOON3WS43THI2DIMY9
+        in: cookie
+        required: false
+        schema:
+          type: string
+      - name: Accept
+        in: header
+        description: |-
+          The RDF format to be used for the request. Valid values are: List(JSON-LD, Turtle, TriG, RDF/XML, N-Quads)
+          If not specified or unknown, the fallback RDF format JSON-LD will be used.
+        required: false
+        schema:
+          type: string
+      - name: x-knora-accept-schema
+        in: header
+        description: |-
+          The ontology schema to be used for the request.
+          If not specified, the default schema ApiV2Complex will be used.
+        required: false
+        schema:
+          type: string
+      - name: schema
+        in: query
+        description: |-
+          The ontology schema to be used for the request.
+          If not specified, the default schema ApiV2Complex will be used.
+        required: false
+        schema:
+          type: string
+      - name: x-knora-json-ld-rendering
+        in: header
+        description: |-
+          The JSON-LD rendering to be used for the request (flat or hierarchical).
+          If not specified, hierarchical JSON-LD will be used.
+        required: false
+        schema:
+          type: string
+      - name: markup
+        in: query
+        description: The markup rendering to be used for the request (XML or standoff).
+        required: false
+        schema:
+          type: string
+      - name: x-knora-accept-markup
+        in: header
+        description: The markup rendering to be used for the request (XML or standoff).
+        required: false
+        schema:
+          type: string
+      requestBody:
+        description: The Gravsearch query. See https://docs.dasch.swiss/latest/DSP-API/03-endpoints/api-v2/query-language/
+        content:
+          text/plain:
+            schema:
+              type: string
+        required: true
+      responses:
+        '200':
+          description: ''
+          headers:
+            Content-Type:
+              required: true
+              schema:
+                type: string
+          content:
+            text/plain:
+              schema:
+                type: string
+        '400':
+          description: ''
+          content:
+            application/json:
+              schema:
+                anyOf:
+                - $ref: '#/components/schemas/BadRequestException'
+                - $ref: '#/components/schemas/ValidationException'
+                - $ref: '#/components/schemas/DuplicateValueException'
+                - $ref: '#/components/schemas/GravsearchException'
+        '401':
+          description: ''
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/BadCredentialsException'
+        '403':
+          description: ''
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ForbiddenException'
+        '404':
+          description: ''
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/NotFoundException'
+      security:
+      - httpAuth: []
+      - httpAuth1: []
+  /v2/searchextended/count/{p1}:
+    get:
+      tags:
+      - V2 Search
+      description: Count resources using a Gravsearch query.
+      operationId: getV2SearchextendedCountP1
+      parameters:
+      - name: KnoraAuthenticationMFYGSLTEMFZWG2BOON3WS43THI2DIMY9
+        in: cookie
+        required: false
+        schema:
+          type: string
+      - name: p1
+        in: path
+        description: The Gravsearch query. See https://docs.dasch.swiss/latest/DSP-API/03-endpoints/api-v2/query-language/
+        required: true
+        schema:
+          type: string
+      - name: Accept
+        in: header
+        description: |-
+          The RDF format to be used for the request. Valid values are: List(JSON-LD, Turtle, TriG, RDF/XML, N-Quads)
+          If not specified or unknown, the fallback RDF format JSON-LD will be used.
+        required: false
+        schema:
+          type: string
+      - name: x-knora-accept-schema
+        in: header
+        description: |-
+          The ontology schema to be used for the request.
+          If not specified, the default schema ApiV2Complex will be used.
+        required: false
+        schema:
+          type: string
+      - name: schema
+        in: query
+        description: |-
+          The ontology schema to be used for the request.
+          If not specified, the default schema ApiV2Complex will be used.
+        required: false
+        schema:
+          type: string
+      - name: x-knora-json-ld-rendering
+        in: header
+        description: |-
+          The JSON-LD rendering to be used for the request (flat or hierarchical).
+          If not specified, hierarchical JSON-LD will be used.
+        required: false
+        schema:
+          type: string
+      - name: markup
+        in: query
+        description: The markup rendering to be used for the request (XML or standoff).
+        required: false
+        schema:
+          type: string
+      - name: x-knora-accept-markup
+        in: header
+        description: The markup rendering to be used for the request (XML or standoff).
+        required: false
+        schema:
+          type: string
+      responses:
+        '200':
+          description: ''
+          headers:
+            Content-Type:
+              required: true
+              schema:
+                type: string
+          content:
+            text/plain:
+              schema:
+                type: string
+        '400':
+          description: ''
+          content:
+            application/json:
+              schema:
+                anyOf:
+                - $ref: '#/components/schemas/BadRequestException'
+                - $ref: '#/components/schemas/ValidationException'
+                - $ref: '#/components/schemas/DuplicateValueException'
+                - $ref: '#/components/schemas/GravsearchException'
+        '401':
+          description: ''
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/BadCredentialsException'
+        '403':
+          description: ''
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ForbiddenException'
+        '404':
+          description: ''
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/NotFoundException'
+      security:
+      - httpAuth: []
+      - httpAuth1: []
+  /v2/searchbylabel/{searchTerm}:
+    get:
+      tags:
+      - V2 Search
+      description: Search for resources by label.
+      operationId: getV2SearchbylabelSearchterm
+      parameters:
+      - name: KnoraAuthenticationMFYGSLTEMFZWG2BOON3WS43THI2DIMY9
+        in: cookie
+        required: false
+        schema:
+          type: string
+      - name: searchTerm
+        in: path
+        required: true
+        schema:
+          type: string
+      - name: Accept
+        in: header
+        description: |-
+          The RDF format to be used for the request. Valid values are: List(JSON-LD, Turtle, TriG, RDF/XML, N-Quads)
+          If not specified or unknown, the fallback RDF format JSON-LD will be used.
+        required: false
+        schema:
+          type: string
+      - name: x-knora-accept-schema
+        in: header
+        description: |-
+          The ontology schema to be used for the request.
+          If not specified, the default schema ApiV2Complex will be used.
+        required: false
+        schema:
+          type: string
+      - name: schema
+        in: query
+        description: |-
+          The ontology schema to be used for the request.
+          If not specified, the default schema ApiV2Complex will be used.
+        required: false
+        schema:
+          type: string
+      - name: x-knora-json-ld-rendering
+        in: header
+        description: |-
+          The JSON-LD rendering to be used for the request (flat or hierarchical).
+          If not specified, hierarchical JSON-LD will be used.
+        required: false
+        schema:
+          type: string
+      - name: markup
+        in: query
+        description: The markup rendering to be used for the request (XML or standoff).
+        required: false
+        schema:
+          type: string
+      - name: x-knora-accept-markup
+        in: header
+        description: The markup rendering to be used for the request (XML or standoff).
+        required: false
+        schema:
+          type: string
+      - name: offset
+        in: query
+        description: The offset to be used for paging.
+        required: false
+        schema:
+          default: 0
+          type: integer
+          format: int32
+          exclusiveMinimum: -1
+      - name: limitToProject
+        in: query
+        description: The project to limit the search to.
+        required: false
+        schema:
+          type: string
+      - name: limitToResourceClass
+        in: query
+        description: The resource class to limit the search to.
+        required: false
+        schema:
+          type: string
+      responses:
+        '200':
+          description: ''
+          headers:
+            Content-Type:
+              required: true
+              schema:
+                type: string
+          content:
+            text/plain:
+              schema:
+                type: string
+        '400':
+          description: ''
+          content:
+            application/json:
+              schema:
+                anyOf:
+                - $ref: '#/components/schemas/BadRequestException'
+                - $ref: '#/components/schemas/ValidationException'
+                - $ref: '#/components/schemas/DuplicateValueException'
+                - $ref: '#/components/schemas/GravsearchException'
+        '401':
+          description: ''
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/BadCredentialsException'
+        '403':
+          description: ''
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ForbiddenException'
+        '404':
+          description: ''
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/NotFoundException'
+      security:
+      - httpAuth: []
+      - httpAuth1: []
+  /v2/searchbylabel/count/{searchTerm}:
+    get:
+      tags:
+      - V2 Search
+      description: Search for resources by label.
+      operationId: getV2SearchbylabelCountSearchterm
+      parameters:
+      - name: KnoraAuthenticationMFYGSLTEMFZWG2BOON3WS43THI2DIMY9
+        in: cookie
+        required: false
+        schema:
+          type: string
+      - name: searchTerm
+        in: path
+        required: true
+        schema:
+          type: string
+      - name: Accept
+        in: header
+        description: |-
+          The RDF format to be used for the request. Valid values are: List(JSON-LD, Turtle, TriG, RDF/XML, N-Quads)
+          If not specified or unknown, the fallback RDF format JSON-LD will be used.
+        required: false
+        schema:
+          type: string
+      - name: x-knora-accept-schema
+        in: header
+        description: |-
+          The ontology schema to be used for the request.
+          If not specified, the default schema ApiV2Complex will be used.
+        required: false
+        schema:
+          type: string
+      - name: schema
+        in: query
+        description: |-
+          The ontology schema to be used for the request.
+          If not specified, the default schema ApiV2Complex will be used.
+        required: false
+        schema:
+          type: string
+      - name: x-knora-json-ld-rendering
+        in: header
+        description: |-
+          The JSON-LD rendering to be used for the request (flat or hierarchical).
+          If not specified, hierarchical JSON-LD will be used.
+        required: false
+        schema:
+          type: string
+      - name: markup
+        in: query
+        description: The markup rendering to be used for the request (XML or standoff).
+        required: false
+        schema:
+          type: string
+      - name: x-knora-accept-markup
+        in: header
+        description: The markup rendering to be used for the request (XML or standoff).
+        required: false
+        schema:
+          type: string
+      - name: limitToProject
+        in: query
+        description: The project to limit the search to.
+        required: false
+        schema:
+          type: string
+      - name: limitToResourceClass
+        in: query
+        description: The resource class to limit the search to.
+        required: false
+        schema:
+          type: string
+      responses:
+        '200':
+          description: ''
+          headers:
+            Content-Type:
+              required: true
+              schema:
+                type: string
+          content:
+            text/plain:
+              schema:
+                type: string
+        '400':
+          description: ''
+          content:
+            application/json:
+              schema:
+                anyOf:
+                - $ref: '#/components/schemas/BadRequestException'
+                - $ref: '#/components/schemas/ValidationException'
+                - $ref: '#/components/schemas/DuplicateValueException'
+                - $ref: '#/components/schemas/GravsearchException'
+        '401':
+          description: ''
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/BadCredentialsException'
+        '403':
+          description: ''
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ForbiddenException'
+        '404':
+          description: ''
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/NotFoundException'
+      security:
+      - httpAuth: []
+      - httpAuth1: []
+  /v2/search/{searchTerm}:
+    get:
+      tags:
+      - V2 Search
+      description: Search for resources by label.
+      operationId: getV2SearchSearchterm
+      parameters:
+      - name: KnoraAuthenticationMFYGSLTEMFZWG2BOON3WS43THI2DIMY9
+        in: cookie
+        required: false
+        schema:
+          type: string
+      - name: searchTerm
+        in: path
+        required: true
+        schema:
+          type: string
+      - name: Accept
+        in: header
+        description: |-
+          The RDF format to be used for the request. Valid values are: List(JSON-LD, Turtle, TriG, RDF/XML, N-Quads)
+          If not specified or unknown, the fallback RDF format JSON-LD will be used.
+        required: false
+        schema:
+          type: string
+      - name: x-knora-accept-schema
+        in: header
+        description: |-
+          The ontology schema to be used for the request.
+          If not specified, the default schema ApiV2Complex will be used.
+        required: false
+        schema:
+          type: string
+      - name: schema
+        in: query
+        description: |-
+          The ontology schema to be used for the request.
+          If not specified, the default schema ApiV2Complex will be used.
+        required: false
+        schema:
+          type: string
+      - name: x-knora-json-ld-rendering
+        in: header
+        description: |-
+          The JSON-LD rendering to be used for the request (flat or hierarchical).
+          If not specified, hierarchical JSON-LD will be used.
+        required: false
+        schema:
+          type: string
+      - name: markup
+        in: query
+        description: The markup rendering to be used for the request (XML or standoff).
+        required: false
+        schema:
+          type: string
+      - name: x-knora-accept-markup
+        in: header
+        description: The markup rendering to be used for the request (XML or standoff).
+        required: false
+        schema:
+          type: string
+      - name: offset
+        in: query
+        description: The offset to be used for paging.
+        required: false
+        schema:
+          default: 0
+          type: integer
+          format: int32
+          exclusiveMinimum: -1
+      - name: limitToProject
+        in: query
+        description: The project to limit the search to.
+        required: false
+        schema:
+          type: string
+      - name: limitToResourceClass
+        in: query
+        description: The resource class to limit the search to.
+        required: false
+        schema:
+          type: string
+      - name: limitToStandoffClass
+        in: query
+        description: The standoff class to limit the search to.
+        required: false
+        schema:
+          type: string
+      - name: returnFiles
+        in: query
+        description: Whether to return files in the search results.
+        required: false
+        schema:
+          default: false
+          type: boolean
+      responses:
+        '200':
+          description: ''
+          headers:
+            Content-Type:
+              required: true
+              schema:
+                type: string
+          content:
+            text/plain:
+              schema:
+                type: string
+        '400':
+          description: ''
+          content:
+            application/json:
+              schema:
+                anyOf:
+                - $ref: '#/components/schemas/BadRequestException'
+                - $ref: '#/components/schemas/ValidationException'
+                - $ref: '#/components/schemas/DuplicateValueException'
+                - $ref: '#/components/schemas/GravsearchException'
+        '401':
+          description: ''
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/BadCredentialsException'
+        '403':
+          description: ''
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ForbiddenException'
+        '404':
+          description: ''
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/NotFoundException'
+      security:
+      - httpAuth: []
+      - httpAuth1: []
+  /v2/search/count/{searchTerm}:
+    get:
+      tags:
+      - V2 Search
+      description: Search for resources by label.
+      operationId: getV2SearchCountSearchterm
+      parameters:
+      - name: KnoraAuthenticationMFYGSLTEMFZWG2BOON3WS43THI2DIMY9
+        in: cookie
+        required: false
+        schema:
+          type: string
+      - name: searchTerm
+        in: path
+        required: true
+        schema:
+          type: string
+      - name: Accept
+        in: header
+        description: |-
+          The RDF format to be used for the request. Valid values are: List(JSON-LD, Turtle, TriG, RDF/XML, N-Quads)
+          If not specified or unknown, the fallback RDF format JSON-LD will be used.
+        required: false
+        schema:
+          type: string
+      - name: x-knora-accept-schema
+        in: header
+        description: |-
+          The ontology schema to be used for the request.
+          If not specified, the default schema ApiV2Complex will be used.
+        required: false
+        schema:
+          type: string
+      - name: schema
+        in: query
+        description: |-
+          The ontology schema to be used for the request.
+          If not specified, the default schema ApiV2Complex will be used.
+        required: false
+        schema:
+          type: string
+      - name: x-knora-json-ld-rendering
+        in: header
+        description: |-
+          The JSON-LD rendering to be used for the request (flat or hierarchical).
+          If not specified, hierarchical JSON-LD will be used.
+        required: false
+        schema:
+          type: string
+      - name: markup
+        in: query
+        description: The markup rendering to be used for the request (XML or standoff).
+        required: false
+        schema:
+          type: string
+      - name: x-knora-accept-markup
+        in: header
+        description: The markup rendering to be used for the request (XML or standoff).
+        required: false
+        schema:
+          type: string
+      - name: limitToProject
+        in: query
+        description: The project to limit the search to.
+        required: false
+        schema:
+          type: string
+      - name: limitToResourceClass
+        in: query
+        description: The resource class to limit the search to.
+        required: false
+        schema:
+          type: string
+      - name: limitToStandoffClass
+        in: query
+        description: The standoff class to limit the search to.
+        required: false
+        schema:
+          type: string
+      responses:
+        '200':
+          description: ''
+          headers:
+            Content-Type:
+              required: true
+              schema:
+                type: string
+          content:
+            text/plain:
+              schema:
+                type: string
+        '400':
+          description: ''
+          content:
+            application/json:
+              schema:
+                anyOf:
+                - $ref: '#/components/schemas/BadRequestException'
+                - $ref: '#/components/schemas/ValidationException'
+                - $ref: '#/components/schemas/DuplicateValueException'
+                - $ref: '#/components/schemas/GravsearchException'
+        '401':
+          description: ''
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/BadCredentialsException'
+        '403':
+          description: ''
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ForbiddenException'
+        '404':
+          description: ''
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/NotFoundException'
+      security:
+      - httpAuth: []
+      - httpAuth1: []
+  /v2/authentication:
+    get:
+      operationId: getV2Authentication
+      parameters:
+      - name: KnoraAuthenticationMFYGSLTEMFZWG2BOON3WS43THI2DIMY9
+        in: cookie
+        required: false
+        schema:
+          type: string
+      responses:
+        '200':
+          description: ''
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CheckResponse'
+        '400':
+          description: ''
+          content:
+            application/json:
+              schema:
+                anyOf:
+                - $ref: '#/components/schemas/BadRequestException'
+                - $ref: '#/components/schemas/ValidationException'
+                - $ref: '#/components/schemas/DuplicateValueException'
+                - $ref: '#/components/schemas/GravsearchException'
+        '401':
+          description: ''
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/BadCredentialsException'
+        '403':
+          description: ''
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ForbiddenException'
+        '404':
+          description: ''
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/NotFoundException'
+      security:
+      - httpAuth: []
+      - httpAuth1: []
+    post:
+      operationId: postV2Authentication
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/LoginPayload'
+        required: true
+      responses:
+        '200':
+          description: ''
+          headers:
+            Set-Cookie:
+              required: false
+              schema:
+                type: array
+                items:
+                  type: string
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/TokenResponse'
+        '400':
+          description: ''
+          content:
+            application/json:
+              schema:
+                anyOf:
+                - $ref: '#/components/schemas/BadRequestException'
+                - $ref: '#/components/schemas/ValidationException'
+                - $ref: '#/components/schemas/DuplicateValueException'
+                - $ref: '#/components/schemas/GravsearchException'
+        '401':
+          description: ''
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/BadCredentialsException'
+        '403':
+          description: ''
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ForbiddenException'
+        '404':
+          description: ''
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/NotFoundException'
+    delete:
+      operationId: deleteV2Authentication
+      parameters:
+      - name: KnoraAuthenticationMFYGSLTEMFZWG2BOON3WS43THI2DIMY9
+        in: cookie
+        required: false
+        schema:
+          type: string
+      responses:
+        '200':
+          description: ''
+          headers:
+            Set-Cookie:
+              required: false
+              schema:
+                type: array
+                items:
+                  type: string
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/LogoutResponse'
+        '400':
+          description: ''
+          content:
+            application/json:
+              schema:
+                anyOf:
+                - $ref: '#/components/schemas/BadRequestException'
+                - $ref: '#/components/schemas/ValidationException'
+                - $ref: '#/components/schemas/DuplicateValueException'
+                - $ref: '#/components/schemas/GravsearchException'
+        '401':
+          description: ''
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/BadCredentialsException'
+        '403':
+          description: ''
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ForbiddenException'
+        '404':
+          description: ''
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/NotFoundException'
+      security:
+      - {}
+      - httpAuth: []
+  /v2/login:
+    get:
+      operationId: getV2Login
+      responses:
+        '200':
+          description: ''
+          content:
+            text/html:
+              schema:
+                type: string
+        '400':
+          description: ''
+          content:
+            application/json:
+              schema:
+                anyOf:
+                - $ref: '#/components/schemas/BadRequestException'
+                - $ref: '#/components/schemas/ValidationException'
+                - $ref: '#/components/schemas/DuplicateValueException'
+                - $ref: '#/components/schemas/GravsearchException'
+        '401':
+          description: ''
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/BadCredentialsException'
+        '403':
+          description: ''
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ForbiddenException'
+        '404':
+          description: ''
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/NotFoundException'
+    post:
+      operationId: postV2Login
+      requestBody:
+        content:
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/LoginForm'
+        required: true
+      responses:
+        '200':
+          description: ''
+          headers:
+            Set-Cookie:
+              required: false
+              schema:
+                type: array
+                items:
+                  type: string
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/TokenResponse'
+        '400':
+          description: ''
+          content:
+            application/json:
+              schema:
+                anyOf:
+                - $ref: '#/components/schemas/BadRequestException'
+                - $ref: '#/components/schemas/ValidationException'
+                - $ref: '#/components/schemas/DuplicateValueException'
+                - $ref: '#/components/schemas/GravsearchException'
+        '401':
+          description: ''
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/BadCredentialsException'
+        '403':
+          description: ''
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ForbiddenException'
+        '404':
+          description: ''
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/NotFoundException'
+components:
+  schemas:
+    BadCredentialsException:
+      title: BadCredentialsException
+      type: object
+      required:
+      - message
+      properties:
+        message:
+          type: string
+    BadRequestException:
+      title: BadRequestException
+      type: object
+      required:
+      - message
+      properties:
+        message:
+          type: string
+    CheckResponse:
+      title: CheckResponse
+      type: object
+      required:
+      - message
+      properties:
+        message:
+          type: string
+    DuplicateValueException:
+      title: DuplicateValueException
+      type: object
+      required:
+      - message
+      properties:
+        message:
+          type: string
+    Email:
+      title: Email
+      type: object
+      required:
+      - value
+      properties:
+        value:
+          type: string
+    EmailPassword:
+      title: EmailPassword
+      type: object
+      required:
+      - email
+      - password
+      properties:
+        email:
+          $ref: '#/components/schemas/Email'
+        password:
+          type: string
+    ForbiddenException:
+      title: ForbiddenException
+      type: object
+      required:
+      - message
+      properties:
+        message:
+          type: string
+    GravsearchException:
+      title: GravsearchException
+      type: object
+      required:
+      - message
+      properties:
+        message:
+          type: string
+    IriPassword:
+      title: IriPassword
+      type: object
+      required:
+      - iri
+      - password
+      properties:
+        iri:
+          $ref: '#/components/schemas/UserIri'
+        password:
+          type: string
+    ListResponseDto:
+      title: ListResponseDto
+      type: object
+      required:
+      - count
+      properties:
+        resources:
+          type: array
+          items:
+            $ref: '#/components/schemas/ResourceInfoDto'
+        count:
+          type: integer
+          format: int32
+    LoginForm:
+      title: LoginForm
+      type: object
+      required:
+      - username
+      - password
+      properties:
+        username:
+          type: string
+        password:
+          type: string
+    LoginPayload:
+      title: LoginPayload
+      oneOf:
+      - $ref: '#/components/schemas/EmailPassword'
+      - $ref: '#/components/schemas/IriPassword'
+      - $ref: '#/components/schemas/UsernamePassword'
+    LogoutResponse:
+      title: LogoutResponse
+      type: object
+      required:
+      - status
+      - message
+      properties:
+        status:
+          type: integer
+          format: int32
+        message:
+          type: string
+    NotFoundException:
+      title: NotFoundException
+      type: object
+      required:
+      - message
+      properties:
+        message:
+          type: string
+    ResourceInfoDto:
+      title: ResourceInfoDto
+      type: object
+      required:
+      - resourceIri
+      - creationDate
+      - lastModificationDate
+      - isDeleted
+      properties:
+        resourceIri:
+          type: string
+        creationDate:
+          type: string
+          format: date-time
+        lastModificationDate:
+          type: string
+          format: date-time
+        deleteDate:
+          type: string
+          format: date-time
+        isDeleted:
+          type: boolean
+    TokenResponse:
+      title: TokenResponse
+      type: object
+      required:
+      - token
+      properties:
+        token:
+          type: string
+    UserIri:
+      title: UserIri
+      type: object
+      required:
+      - value
+      properties:
+        value:
+          type: string
+    Username:
+      title: Username
+      type: object
+      required:
+      - value
+      properties:
+        value:
+          type: string
+    UsernamePassword:
+      title: UsernamePassword
+      type: object
+      required:
+      - username
+      - password
+      properties:
+        username:
+          $ref: '#/components/schemas/Username'
+        password:
+          type: string
+    ValidationException:
+      title: ValidationException
+      type: object
+      required:
+      - msg
+      properties:
+        msg:
+          type: string
+  securitySchemes:
+    httpAuth:
+      type: http
+      scheme: bearer
+    httpAuth1:
+      type: http
+      scheme: basic

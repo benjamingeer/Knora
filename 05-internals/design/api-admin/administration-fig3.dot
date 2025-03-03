@@ -1,0 +1,14 @@
+digraph G {
+  a [label="Start"];
+
+  b [label="Get all groups for user"];
+  c [label="Get all Project Administration Permissions received through group membership"];
+  d [label="Decide if user is allowed to perform operation"];
+
+  z [label="End"];
+
+  a -> b;
+  b -> c;
+  c -> d;
+  d -> z;
+}

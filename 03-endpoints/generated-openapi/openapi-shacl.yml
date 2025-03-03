@@ -1,0 +1,150 @@
+openapi: 3.1.0
+info:
+  title: webapi-shacl
+  version: v31.8.0
+servers:
+- url: http://localhost:3333
+  description: Local development server
+- url: https://api.dasch.swiss
+  description: Production server
+paths:
+  /shacl/validate:
+    post:
+      tags:
+      - Shacl
+      description: foo
+      operationId: postShaclValidate
+      requestBody:
+        content:
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/ValidationFormData'
+        required: true
+      responses:
+        '200':
+          description: |2
+
+            The validation report in Turtle format.
+
+            ```turtle
+            @prefix sh:      <http://www.w3.org/ns/shacl#> .
+            @prefix rdf:     <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
+
+            [ rdf:type     sh:ValidationReport;
+              sh:conforms  true
+            ] .
+            ```
+          content:
+            text/turtle:
+              schema:
+                type: string
+        '400':
+          description: ''
+          content:
+            application/json:
+              schema:
+                anyOf:
+                - $ref: '#/components/schemas/BadRequestException'
+                - $ref: '#/components/schemas/ValidationException'
+                - $ref: '#/components/schemas/DuplicateValueException'
+                - $ref: '#/components/schemas/GravsearchException'
+        '401':
+          description: ''
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/BadCredentialsException'
+        '403':
+          description: ''
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ForbiddenException'
+        '404':
+          description: ''
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/NotFoundException'
+components:
+  schemas:
+    BadCredentialsException:
+      title: BadCredentialsException
+      type: object
+      required:
+      - message
+      properties:
+        message:
+          type: string
+    BadRequestException:
+      title: BadRequestException
+      type: object
+      required:
+      - message
+      properties:
+        message:
+          type: string
+    DuplicateValueException:
+      title: DuplicateValueException
+      type: object
+      required:
+      - message
+      properties:
+        message:
+          type: string
+    ForbiddenException:
+      title: ForbiddenException
+      type: object
+      required:
+      - message
+      properties:
+        message:
+          type: string
+    GravsearchException:
+      title: GravsearchException
+      type: object
+      required:
+      - message
+      properties:
+        message:
+          type: string
+    NotFoundException:
+      title: NotFoundException
+      type: object
+      required:
+      - message
+      properties:
+        message:
+          type: string
+    ValidationException:
+      title: ValidationException
+      type: object
+      required:
+      - msg
+      properties:
+        msg:
+          type: string
+    ValidationFormData:
+      title: ValidationFormData
+      type: object
+      required:
+      - data.ttl
+      - shacl.ttl
+      properties:
+        data.ttl:
+          description: The data to be validated.
+          type: string
+          format: binary
+        shacl.ttl:
+          description: The shapes for validation.
+          type: string
+          format: binary
+        validateShapes:
+          description: Should shapes also be validated.
+          type: boolean
+        reportDetails:
+          description: Add `sh:details` to the validation report.
+          type: boolean
+        addBlankNodes:
+          description: Add blank nodes to the validation report.
+          type: boolean

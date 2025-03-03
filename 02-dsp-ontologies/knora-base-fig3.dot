@@ -1,0 +1,57 @@
+digraph {
+   {
+       // Resources
+       node [style = filled, fontcolor = white, color = navy, fillcolor = slateblue4]
+
+       r1 [label = "R1"]
+       r2 [label = "R2"]
+   }
+
+   {
+       // Values
+       node [style = filled, fontcolor = white, color = tomato3, fillcolor = tomato2]
+
+       v1 [label = "V1"]
+       lv1 [label = "LV1"]
+   }
+
+   // Standoff tag
+   so1 [label = "SO1", style = filled, fontcolor = white, color = darkgreen, fillcolor = forestgreen]
+
+   {
+       // Literals
+       node [shape = box, color = firebrick]
+
+       v1Str [label = "‘This link is internal.’"]
+       tagStart [label = "5"]
+       tagEnd [label = "9"]
+       hasStandoffLinkTo [label = "hasStandoffLinkTo"]
+       refCount [label = "1"]
+   }
+
+   edge [fontsize = 11, color = cyan4]
+
+   r1 -> r2 [label = "hasStandoffLinkTo"]
+   r1 -> v1 [label = "hasComment"]
+   r1 -> lv1 [label = "hasStandoffLinkToValue"]
+
+   v1 -> v1Str [label = "valueHasString"]
+   v1 -> so1 [label = "valueHasStandoff"]
+
+   so1 -> tagStart [label = "standoffTagHasStart"]
+   so1 -> tagEnd [label = "standoffTagHasEnd"]
+   so1 -> r2 [label = "standoffTagHasLink"]
+
+   lv1 -> r1 [label = "subject"]
+   lv1 -> hasStandoffLinkTo [label = "predicate"]
+   lv1 -> r2 [label = "object"]
+   lv1 -> refCount [label = "valueHasrefCount"]
+
+   // Add an invisible edge to order tagStart and tagEnd from left to right.
+
+   {
+       rank = same
+       tagStart -> tagEnd [style = invis]
+       rankdir = LR
+   }
+}

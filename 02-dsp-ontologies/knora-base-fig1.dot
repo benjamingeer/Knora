@@ -1,0 +1,33 @@
+digraph {
+   book [label = "ex:book2", style = filled, fontcolor = white, color = navy, fillcolor = slateblue4]
+
+   {
+       node [style = filled, fontcolor = white, color = tomato3, fillcolor = tomato2]
+
+       title [label = "kb:TextValue"]
+       pubdate [label = "kb:DateValue"]
+   }
+
+   {
+       node [shape = box, color = firebrick]
+
+       titleStr [label = "‘King Lear’"]
+       titleCreationDate [label = "2015-08-12 13:00"]
+
+       startJDN [label = "2364669"]
+       endJDN [label = "2364669"]
+       pubdateCreationDate [label = "2015-08-12 13:03"]
+   }
+
+   edge [fontsize = 11, color = cyan4]
+
+   book -> title [label = "ex:title"]
+   book -> pubdate [label = "ex:pubdate"]
+
+   title -> titleStr [label = "kb:valueHasString"]
+   title -> titleCreationDate [label = "kb:valueCreationDate"]
+
+   pubdate -> startJDN [label = "kb:valueHasStartJDN"]
+   pubdate -> endJDN [label = "kb:valueHasEndJDN"]
+   pubdate -> pubdateCreationDate [label = "kb:valueCreationDate"]
+}
