@@ -22,7 +22,6 @@ import org.knora.webapi.messages.ResponderRequest.KnoraRequestV2
 import org.knora.webapi.messages.SmartIri
 import org.knora.webapi.messages.util.rdf.RdfFormat
 import org.knora.webapi.messages.v2.responder.KnoraResponseV2
-import org.knora.webapi.messages.v2.responder.resourcemessages.ResourceTEIGetResponseV2
 import org.knora.webapi.slice.common.api.ApiV2
 import org.knora.webapi.slice.resourceinfo.domain.IriConverter
 
@@ -174,28 +173,6 @@ object RouteUtilV2 {
       response           = HttpResponse(StatusCodes.OK, entity = HttpEntity(contentType, content))
       routeResult       <- ZIO.fromFuture(_ => requestContext.complete(response))
     } yield routeResult)
-
-  /**
-   * Sends a message to a responder and completes the HTTP request by returning the response as TEI/XML.
-   *
-   * @param requestTask          a [[Task]] containing a [[KnoraRequestV2]] message that should be sent to the responder manager.
-   * @param requestContext       the pekko-http [[RequestContext]].
-   *
-   * @return a [[Future]] containing a [[RouteResult]].
-   */
-  def runTEIXMLRoute[R](
-    requestTask: ZIO[R, Throwable, KnoraRequestV2],
-    requestContext: RequestContext,
-  )(implicit runtime: Runtime[R & MessageRelay]): Future[RouteResult] =
-    UnsafeZioRun.runToFuture {
-      for {
-        requestMessage <- requestTask
-        teiResponse    <- ZIO.serviceWithZIO[MessageRelay](_.ask[ResourceTEIGetResponseV2](requestMessage))
-        contentType     = MediaTypes.`application/xml`.toContentType(HttpCharsets.`UTF-8`)
-        response        = HttpResponse(StatusCodes.OK, entity = HttpEntity(contentType, teiResponse.toXML))
-        completed      <- ZIO.fromFuture(_ => requestContext.complete(response))
-      } yield completed
-    }
 
   private def extractMediaTypeFromHeaderItem(
     headerValueItem: String,

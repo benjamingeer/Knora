@@ -12,7 +12,7 @@ import org.knora.webapi.slice.common.api.HandlerMapper
 import org.knora.webapi.slice.common.api.KnoraResponseRenderer.FormatOptions
 import org.knora.webapi.slice.common.api.SecuredEndpointHandler
 import org.knora.webapi.slice.resources.api.model.ValueUuid
-import org.knora.webapi.slice.resources.api.model.ValueVersionDate
+import org.knora.webapi.slice.resources.api.model.VersionDate
 import org.knora.webapi.slice.resources.api.service.ValuesRestService
 
 final class ValuesEndpointsHandler(

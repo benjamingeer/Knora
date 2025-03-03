@@ -95,24 +95,6 @@ class SearchResponderV2Spec extends CoreSpec {
   private def gravsearchV2(query: ConstructQuery, schemaAndOptions: SchemaRendering, user: User) =
     ZIO.serviceWithZIO[SearchResponderV2](_.gravsearchV2(query, schemaAndOptions, user))
 
-  private def searchResourcesByProjectAndClassV2(
-    projectIri: SmartIri,
-    resourceClass: SmartIri,
-    orderByProperty: Option[SmartIri],
-    page: Int,
-    schemaAndOptions: SchemaRendering,
-    requestingUser: User,
-  ) = ZIO.serviceWithZIO[SearchResponderV2](
-    _.searchResourcesByProjectAndClassV2(
-      projectIri,
-      resourceClass,
-      orderByProperty,
-      page,
-      schemaAndOptions,
-      requestingUser,
-    ),
-  )
-
   "The search responder v2" should {
 
     "perform a fulltext search for 'Narr'" in {
@@ -302,13 +284,15 @@ class SearchResponderV2Spec extends CoreSpec {
 
     "search by project and resource class" in {
       val result = UnsafeZioRun.runOrThrow(
-        searchResourcesByProjectAndClassV2(
-          projectIri = SharedTestDataADM.incunabulaProject.id.value.toSmartIri,
-          resourceClass = "http://0.0.0.0:3333/ontology/0803/incunabula/v2#book".toSmartIri,
-          orderByProperty = Some("http://0.0.0.0:3333/ontology/0803/incunabula/v2#title".toSmartIri),
-          page = 0,
-          schemaAndOptions = SchemaRendering.apiV2SchemaWithOption(MarkupRendering.Xml),
-          requestingUser = SharedTestDataADM.incunabulaProjectAdminUser,
+        ZIO.serviceWithZIO[SearchResponderV2](
+          _.searchResourcesByProjectAndClassV2(
+            projectIri = SharedTestDataADM.incunabulaProject.id,
+            resourceClass = "http://0.0.0.0:3333/ontology/0803/incunabula/v2#book".toSmartIri,
+            orderByProperty = Some("http://0.0.0.0:3333/ontology/0803/incunabula/v2#title".toSmartIri),
+            page = 0,
+            schemaAndOptions = SchemaRendering.apiV2SchemaWithOption(MarkupRendering.Xml),
+            requestingUser = SharedTestDataADM.incunabulaProjectAdminUser,
+          ),
         ),
       )
       result.resources.size should ===(19)

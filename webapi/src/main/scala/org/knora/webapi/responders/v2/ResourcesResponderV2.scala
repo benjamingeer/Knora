@@ -7,6 +7,7 @@ package org.knora.webapi.responders.v2
 
 import com.typesafe.scalalogging.LazyLogging
 import zio.*
+import zio.Task
 import zio.ZIO
 
 import java.time.Instant
@@ -50,6 +51,8 @@ import org.knora.webapi.slice.admin.domain.service.LegalInfoService
 import org.knora.webapi.slice.admin.domain.service.ProjectService
 import org.knora.webapi.slice.ontology.domain.service.OntologyRepo
 import org.knora.webapi.slice.ontology.domain.service.OntologyService
+import org.knora.webapi.slice.resources.api.model.GraphDirection
+import org.knora.webapi.slice.resources.api.model.VersionDate
 import org.knora.webapi.slice.resources.repo.service.ResourcesRepo
 import org.knora.webapi.store.iiif.errors.SipiException
 import org.knora.webapi.store.triplestore.api.TriplestoreService
@@ -149,44 +152,9 @@ final case class ResourcesResponderV2(
           requestingUser,
         ) =>
       getResourcePreviewV2(resIris, withDeletedResource, targetSchema, requestingUser)
-    case ResourceTEIGetRequestV2(
-          resIri,
-          textProperty,
-          mappingIri,
-          gravsearchTemplateIri,
-          headerXSLTIri,
-          requestingUser,
-        ) =>
-      getResourceAsTeiV2(
-        resIri,
-        textProperty,
-        mappingIri,
-        gravsearchTemplateIri,
-        headerXSLTIri,
-        requestingUser,
-      )
-
-    case createResourceRequestV2: CreateResourceRequestV2 =>
-      createHandler(createResourceRequestV2)
-
-    case updateResourceMetadataRequestV2: UpdateResourceMetadataRequestV2 =>
-      updateResourceMetadataV2(updateResourceMetadataRequestV2)
-
-    case deleteOrEraseResourceRequestV2: DeleteOrEraseResourceRequestV2 =>
-      deleteOrEraseResourceV2(deleteOrEraseResourceRequestV2)
-
-    case graphDataGetRequest: GraphDataGetRequestV2 => getGraphDataResponseV2(graphDataGetRequest)
 
     case resourceHistoryRequest: ResourceVersionHistoryGetRequestV2 =>
       getResourceHistoryV2(resourceHistoryRequest)
-
-    case resourceIIIFManifestRequest: ResourceIIIFManifestGetRequestV2 => getIIIFManifestV2(resourceIIIFManifestRequest)
-
-    case resourceHistoryEventsRequest: ResourceHistoryEventsGetRequestV2 =>
-      getResourceHistoryEvents(resourceHistoryEventsRequest)
-
-    case projectHistoryEventsRequestV2: ProjectResourcesWithHistoryGetRequestV2 =>
-      getProjectResourceHistoryEvents(projectHistoryEventsRequestV2)
 
     case other =>
       Responder.handleUnexpectedMessage(other, this.getClass.getName)
@@ -232,7 +200,7 @@ final case class ResourcesResponderV2(
    * @param updateResourceMetadataRequestV2 the update request.
    * @return a [[UpdateResourceMetadataResponseV2]].
    */
-  private def updateResourceMetadataV2(
+  def updateResourceMetadataV2(
     updateResourceMetadataRequestV2: UpdateResourceMetadataRequestV2,
   ): Task[UpdateResourceMetadataResponseV2] = {
     def makeTaskFuture: Task[UpdateResourceMetadataResponseV2] =
@@ -346,27 +314,12 @@ final case class ResourcesResponderV2(
   }
 
   /**
-   * Either marks a resource as deleted or erases it from the triplestore, depending on the value of `erase`
-   * in the request message.
-   *
-   * @param deleteOrEraseResourceV2 the request message.
-   */
-  private def deleteOrEraseResourceV2(
-    deleteOrEraseResourceV2: DeleteOrEraseResourceRequestV2,
-  ): Task[SuccessResponseV2] =
-    if (deleteOrEraseResourceV2.erase) {
-      eraseResourceV2(deleteOrEraseResourceV2)
-    } else {
-      markResourceAsDeletedV2(deleteOrEraseResourceV2)
-    }
-
-  /**
    * Marks a resource as deleted.
    *
    * @param deleteResourceV2 the request message.
    */
-  private def markResourceAsDeletedV2(deleteResourceV2: DeleteOrEraseResourceRequestV2): Task[SuccessResponseV2] = {
-    def deleteTask(): Task[SuccessResponseV2] =
+  def markResourceAsDeletedV2(deleteResourceV2: DeleteOrEraseResourceRequestV2): Task[SuccessResponseV2] = {
+    val deleteTask: Task[SuccessResponseV2] =
       for {
         // Get the metadata of the resource to be updated.
         resourcesSeq <- getResourcePreviewV2(
@@ -435,8 +388,7 @@ final case class ResourcesResponderV2(
           }
       } yield SuccessResponseV2("Resource marked as deleted")
 
-    ZIO.when(deleteResourceV2.erase)(ZIO.fail(AssertionException(s"Request message has erase == true"))) *>
-      IriLocker.runWithIriLock(deleteResourceV2.apiRequestID, deleteResourceV2.resourceIri, deleteTask())
+    IriLocker.runWithIriLock(deleteResourceV2.apiRequestID, deleteResourceV2.resourceIri, deleteTask)
   }
 
   /**
@@ -444,8 +396,8 @@ final case class ResourcesResponderV2(
    *
    * @param eraseResourceV2 the request message.
    */
-  private def eraseResourceV2(eraseResourceV2: DeleteOrEraseResourceRequestV2): Task[SuccessResponseV2] = {
-    def eraseTask: Task[SuccessResponseV2] =
+  def eraseResourceV2(eraseResourceV2: DeleteOrEraseResourceRequestV2): Task[SuccessResponseV2] = {
+    val eraseTask: Task[SuccessResponseV2] =
       for {
         // Get the metadata of the resource to be updated.
         resourcesSeq <- getResourcePreviewV2(
@@ -505,11 +457,7 @@ final case class ResourcesResponderV2(
             )
             .whenZIO(iriService.checkIriExists(resourceSmartIri.toString))
       } yield SuccessResponseV2("Resource erased")
-
-    for {
-      _          <- ZIO.when(!eraseResourceV2.erase)(ZIO.fail(AssertionException(s"Request message has erase == false")))
-      taskResult <- IriLocker.runWithIriLock(eraseResourceV2.apiRequestID, eraseResourceV2.resourceIri, eraseTask)
-    } yield taskResult
+    IriLocker.runWithIriLock(eraseResourceV2.apiRequestID, eraseResourceV2.resourceIri, eraseTask)
   }
 
   /**
@@ -626,7 +574,7 @@ final case class ResourcesResponderV2(
           requestingUser = requestingUser,
         )
 
-      _ = apiResponse.checkResourceIris(resourceIris.toSet, apiResponse)
+      _ <- apiResponse.checkResourceIris(resourceIris.toSet, apiResponse)
 
       _ <- valueUuid match {
              case Some(definedValueUuid) =>
@@ -699,10 +647,7 @@ final case class ResourcesResponderV2(
                        requestingUser = requestingUser,
                      )
 
-      _ = apiResponse.checkResourceIris(
-            targetResourceIris = resourceIris.toSet,
-            resourcesSequence = apiResponse,
-          )
+      _ <- apiResponse.checkResourceIris(resourceIris.toSet, apiResponse)
 
       // Check if resources are deleted, if so, replace them with DeletedResource
       responseWithDeletedResourcesReplaced = apiResponse.resources match {
@@ -818,7 +763,7 @@ final case class ResourcesResponderV2(
    * @param requestingUser        the user making the request.
    * @return a [[ResourceTEIGetResponseV2]].
    */
-  private def getResourceAsTeiV2(
+  def getResourceAsTeiV2(
     resourceIri: IRI,
     textProperty: SmartIri,
     mappingIri: Option[IRI],
@@ -1019,11 +964,16 @@ final case class ResourcesResponderV2(
   /**
    * Gets a graph of resources that are reachable via links to or from a given resource.
    *
-   * @param graphDataGetRequest a [[GraphDataGetRequestV2]] specifying the characteristics of the graph.
    * @return a [[GraphDataGetResponseV2]] representing the requested graph.
    */
-  private def getGraphDataResponseV2(graphDataGetRequest: GraphDataGetRequestV2): Task[GraphDataGetResponseV2] = {
-    val excludePropertyInternal = graphDataGetRequest.excludeProperty.map(_.toOntologySchema(InternalSchema))
+  def getGraphDataResponseV2(
+    resourceIri: IRI,
+    depth: Int,
+    dir: GraphDirection,
+    excludeProperty: Option[SmartIri],
+    requestingUser: User,
+  ): Task[GraphDataGetResponseV2] = {
+    val excludePropertyInternal = excludeProperty.map(_.toOntologySchema(InternalSchema))
 
     /**
      * The internal representation of a node returned by a SPARQL query generated by the `getGraphData` template.
@@ -1133,7 +1083,7 @@ final case class ResourcesResponderV2(
                   entityCreator = node.nodeCreator,
                   entityProject = node.nodeProject,
                   entityPermissionLiteral = node.nodePermissions,
-                  requestingUser = graphDataGetRequest.requestingUser,
+                  requestingUser = requestingUser,
                 )
                 .nonEmpty
             }
@@ -1174,7 +1124,7 @@ final case class ResourcesResponderV2(
                       entityCreator = edge.linkValueCreator,
                       entityProject = edge.sourceNodeProject,
                       entityPermissionLiteral = edge.linkValuePermissions,
-                      requestingUser = graphDataGetRequest.requestingUser,
+                      requestingUser = requestingUser,
                     )
                     .nonEmpty
 
@@ -1232,7 +1182,7 @@ final case class ResourcesResponderV2(
     val query =
       sparql.v2.txt
         .getGraphData(
-          startNodeIri = graphDataGetRequest.resourceIri,
+          startNodeIri = resourceIri,
           maybeExcludeLinkProperty = excludePropertyInternal,
           startNodeOnly = true,
           outbound = true,
@@ -1244,7 +1194,7 @@ final case class ResourcesResponderV2(
       rows: Seq[VariableResultsRow] = response.results.bindings
 
       _ <- ZIO.when(rows.isEmpty) {
-             val msg = s"Resource <${graphDataGetRequest.resourceIri}> not found (it may have been deleted)"
+             val msg = s"Resource <$resourceIri> not found (it may have been deleted)"
              ZIO.fail(NotFoundException(msg))
            }
 
@@ -1266,22 +1216,22 @@ final case class ResourcesResponderV2(
                  entityCreator = startNode.nodeCreator,
                  entityProject = startNode.nodeProject,
                  entityPermissionLiteral = startNode.nodePermissions,
-                 requestingUser = graphDataGetRequest.requestingUser,
+                 requestingUser = requestingUser,
                )
                .isEmpty,
            ) {
              val msg =
-               s"User ${graphDataGetRequest.requestingUser.email} does not have permission to view resource <${graphDataGetRequest.resourceIri}>"
+               s"User ${requestingUser.email} does not have permission to view resource <$resourceIri>"
              ZIO.fail(ForbiddenException(msg))
            }
 
       // Recursively get the graph containing outbound links.
       outboundQueryResults <-
-        if (graphDataGetRequest.outbound) {
+        if (dir.outbound) {
           traverseGraph(
             startNode = startNode,
             outbound = true,
-            depth = graphDataGetRequest.depth,
+            depth = depth,
           )
         } else {
           ZIO.succeed(GraphQueryResults())
@@ -1289,11 +1239,11 @@ final case class ResourcesResponderV2(
 
       // Recursively get the graph containing inbound links.
       inboundQueryResults <-
-        if (graphDataGetRequest.inbound) {
+        if (dir.inbound) {
           traverseGraph(
             startNode = startNode,
             outbound = false,
-            depth = graphDataGetRequest.depth,
+            depth = depth,
           )
         } else {
           ZIO.succeed(GraphQueryResults())
@@ -1327,6 +1277,22 @@ final case class ResourcesResponderV2(
       ontologySchema = InternalSchema,
     )
   }
+
+  def getResourceHistory(
+    resourceIri: String,
+    startDate: Option[VersionDate],
+    endDate: Option[VersionDate],
+    requestingUser: User,
+  ): Task[ResourceVersionHistoryResponseV2] =
+    getResourceHistoryV2(
+      ResourceVersionHistoryGetRequestV2(
+        resourceIri,
+        withDeletedResource = false,
+        startDate.map(_.value),
+        endDate.map(_.value),
+        requestingUser,
+      ),
+    )
 
   /**
    * Returns the version history of a resource.
@@ -1396,7 +1362,7 @@ final case class ResourcesResponderV2(
       historyEntriesWithResourceCreation,
     )
 
-  private def getIIIFManifestV2(request: ResourceIIIFManifestGetRequestV2): Task[ResourceIIIFManifestGetResponseV2] =
+  def getIiifManifestV2(resourceIri: IRI, requestingUser: User): Task[ResourceIIIFManifestGetResponseV2] =
     // The implementation here is experimental. If we had a way of streaming the canvas URLs to the IIIF viewer,
     // it would be better to write the Gravsearch query differently, so that ?representation was the main resource.
     // Then the Gravsearch query could return pages of results.
@@ -1408,9 +1374,7 @@ final case class ResourcesResponderV2(
       // Make a Gravsearch query from a template.
       gravsearchQueryForIncomingLinks <- ZIO.attempt(
                                            org.knora.webapi.messages.twirl.queries.gravsearch.txt
-                                             .getIncomingImageLinks(
-                                               resourceIri = request.resourceIri,
-                                             )
+                                             .getIncomingImageLinks(resourceIri)
                                              .toString(),
                                          )
 
@@ -1420,10 +1384,10 @@ final case class ResourcesResponderV2(
       searchResponse <- searchResponderV2.gravsearchV2(
                           parsedGravsearchQuery,
                           apiV2SchemaWithOption(MarkupRendering.Standoff),
-                          request.requestingUser,
+                          requestingUser,
                         )
 
-      resource      = searchResponse.toResource(request.resourceIri)
+      resource      = searchResponse.toResource(resourceIri)
       incomingLinks = resource.values.getOrElse(OntologyConstants.KnoraBase.HasIncomingLinkValue.toSmartIri, Seq.empty)
 
       representations: Seq[ReadResourceV2] = incomingLinks.collect { case readLinkValueV2: ReadLinkValueV2 =>
@@ -1435,7 +1399,7 @@ final case class ResourcesResponderV2(
         body = JsonLDObject(
           Map(
             JsonLDKeywords.CONTEXT -> JsonLDString("http://iiif.io/api/presentation/3/context.json"),
-            "id"                   -> JsonLDString(s"${request.resourceIri}/manifest"), // Is this IRI OK?
+            "id"                   -> JsonLDString(s"$resourceIri/manifest"), // Is this IRI OK?
             "type"                 -> JsonLDString("Manifest"),
             "label"                -> JsonLDObject(Map("en" -> JsonLDArray(Seq(JsonLDString(resource.label))))),
             "behavior"             -> JsonLDArray(Seq(JsonLDString("paged"))),
@@ -1525,46 +1489,39 @@ final case class ResourcesResponderV2(
   /**
    * Returns all events describing the history of a resource ordered by version date.
    *
-   * @param resourceHistoryEventsGetRequest the request for events describing history of a resource.
+   * @param resourceIri the request for events describing history of a resource.
+   * @param requestingUser the user making the request.
    * @return the events extracted from full representation of a resource at each time point in its history ordered by version date.
    */
-  private def getResourceHistoryEvents(
-    resourceHistoryEventsGetRequest: ResourceHistoryEventsGetRequestV2,
+  def getResourceHistoryEvents(
+    resourceIri: IRI,
+    requestingUser: User,
   ): Task[ResourceAndValueVersionHistoryResponseV2] =
     for {
-      resourceHistory <-
-        getResourceHistoryV2(
-          ResourceVersionHistoryGetRequestV2(
-            resourceIri = resourceHistoryEventsGetRequest.resourceIri,
-            withDeletedResource = true,
-            requestingUser = resourceHistoryEventsGetRequest.requestingUser,
-          ),
-        )
-      resourceFullHist <- extractEventsFromHistory(
-                            resourceIri = resourceHistoryEventsGetRequest.resourceIri,
-                            resourceHistory = resourceHistory.history,
-                            requestingUser = resourceHistoryEventsGetRequest.requestingUser,
-                          )
-      sortedResourceHistory = resourceFullHist.sortBy(_.versionDate)
-    } yield ResourceAndValueVersionHistoryResponseV2(historyEvents = sortedResourceHistory)
+      resourceHistory <- getResourceHistoryV2(
+                           ResourceVersionHistoryGetRequestV2(
+                             resourceIri = resourceIri,
+                             withDeletedResource = true,
+                             requestingUser = requestingUser,
+                           ),
+                         )
+      resourceFullHist <- extractEventsFromHistory(resourceIri, resourceHistory.history, requestingUser)
+    } yield ResourceAndValueVersionHistoryResponseV2(resourceFullHist.sortBy(_.versionDate))
 
   /**
    * Returns events representing the history of all resources and values belonging to a project ordered by date.
    *
-   * @param projectResourceHistoryEventsGetRequest the request for history events of a project.
+   * @param projectId the history events of a project.
+   * @param requestingUser the user making the request.
+   *
    * @return the all history events of resources of a project ordered by version date.
    */
-  private def getProjectResourceHistoryEvents(
-    projectResourceHistoryEventsGetRequest: ProjectResourcesWithHistoryGetRequestV2,
+  def getProjectResourceHistoryEvents(
+    projectId: ProjectIri,
+    requestingUser: User,
   ): Task[ResourceAndValueVersionHistoryResponseV2] =
     for {
-      // Get the project; checks if a project with given IRI exists.
-      projectId <- ZIO
-                     .fromEither(ProjectIri.from(projectResourceHistoryEventsGetRequest.projectIri))
-                     .mapError(e => BadRequestException(e))
-      _ <- knoraProjectService
-             .findById(projectId)
-             .someOrFail(NotFoundException(s"Project ${projectId.value} not found"))
+      _ <- knoraProjectService.findById(projectId).someOrFail(NotFoundException(s"Project $projectId not found"))
 
       // Do a SELECT prequery to get the IRIs of the resources that belong to the project.
       prequery              = sparql.v2.txt.getAllResourcesInProjectPrequery(projectId.value)
@@ -1579,15 +1536,10 @@ final case class ResourcesResponderV2(
                 ResourceVersionHistoryGetRequestV2(
                   resourceIri = resourceIri,
                   withDeletedResource = true,
-                  requestingUser = projectResourceHistoryEventsGetRequest.requestingUser,
+                  requestingUser = requestingUser,
                 ),
               )
-            resourceFullHist <-
-              extractEventsFromHistory(
-                resourceIri = resourceIri,
-                resourceHistory = resourceHistory.history,
-                requestingUser = projectResourceHistoryEventsGetRequest.requestingUser,
-              )
+            resourceFullHist <- extractEventsFromHistory(resourceIri, resourceHistory.history, requestingUser)
           } yield resourceFullHist
         }
 

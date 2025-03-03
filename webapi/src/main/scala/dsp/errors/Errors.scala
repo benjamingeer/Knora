@@ -150,6 +150,9 @@ object DuplicateValueException {
  * @param message a description of the error.
  */
 case class OntologyConstraintException(message: String) extends RequestRejectedException(message)
+object OntologyConstraintException {
+  implicit val codec: JsonCodec[OntologyConstraintException] = DeriveJsonCodec.gen[OntologyConstraintException]
+}
 
 /**
  * An exception indicating that a requested update is not allowed because another user has edited the
@@ -205,7 +208,6 @@ case class InvalidRdfException(msg: String, cause: Throwable = null) extends Req
  * @param msg   a description of the error.
  */
 case class ValidationException(msg: String) extends RequestRejectedException(msg)
-
 object ValidationException {
   implicit val codec: JsonCodec[ValidationException] = DeriveJsonCodec.gen[ValidationException]
 }

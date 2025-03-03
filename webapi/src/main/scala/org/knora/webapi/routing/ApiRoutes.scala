@@ -82,9 +82,7 @@ final case class ApiRoutes(
                     shaclApiRoutes.routes
                 ).reduce(_ ~ _)
               val pekkoRoutes =
-                OntologiesRouteV2().makeRoute ~
-                  ResourcesRouteV2(appConfig).makeRoute ~
-                  StandoffRouteV2().makeRoute
+                OntologiesRouteV2().makeRoute ~ StandoffRouteV2().makeRoute
               tapirRoutes ~ pekkoRoutes
             }
           }

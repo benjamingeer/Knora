@@ -4612,13 +4612,17 @@ class ValuesResponderV2Spec extends CoreSpec with ImplicitSender {
       permissions = Some("M knora-admin:ProjectMember"),
     )
 
-    appActor ! CreateResourceRequestV2(
-      createResource = inputResource,
-      requestingUser = SharedTestDataADM.imagesUser01,
-      apiRequestID = randomUUID,
+    val _ = UnsafeZioRun.runOrThrow(
+      ZIO.serviceWithZIO[ResourcesResponderV2](
+        _.createResource(
+          CreateResourceRequestV2(
+            createResource = inputResource,
+            requestingUser = SharedTestDataADM.imagesUser01,
+            apiRequestID = randomUUID,
+          ),
+        ),
+      ),
     )
-
-    expectMsgClass(timeout, classOf[ReadResourcesSequenceV2])
 
     val propertyIri: SmartIri = "http://0.0.0.0:3333/ontology/00FF/images/v2#stueckzahl".toSmartIri
 
@@ -4655,17 +4659,19 @@ class ValuesResponderV2Spec extends CoreSpec with ImplicitSender {
       projectADM = SharedTestDataADM.imagesProject,
       permissions = Some("M knora-admin:ProjectMember"),
     )
-
-    appActor ! CreateResourceRequestV2(
-      createResource = inputResource,
-      requestingUser = SharedTestDataADM.imagesUser01,
-      apiRequestID = randomUUID,
+    val _ = UnsafeZioRun.runOrThrow(
+      ZIO.serviceWithZIO[ResourcesResponderV2](
+        _.createResource(
+          CreateResourceRequestV2(
+            createResource = inputResource,
+            requestingUser = SharedTestDataADM.imagesUser01,
+            apiRequestID = randomUUID,
+          ),
+        ),
+      ),
     )
 
-    expectMsgClass(timeout, classOf[ReadResourcesSequenceV2])
-
     val propertyIri: SmartIri = "http://0.0.0.0:3333/ontology/00FF/images/v2#stueckzahl".toSmartIri
-
     UnsafeZioRun.runOrThrow(
       ZIO.serviceWithZIO[ValuesResponderV2](
         _.createValueV2(
@@ -4698,17 +4704,19 @@ class ValuesResponderV2Spec extends CoreSpec with ImplicitSender {
       projectADM = SharedTestDataADM.imagesProject,
       permissions = Some("M knora-admin:ProjectMember"),
     )
-
-    appActor ! CreateResourceRequestV2(
-      createResource = inputResource,
-      requestingUser = SharedTestDataADM.imagesUser01,
-      apiRequestID = randomUUID,
+    val _ = UnsafeZioRun.runOrThrow(
+      ZIO.serviceWithZIO[ResourcesResponderV2](
+        _.createResource(
+          CreateResourceRequestV2(
+            createResource = inputResource,
+            requestingUser = SharedTestDataADM.imagesUser01,
+            apiRequestID = randomUUID,
+          ),
+        ),
+      ),
     )
 
-    expectMsgClass(timeout, classOf[ReadResourcesSequenceV2])
-
     val propertyIri: SmartIri = "http://0.0.0.0:3333/ontology/00FF/images/v2#stueckzahl".toSmartIri
-
     UnsafeZioRun.runOrThrow(
       ZIO.serviceWithZIO[ValuesResponderV2](
         _.createValueV2(

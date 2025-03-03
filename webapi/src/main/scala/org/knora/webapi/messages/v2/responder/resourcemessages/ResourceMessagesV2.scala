@@ -5,11 +5,13 @@
 
 package org.knora.webapi.messages.v2.responder.resourcemessages
 
+import zio.Task
+import zio.ZIO
+
 import java.time.Instant
 import java.util.UUID
 
 import dsp.errors.*
-import dsp.valueobjects.Iri
 import dsp.valueobjects.UuidUtil
 import org.knora.webapi.*
 import org.knora.webapi.config.AppConfig
@@ -28,7 +30,6 @@ import org.knora.webapi.messages.v2.responder.standoffmessages.MappingXMLtoStand
 import org.knora.webapi.messages.v2.responder.valuemessages.*
 import org.knora.webapi.messages.v2.responder.valuemessages.ValueMessagesV2Optics.*
 import org.knora.webapi.slice.admin.api.model.Project
-import org.knora.webapi.slice.admin.domain.model.KnoraProject.ProjectIri
 import org.knora.webapi.slice.admin.domain.model.Permission
 import org.knora.webapi.slice.admin.domain.model.User
 
@@ -82,18 +83,6 @@ case class ResourcesPreviewGetRequestV2(
 ) extends ResourcesResponderRequestV2
 
 /**
- * Requests a IIIF manifest for the images that are `knora-base:isPartOf` the specified
- * resource.
- *
- * @param resourceIri          the resource IRI.
- * @param requestingUser       the user making the request.
- */
-case class ResourceIIIFManifestGetRequestV2(
-  resourceIri: IRI,
-  requestingUser: User,
-) extends ResourcesResponderRequestV2
-
-/**
  * Represents a IIIF manifest for the images that are `knora-base:isPartOf` the specified
  * resource.
  *
@@ -123,38 +112,6 @@ case class ResourceVersionHistoryGetRequestV2(
   endDate: Option[Instant] = None,
   requestingUser: User,
 ) extends ResourcesResponderRequestV2
-
-/**
- * Requests the full version history of a resource and its values as events.
- *
- * @param resourceIri            the IRI of the resource.
- * @param requestingUser         the user making the request.
- */
-case class ResourceHistoryEventsGetRequestV2(
-  resourceIri: IRI,
-  requestingUser: User,
-) extends ResourcesResponderRequestV2 {
-  private val stringFormatter = StringFormatter.getInstanceForConstantOntologies
-  Iri
-    .validateAndEscapeIri(resourceIri)
-    .getOrElse(throw BadRequestException(s"Invalid resource IRI: $resourceIri"))
-  if (!stringFormatter.toSmartIri(resourceIri).isKnoraResourceIri) {
-    throw BadRequestException(s"Given IRI is not a resource IRI: $resourceIri")
-  }
-}
-
-/**
- * Requests the version history of all resources of a project.
- *
- * @param projectIri          the IRI of the project.
- * @param requestingUser       the user making the request.
- */
-case class ProjectResourcesWithHistoryGetRequestV2(
-  projectIri: IRI,
-  requestingUser: User,
-) extends ResourcesResponderRequestV2 {
-  ProjectIri.from(projectIri).getOrElse(throw BadRequestException(s"Invalid project IRI: $projectIri"))
-}
 
 /**
  * Represents an item in the version history of a resource.
@@ -218,25 +175,6 @@ case class ResourceVersionHistoryResponseV2(history: Seq[ResourceHistoryEntry]) 
     JsonLDDocument(body = body, context = context)
   }
 }
-
-/**
- * Requests a resource as TEI/XML. A successful response will be a [[ResourceTEIGetResponseV2]].
- *
- * @param resourceIri           the IRI of the resource to be returned in TEI/XML.
- * @param textProperty          the property representing the text (to be converted to the body of a TEI document).
- * @param mappingIri            the IRI of the mapping to be used to convert from standoff to TEI/XML, if any. Otherwise the standard mapping is assumed.
- * @param gravsearchTemplateIri the gravsearch template to query the metadata for the TEI header, if provided.
- * @param headerXSLTIri         the IRI of the XSL transformation to convert the resource's metadata to the TEI header.
- * @param requestingUser        the user making the request.
- */
-case class ResourceTEIGetRequestV2(
-  resourceIri: IRI,
-  textProperty: SmartIri,
-  mappingIri: Option[IRI],
-  gravsearchTemplateIri: Option[IRI],
-  headerXSLTIri: Option[IRI],
-  requestingUser: User,
-) extends ResourcesResponderRequestV2
 
 /**
  * Represents a Knora resource as TEI/XML.
@@ -658,7 +596,7 @@ case class UpdateResourceMetadataRequestV2(
   maybeNewModificationDate: Option[Instant] = None,
   requestingUser: User,
   apiRequestID: UUID,
-) extends ResourcesResponderRequestV2
+)
 
 /**
  * Represents a response after updating a resource's metadata.
@@ -760,10 +698,9 @@ case class DeleteOrEraseResourceRequestV2(
   maybeDeleteComment: Option[String] = None,
   maybeDeleteDate: Option[Instant] = None,
   maybeLastModificationDate: Option[Instant] = None,
-  erase: Boolean = false,
   requestingUser: User,
   apiRequestID: UUID,
-) extends ResourcesResponderRequestV2
+)
 
 /**
  * Represents a sequence of resources read back from Knora.
@@ -909,22 +846,27 @@ case class ReadResourcesSequenceV2(
    * @throws NotFoundException  if the requested resources are not found.
    * @throws ForbiddenException if the user does not have permission to see the requested resources.
    */
-  def checkResourceIris(targetResourceIris: Set[IRI], resourcesSequence: ReadResourcesSequenceV2): Unit = {
+  def checkResourceIris(targetResourceIris: Set[IRI], resourcesSequence: ReadResourcesSequenceV2): Task[Unit] = {
     val hiddenTargetResourceIris: Set[IRI] = targetResourceIris.intersect(resourcesSequence.hiddenResourceIris)
 
     if (hiddenTargetResourceIris.nonEmpty) {
-      throw ForbiddenException(
-        s"You do not have permission to see one or more resources: ${hiddenTargetResourceIris.map(iri => s"<$iri>").mkString(", ")}",
+      return ZIO.fail(
+        ForbiddenException(
+          s"You do not have permission to see one or more resources: ${hiddenTargetResourceIris.map(iri => s"<$iri>").mkString(", ")}",
+        ),
       )
     }
 
     val missingResourceIris: Set[IRI] = targetResourceIris -- resourcesSequence.resources.map(_.resourceIri).toSet
 
     if (missingResourceIris.nonEmpty) {
-      throw NotFoundException(
-        s"One or more resources were not found:  ${missingResourceIris.map(iri => s"<$iri>").mkString(", ")}",
+      return ZIO.fail(
+        NotFoundException(
+          s"One or more resources were not found:  ${missingResourceIris.map(iri => s"<$iri>").mkString(", ")}",
+        ),
       )
     }
+    ZIO.unit
   }
 
   /**
@@ -945,30 +887,6 @@ case class ReadResourcesSequenceV2(
     }
 
     allProjects.head
-  }
-}
-
-/**
- * Requests a graph of resources that are reachable via links to or from a given resource. A successful response
- * will be a [[GraphDataGetResponseV2]].
- *
- * @param resourceIri     the IRI of the initial resource.
- * @param depth           the maximum depth of the graph, counting from the initial resource.
- * @param inbound         `true` to query inbound links.
- * @param outbound        `true` to query outbound links.
- * @param excludeProperty the IRI of a link property to exclude from the results.
- * @param requestingUser  the user making the request.
- */
-case class GraphDataGetRequestV2(
-  resourceIri: IRI,
-  depth: Int,
-  inbound: Boolean,
-  outbound: Boolean,
-  excludeProperty: Option[SmartIri],
-  requestingUser: User,
-) extends ResourcesResponderRequestV2 {
-  if (!(inbound || outbound)) {
-    throw BadRequestException("No link direction selected")
   }
 }
 
