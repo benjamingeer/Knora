@@ -52,7 +52,7 @@ import org.knora.webapi.slice.infrastructure.CacheManager
 import org.knora.webapi.slice.infrastructure.EhCache
 import org.knora.webapi.slice.ontology.domain.model.Cardinality.AtLeastOne
 import org.knora.webapi.slice.ontology.domain.model.Cardinality.ExactlyOne
-import org.knora.webapi.store.iiif.impl.SipiServiceLive
+import org.knora.webapi.store.iiif.api.SipiService
 import org.knora.webapi.store.triplestore.api.TriplestoreService
 import org.knora.webapi.store.triplestore.api.TriplestoreService.Queries.Construct
 import org.knora.webapi.store.triplestore.api.TriplestoreService.Queries.Update
@@ -71,7 +71,7 @@ final case class StandoffResponderV2(
   projectService: ProjectService,
   xsltCache: EhCache[String, String],
   mappingCache: EhCache[String, MappingXMLtoStandoff],
-  sipiServiceLive: SipiServiceLive,
+  sipiService: SipiService,
 )(implicit val stringFormatter: StringFormatter)
     extends MessageHandler
     with LazyLogging {
@@ -183,7 +183,7 @@ final case class StandoffResponderV2(
         } else {
           for {
             response <-
-              sipiServiceLive
+              sipiService
                 .getTextFileRequest(
                   SipiGetTextFileRequest(
                     fileUrl = xsltFileUrl,
@@ -981,7 +981,7 @@ object StandoffResponderV2 {
         xc      <- ZIO.serviceWithZIO[CacheManager](_.createCache[String, String]("xsltCache"))
         mc      <- ZIO.serviceWithZIO[CacheManager](_.createCache[String, MappingXMLtoStandoff]("mappingCache"))
         sf      <- ZIO.service[StringFormatter]
-        ssl     <- ZIO.service[SipiServiceLive]
+        ssl     <- ZIO.service[SipiService]
         handler <- mr.subscribe(StandoffResponderV2(ac, mr, ts, cru, stu, ps, xc, mc, ssl)(sf))
       } yield handler
     }

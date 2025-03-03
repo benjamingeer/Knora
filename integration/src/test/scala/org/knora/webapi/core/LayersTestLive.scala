@@ -7,22 +7,15 @@ package org.knora.webapi.core
 
 import org.apache.pekko.actor.ActorSystem
 import zio.*
-import zio.ULayer
-import zio.ZLayer
 
 import org.knora.webapi.config.AppConfig
 import org.knora.webapi.config.AppConfig.AppConfigurations
-import org.knora.webapi.config.InstrumentationServerConfig
 import org.knora.webapi.messages.StringFormatter
 import org.knora.webapi.messages.util.*
-import org.knora.webapi.messages.util.search.QueryTraverser
-import org.knora.webapi.messages.util.search.gravsearch.transformers.OntologyInferencer
-import org.knora.webapi.messages.util.search.gravsearch.types.GravsearchTypeInspectionRunner
 import org.knora.webapi.messages.util.standoff.StandoffTagUtilV2
 import org.knora.webapi.messages.util.standoff.StandoffTagUtilV2Live
 import org.knora.webapi.responders.IriService
 import org.knora.webapi.responders.admin.*
-import org.knora.webapi.responders.admin.ListsResponder
 import org.knora.webapi.responders.v2.*
 import org.knora.webapi.responders.v2.ontology.CardinalityHandler
 import org.knora.webapi.responders.v2.ontology.OntologyCacheHelpers
@@ -36,9 +29,11 @@ import org.knora.webapi.slice.admin.api.service.PermissionRestService
 import org.knora.webapi.slice.admin.api.service.ProjectRestService
 import org.knora.webapi.slice.admin.api.service.UserRestService
 import org.knora.webapi.slice.admin.domain.service.*
+import org.knora.webapi.slice.admin.domain.service.ProjectExportStorageService
 import org.knora.webapi.slice.common.ApiComplexV2JsonLdRequestParser
 import org.knora.webapi.slice.common.api.*
 import org.knora.webapi.slice.common.repo.service.PredicateObjectMapper
+import org.knora.webapi.slice.infrastructure.CacheManager
 import org.knora.webapi.slice.infrastructure.InfrastructureModule
 import org.knora.webapi.slice.infrastructure.api.ManagementEndpoints
 import org.knora.webapi.slice.infrastructure.api.ManagementRoutes
@@ -49,22 +44,26 @@ import org.knora.webapi.slice.ontology.api.service.RestCardinalityService
 import org.knora.webapi.slice.ontology.api.service.RestCardinalityServiceLive
 import org.knora.webapi.slice.ontology.domain.service.CardinalityService
 import org.knora.webapi.slice.ontology.domain.service.OntologyRepo
+import org.knora.webapi.slice.ontology.domain.service.OntologyService
 import org.knora.webapi.slice.ontology.domain.service.OntologyServiceLive
 import org.knora.webapi.slice.ontology.repo.service.OntologyCache
 import org.knora.webapi.slice.ontology.repo.service.OntologyCacheLive
 import org.knora.webapi.slice.ontology.repo.service.OntologyRepoLive
 import org.knora.webapi.slice.ontology.repo.service.PredicateRepositoryLive
 import org.knora.webapi.slice.resourceinfo.ResourceInfoLayers
+import org.knora.webapi.slice.resourceinfo.api.ResourceInfoEndpoints
 import org.knora.webapi.slice.resourceinfo.domain.IriConverter
 import org.knora.webapi.slice.resources.api.ResourcesApiModule
+import org.knora.webapi.slice.resources.repo.service.ResourcesRepo
 import org.knora.webapi.slice.resources.repo.service.ResourcesRepoLive
 import org.knora.webapi.slice.search.api.SearchApiRoutes
 import org.knora.webapi.slice.search.api.SearchEndpoints
+import org.knora.webapi.slice.security.ScopeResolver
 import org.knora.webapi.slice.security.SecurityModule
 import org.knora.webapi.slice.security.api.AuthenticationApiModule
+import org.knora.webapi.slice.security.api.AuthenticationApiRoutes
 import org.knora.webapi.slice.shacl.ShaclModule
 import org.knora.webapi.slice.shacl.api.ShaclApiModule
-import org.knora.webapi.slice.shacl.api.ShaclApiRoutes
 import org.knora.webapi.store.iiif.IIIFRequestMessageHandler
 import org.knora.webapi.store.iiif.IIIFRequestMessageHandlerLive
 import org.knora.webapi.store.iiif.api.SipiService
@@ -72,80 +71,34 @@ import org.knora.webapi.store.iiif.impl.SipiServiceLive
 import org.knora.webapi.store.triplestore.api.TriplestoreService
 import org.knora.webapi.store.triplestore.impl.TriplestoreServiceLive
 import org.knora.webapi.store.triplestore.upgrade.RepositoryUpdater
+import org.knora.webapi.testcontainers.DspIngestTestContainer
+import org.knora.webapi.testcontainers.FusekiTestContainer
+import org.knora.webapi.testcontainers.SharedVolumes
+import org.knora.webapi.testcontainers.SipiTestContainer
+import org.knora.webapi.testservices.TestClientService
+import org.knora.webapi.testservices.TestDspIngestClient
 
-object LayersLive {
+object LayersTestLive { self =>
 
-  /**
-   * The `Environment` that we require to exist at startup.
-   */
-  type DspEnvironmentLive =
-    // format: off
-    ActorSystem &
-    AdminApiEndpoints &
-    AdminModule.Provided &
-    ApiComplexV2JsonLdRequestParser &
-    ApiRoutes &
-    ApiV2Endpoints &
-    AppConfigurations &
-    AssetPermissionsResponder &
-    AuthorizationRestService &
-    AuthenticationApiModule.Provided &
-    CardinalityHandler &
-    ConstructResponseUtilV2 &
-    DefaultObjectAccessPermissionService &
-    GroupRestService &
-    HttpServer &
-    IIIFRequestMessageHandler &
-    InfrastructureModule.Provided &
-    InstrumentationServerConfig &
-    IriConverter &
-    ListsApiModule.Provided &
-    ListsResponder &
-    ListsService &
-    MessageRelay &
-    OntologyCache &
-    OntologyCacheHelpers &
-    OntologyInferencer &
-    OntologyApiModule.Provided &
-    OntologyResponderV2 &
-    OntologyTriplestoreHelpers &
-    PermissionRestService &
-    PermissionUtilADM &
-    PermissionsResponder &
-    ProjectExportService &
-    ProjectExportStorageService &
-    ProjectImportService &
-    ProjectRestService &
-    RepositoryUpdater &
-    ResourceUtilV2 &
-    ResourcesResponderV2 &
-    RestCardinalityService &
-    SecurityModule.Provided &
-    SearchApiRoutes &
-    SearchResponderV2Module.Provided &
-    ShaclApiModule.Provided &
-    ShaclModule.Provided &
-    SipiService &
-    StandoffResponderV2 &
-    StandoffTagUtilV2 &
-    State &
-    StringFormatter &
-    TriplestoreService &
-    UserRestService &
-    ValuesResponderV2
-    // format: on
+  type Environment =
+    LayersLive.DspEnvironmentLive & MessageRelayActorRef & FusekiTestContainer & TestClientService &
+      TestDspIngestClient & SipiTestContainer & DspIngestTestContainer & SharedVolumes.Volumes
 
   /**
-   * All effect layers needed to provide the `Environment`
+   * Provides a layer for integration tests which depend on Fuseki and Sipi as Testcontainers.
+   * @return a [[ULayer]] with the [[DefaultTestEnvironmentWithSipi]]
    */
-  val dspLayersLive: ULayer[DspEnvironmentLive] =
-    ZLayer.make[DspEnvironmentLive](
+  val layer: ULayer[self.Environment] =
+    ZLayer.make[self.Environment](
+      PekkoActorSystem.layer,
+      SipiServiceLive.layer,
+      TestContainerLayers.all,
+      /// common
       AdminApiModule.layer,
       AdminModule.layer,
       ApiComplexV2JsonLdRequestParser.layer,
       ApiRoutes.layer,
       ApiV2Endpoints.layer,
-      AppConfig.layer,
       AssetPermissionsResponder.layer,
       AuthenticationApiModule.layer,
       AuthorizationRestService.layer,
@@ -166,6 +119,7 @@ object LayersLive {
       ListsService.layer,
       ManagementEndpoints.layer,
       ManagementRoutes.layer,
+      MessageRelayActorRef.layer,
       MessageRelayLive.layer,
       OntologyApiModule.layer,
       OntologyCacheHelpers.layer,
@@ -176,7 +130,6 @@ object LayersLive {
       OntologyTriplestoreHelpers.layer,
       PermissionUtilADMLive.layer,
       PermissionsResponder.layer,
-      PekkoActorSystem.layer,
       PredicateObjectMapper.layer,
       PredicateRepositoryLive.layer,
       ProjectExportServiceLive.layer,
@@ -189,20 +142,20 @@ object LayersLive {
       ResourcesRepoLive.layer,
       ResourcesResponderV2.layer,
       RestCardinalityServiceLive.layer,
-      SecurityModule.layer,
       SearchApiRoutes.layer,
       SearchEndpoints.layer,
       SearchResponderV2Module.layer,
+      SecurityModule.layer,
       ShaclApiModule.layer,
       ShaclModule.layer,
-      SipiServiceLive.layer,
       StandoffResponderV2.layer,
       StandoffTagUtilV2Live.layer,
       State.layer,
       StringFormatter.live,
       TapirToPekkoInterpreter.layer,
+      TestClientService.layer,
+      TestDspIngestClient.layer,
       TriplestoreServiceLive.layer,
       ValuesResponderV2.layer,
-      // ZLayer.Debug.mermaid,
     )
 }

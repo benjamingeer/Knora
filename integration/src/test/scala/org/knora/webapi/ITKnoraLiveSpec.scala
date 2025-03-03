@@ -26,7 +26,7 @@ import scala.concurrent.duration.FiniteDuration
 
 import org.knora.webapi.config.AppConfig
 import org.knora.webapi.core.AppServer
-import org.knora.webapi.core.LayersTest.DefaultTestEnvironmentWithSipi
+import org.knora.webapi.core.LayersTestLive
 import org.knora.webapi.core.TestStartupUtils
 import org.knora.webapi.messages.store.triplestoremessages.RdfDataObject
 import org.knora.webapi.messages.store.triplestoremessages.TriplestoreJsonProtocol
@@ -56,13 +56,13 @@ abstract class ITKnoraLiveSpec
    * The `Environment` that we require to exist at startup.
    * Can be overriden in specs that need other implementations.
    */
-  type Environment = core.LayersTest.DefaultTestEnvironmentWithSipi
+  type Environment = LayersTestLive.Environment
 
   /**
    * The effect layers from which the App is built.
    * Can be overriden in specs that need other implementations.
    */
-  lazy val effectLayers = core.LayersTest.integrationTestsWithSipiAndFusekiTestcontainers
+  lazy val effectLayers = LayersTestLive.layer
 
   /**
    * `Bootstrap` will ensure that everything is instantiated when the Runtime is created
@@ -71,7 +71,7 @@ abstract class ITKnoraLiveSpec
   private val bootstrap = util.Logger.text() >>> effectLayers
 
   // create a configured runtime
-  implicit val runtime: Runtime.Scoped[DefaultTestEnvironmentWithSipi] =
+  implicit val runtime: Runtime.Scoped[Environment] =
     Unsafe.unsafe(implicit u => Runtime.unsafe.fromLayer(bootstrap))
 
   lazy val appConfig: AppConfig                        = UnsafeZioRun.service[AppConfig]

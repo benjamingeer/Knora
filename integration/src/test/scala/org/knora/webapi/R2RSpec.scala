@@ -46,13 +46,13 @@ abstract class R2RSpec
    * The `Environment` that we require to exist at startup.
    * Can be overridden in specs that need other implementations.
    */
-  type Environment = core.LayersTest.DefaultTestEnvironmentWithoutSipi
+  type Environment = core.LayersTestMock.Environment
 
   /**
    * The effect layers from which the App is built.
    * Can be overridden in specs that need other implementations.
    */
-  lazy val effectLayers: ULayer[Environment] = core.LayersTest.integrationTestsWithFusekiTestcontainers(Some(system))
+  lazy val effectLayers: ULayer[Environment] = core.LayersTestMock.layer(Some(system))
 
   /**
    * `Bootstrap` will ensure that everything is instantiated when the Runtime is created

@@ -10,7 +10,6 @@ import org.apache.pekko.testkit.ImplicitSender
 import org.xmlunit.builder.DiffBuilder
 import org.xmlunit.builder.Input
 import org.xmlunit.diff.Diff
-import zio.ULayer
 import zio.ZIO
 
 import java.time.Instant
@@ -21,7 +20,6 @@ import scala.concurrent.duration.*
 import dsp.errors.*
 import dsp.valueobjects.UuidUtil
 import org.knora.webapi.*
-import org.knora.webapi.core.LayersTest.DefaultTestEnvironmentWithoutSipi
 import org.knora.webapi.messages.IriConversions.*
 import org.knora.webapi.messages.OntologyConstants
 import org.knora.webapi.messages.SmartIri
@@ -396,7 +394,7 @@ class GraphTestData {
   )
 }
 
-class ResourcesResponderV2Spec extends CoreSpec with ImplicitSender {
+class ResourcesResponderV2Spec extends CoreSpec with ImplicitSender { self =>
 
   import ResourcesResponderV2Spec.*
 
@@ -407,11 +405,6 @@ class ResourcesResponderV2Spec extends CoreSpec with ImplicitSender {
   private var standardMapping: Option[MappingXMLtoStandoff] = None
 
   private val graphTestData = new GraphTestData
-
-  /* we need to run our app with the mocked sipi implementation */
-  override type Environment = core.LayersTest.DefaultTestEnvironmentWithoutSipi
-  override lazy val effectLayers: ULayer[DefaultTestEnvironmentWithoutSipi] =
-    core.LayersTest.integrationTestsWithFusekiTestcontainers()
 
   override lazy val rdfDataObjects: List[RdfDataObject] = List(
     RdfDataObject(

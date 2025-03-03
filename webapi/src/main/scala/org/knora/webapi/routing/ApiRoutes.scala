@@ -34,6 +34,7 @@ import org.knora.webapi.slice.ontology.api.OntologyV2RequestParser
 import org.knora.webapi.slice.ontology.api.service.RestCardinalityService
 import org.knora.webapi.slice.resourceinfo.api.ResourceInfoRoutes
 import org.knora.webapi.slice.resourceinfo.domain.IriConverter
+import org.knora.webapi.slice.resources.api.ResourcesApiRoutes
 import org.knora.webapi.slice.search.api.SearchApiRoutes
 import org.knora.webapi.slice.security.Authenticator as WebApiAuthenticator
 import org.knora.webapi.slice.security.api.AuthenticationApiRoutes
@@ -53,6 +54,7 @@ final case class ApiRoutes(
   authenticationApiRoutes: AuthenticationApiRoutes,
   listsApiV2Routes: ListsApiV2Routes,
   resourceInfoRoutes: ResourceInfoRoutes,
+  resourcesApiRoutes: ResourcesApiRoutes,
   searchApiRoutes: SearchApiRoutes,
   shaclApiRoutes: ShaclApiRoutes,
   managementRoutes: ManagementRoutes,
@@ -69,13 +71,20 @@ final case class ApiRoutes(
           ) {
             DSPApiDirectives.handleErrors(appConfig) {
               val tapirRoutes =
-                (adminApiRoutes.routes ++ authenticationApiRoutes.routes ++ resourceInfoRoutes.routes ++ searchApiRoutes.routes ++ managementRoutes.routes ++ listsApiV2Routes.routes ++ shaclApiRoutes.routes)
-                  .reduce(_ ~ _)
+                (
+                  adminApiRoutes.routes ++
+                    authenticationApiRoutes.routes ++
+                    listsApiV2Routes.routes ++
+                    managementRoutes.routes ++
+                    resourceInfoRoutes.routes ++
+                    resourcesApiRoutes.routes ++
+                    searchApiRoutes.routes ++
+                    shaclApiRoutes.routes
+                ).reduce(_ ~ _)
               val pekkoRoutes =
                 OntologiesRouteV2().makeRoute ~
                   ResourcesRouteV2(appConfig).makeRoute ~
-                  StandoffRouteV2().makeRoute ~
-                  ValuesRouteV2().makeRoute
+                  StandoffRouteV2().makeRoute
               tapirRoutes ~ pekkoRoutes
             }
           }
@@ -96,7 +105,8 @@ object ApiRoutes {
    * All routes composed together.
    */
   val layer: URLayer[
-    ApiRoutesRuntime & ActorSystem & AdminApiRoutes & ManagementRoutes & ResourceInfoRoutes & ShaclApiRoutes,
+    ActorSystem & AdminApiRoutes & ApiRoutesRuntime & ManagementRoutes & ResourceInfoRoutes & ResourcesApiRoutes &
+      ShaclApiRoutes,
     ApiRoutes,
   ] =
     ZLayer {
@@ -107,6 +117,7 @@ object ApiRoutes {
         authenticationApiRoutes <- ZIO.service[AuthenticationApiRoutes]
         listsApiV2Routes        <- ZIO.service[ListsApiV2Routes]
         resourceInfoRoutes      <- ZIO.service[ResourceInfoRoutes]
+        resourcesApiRoutes      <- ZIO.service[ResourcesApiRoutes]
         searchApiRoutes         <- ZIO.service[SearchApiRoutes]
         shaclApiRoutes          <- ZIO.service[ShaclApiRoutes]
         managementRoutes        <- ZIO.service[ManagementRoutes]
@@ -117,6 +128,7 @@ object ApiRoutes {
         authenticationApiRoutes,
         listsApiV2Routes,
         resourceInfoRoutes,
+        resourcesApiRoutes,
         searchApiRoutes,
         shaclApiRoutes,
         managementRoutes,

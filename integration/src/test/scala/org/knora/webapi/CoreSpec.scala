@@ -23,7 +23,8 @@ import scala.concurrent.duration.SECONDS
 
 import org.knora.webapi.config.AppConfig
 import org.knora.webapi.core.AppServer
-import org.knora.webapi.core.LayersTest.DefaultTestEnvironmentWithoutSipi
+import org.knora.webapi.core.LayersTestLive
+import org.knora.webapi.core.LayersTestMock
 import org.knora.webapi.core.MessageRelayActorRef
 import org.knora.webapi.core.TestStartupUtils
 import org.knora.webapi.messages.store.triplestoremessages.RdfDataObject
@@ -39,19 +40,19 @@ abstract class CoreSpec
     with TestStartupUtils
     with Matchers
     with BeforeAndAfterAll
-    with ImplicitSender {
+    with ImplicitSender { self =>
 
   /**
    * The `Environment` that we require to exist at startup.
    * Can be overriden in specs that need other implementations.
    */
-  type Environment = core.LayersTest.DefaultTestEnvironmentWithoutSipi
+  type Environment = LayersTestMock.Environment
 
   /**
    * The effect layers from which the App is built.
    * Can be overriden in specs that need other implementations.
    */
-  lazy val effectLayers = core.LayersTest.integrationTestsWithFusekiTestcontainers()
+  lazy val effectLayers: ULayer[self.Environment] = LayersTestLive.layer
 
   /**
    * `Bootstrap` will ensure that everything is instantiated when the Runtime is created
@@ -60,7 +61,7 @@ abstract class CoreSpec
   private val bootstrap = util.Logger.text() >>> effectLayers
 
   // create a configured runtime
-  implicit val runtime: Runtime.Scoped[DefaultTestEnvironmentWithoutSipi] = Unsafe.unsafe { implicit u =>
+  implicit val runtime: Runtime.Scoped[self.Environment] = Unsafe.unsafe { implicit u =>
     Runtime.unsafe.fromLayer(bootstrap)
   }
 

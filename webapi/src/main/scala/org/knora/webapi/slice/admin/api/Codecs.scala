@@ -32,10 +32,10 @@ import org.knora.webapi.slice.common.domain.SparqlEncodedString
 object Codecs {
   object TapirCodec {
 
-    private type StringCodec[A] = Codec[String, A, CodecFormat.TextPlain]
+    type StringCodec[A] = Codec[String, A, CodecFormat.TextPlain]
     private def stringCodec[A <: StringValue](from: String => Either[String, A]): StringCodec[A] =
       stringCodec(from, _.value)
-    private def stringCodec[A](from: String => Either[String, A], to: A => String): StringCodec[A] =
+    def stringCodec[A](from: String => Either[String, A], to: A => String): StringCodec[A] =
       Codec.string.mapEither(from)(to)
 
     private def booleanCodec[A <: BooleanValue](from: Boolean => A): StringCodec[A] =

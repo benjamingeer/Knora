@@ -53,7 +53,7 @@ final case class ListsEndpointsV2(private val base: BaseEndpoints) {
   val endpoints: Seq[AnyEndpoint] = Seq(
     getV2Lists,
     getV2Node,
-  ).map(_.endpoint.tag("v2"))
+  ).map(_.endpoint.tag("V2 Lists"))
 }
 
 object ListsEndpointsV2 {

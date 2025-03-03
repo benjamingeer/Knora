@@ -5,7 +5,6 @@
 
 package org.knora.webapi.routing
 
-import org.apache.pekko
 import zio.*
 
 import java.net.URLDecoder
@@ -13,15 +12,12 @@ import java.util.UUID
 
 import dsp.errors.BadRequestException
 import dsp.valueobjects.Iri
-import dsp.valueobjects.UuidUtil
 import org.knora.webapi.ApiV2Complex
 import org.knora.webapi.IRI
 import org.knora.webapi.messages.SmartIri
 import org.knora.webapi.messages.StringFormatter
 import org.knora.webapi.slice.common.KnoraIris.OntologyIri
 import org.knora.webapi.slice.resourceinfo.domain.IriConverter
-
-import pekko.http.scaladsl.server.RequestContext
 
 object RouteUtilZ { self =>
 
@@ -46,9 +42,6 @@ object RouteUtilZ { self =>
         ),
       )
 
-  def decodeUuid(uuidStr: String): IO[BadRequestException, UUID] =
-    ZIO.attempt(UuidUtil.decode(uuidStr)).orElseFail(BadRequestException(s"Invalid value UUID: $uuidStr"))
-
   def ensureExternalOntologyName(iri: SmartIri): IO[BadRequestException, SmartIri] =
     if (StringFormatter.isKnoraOntologyIri(iri)) {
       ZIO.fail(BadRequestException(s"Internal ontology <$iri> cannot be served"))
@@ -60,9 +53,6 @@ object RouteUtilZ { self =>
     ZIO
       .succeed(iri)
       .filterOrFail(!_.isKnoraOntologyIri)(BadRequestException(s"Iri is a Knora ontology iri: $iri"))
-
-  def ensureIsKnoraResourceIri(iri: SmartIri): IO[BadRequestException, SmartIri] =
-    ZIO.succeed(iri).filterOrFail(_.isKnoraResourceIri)(BadRequestException(s"Invalid resource IRI: $iri"))
 
   def ensureApiV2ComplexSchema(iri: SmartIri): IO[BadRequestException, SmartIri] =
     ZIO
@@ -79,8 +69,6 @@ object RouteUtilZ { self =>
     toSmartIri(s).orElseFail(BadRequestException(errorMsg))
 
   def randomUuid(): UIO[UUID] = Random.nextUUID
-
-  def getStringValueFromQuery(ctx: RequestContext, key: String): Option[String] = ctx.request.uri.query().get(key)
 
   def toSparqlEncodedString(s: String, errorMsg: String): IO[BadRequestException, String] =
     ZIO.fromOption(Iri.toSparqlEncodedString(s)).orElseFail(BadRequestException(errorMsg))

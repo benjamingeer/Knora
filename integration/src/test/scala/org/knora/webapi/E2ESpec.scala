@@ -58,13 +58,13 @@ abstract class E2ESpec
    * The `Environment` that we require to exist at startup.
    * Can be overriden in specs that need other implementations.
    */
-  type Environment = core.LayersTest.DefaultTestEnvironmentWithoutSipi
+  type Environment = core.LayersTestLive.Environment
 
   /**
    * The effect layers from which the App is built.
    * Can be overriden in specs that need other implementations.
    */
-  lazy val effectLayers = core.LayersTest.integrationTestsWithFusekiTestcontainers()
+  lazy val effectLayers = core.LayersTestLive.layer
 
   /**
    * `Bootstrap` will ensure that everything is instantiated when the Runtime is created

@@ -3,19 +3,19 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-package org.knora.webapi.config
+package org.knora.webapi.core
 
 import zio.*
 import zio.test.*
 
+import org.knora.webapi.config.AppConfig
 import org.knora.webapi.testcontainers.DspIngestTestContainer
 import org.knora.webapi.testcontainers.FusekiTestContainer
-import org.knora.webapi.testcontainers.SharedVolumes
 import org.knora.webapi.testcontainers.SipiTestContainer
 
-object AppConfigForTestContainersZSpec extends ZIOSpecDefault {
+object TestContainerLayersSpec extends ZIOSpecDefault {
 
-  def spec: Spec[Any, Nothing] = suite("AppConfigForTestContainersSpec")(
+  def spec: Spec[Any, Nothing] = suite("TestContainerLayers")(
     test("successfully provide the adapted application configuration for using with test containers") {
       for {
         appConfig          <- ZIO.service[AppConfig]
@@ -28,11 +28,5 @@ object AppConfigForTestContainersZSpec extends ZIOSpecDefault {
         )
       }
     },
-  ).provide(
-    AppConfigForTestContainers.testcontainers,
-    DspIngestTestContainer.layer,
-    FusekiTestContainer.layer,
-    SharedVolumes.layer,
-    SipiTestContainer.layer,
-  )
+  ).provide(TestContainerLayers.all)
 }

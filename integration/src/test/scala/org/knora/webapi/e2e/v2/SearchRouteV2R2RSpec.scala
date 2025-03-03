@@ -32,9 +32,9 @@ import org.knora.webapi.messages.util.search.SparqlQueryConstants
 import org.knora.webapi.routing.UnsafeZioRun
 import org.knora.webapi.routing.v2.ResourcesRouteV2
 import org.knora.webapi.routing.v2.StandoffRouteV2
-import org.knora.webapi.routing.v2.ValuesRouteV2
 import org.knora.webapi.sharedtestdata.SharedTestDataADM
 import org.knora.webapi.slice.search.api.SearchApiRoutes
+import org.knora.webapi.testservices.TestClientService
 import org.knora.webapi.util.FileUtil
 import org.knora.webapi.util.MutableTestIri
 
@@ -58,8 +58,6 @@ class SearchRouteV2R2RSpec extends R2RSpec {
     DSPApiDirectives.handleErrors(appConfig)(ResourcesRouteV2(appConfig).makeRoute)
   private val standoffPath =
     DSPApiDirectives.handleErrors(appConfig)(StandoffRouteV2().makeRoute)
-  private val valuesPath =
-    DSPApiDirectives.handleErrors(appConfig)(ValuesRouteV2().makeRoute)
 
   implicit val ec: ExecutionContextExecutor = system.dispatcher
 
@@ -7189,7 +7187,6 @@ class SearchRouteV2R2RSpec extends R2RSpec {
       }
 
       // Next, create a resource with a text value containing a standoff date tag.
-
       val xmlForJson = stringFormatter.toJsonEncodedString(
         FileUtil.readTextFile(Paths.get("..", "test_data/test_route/texts/HTML.xml")),
       )
@@ -7210,9 +7207,16 @@ class SearchRouteV2R2RSpec extends R2RSpec {
            |  }
            |}""".stripMargin
 
-      Post("/v2/values", HttpEntity(RdfMediaTypes.`application/ld+json`, requestBody)) ~> addCredentials(
-        BasicHttpCredentials(anythingUserEmail, password),
-      ) ~> valuesPath ~> check(assert(status == StatusCodes.OK))
+      UnsafeZioRun.runOrThrow(
+        ZIO.serviceWithZIO[TestClientService](
+          _.singleAwaitingRequest(
+            Post(
+              appConfig.knoraApi.internalKnoraApiBaseUrl + "/v2/values",
+              HttpEntity(RdfMediaTypes.`application/ld+json`, requestBody),
+            ) ~> addCredentials(BasicHttpCredentials(anythingUserEmail, password)),
+          ).filterOrFail(_.status.isSuccess)(Exception("Value creation failed")),
+        ),
+      )
 
       // Finally, do a Gravsearch query that finds the date tag.
 

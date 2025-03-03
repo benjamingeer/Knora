@@ -14,7 +14,7 @@ import zio.json.ast.JsonCursor
 import zio.test.*
 
 import org.knora.webapi.core.AppServer
-import org.knora.webapi.core.LayersTest
+import org.knora.webapi.core.LayersTestMock
 import org.knora.webapi.core.TestStartupUtils
 import org.knora.webapi.messages.store.triplestoremessages.RdfDataObject
 import org.knora.webapi.slice.admin.domain.model.KnoraProject.Shortcode
@@ -23,11 +23,11 @@ import org.knora.webapi.slice.admin.domain.model.UserIri
 abstract class E2EZSpec extends ZIOSpecDefault with TestStartupUtils {
 
   private val testLayers =
-    util.Logger.text() >>> core.LayersTest.integrationTestsWithFusekiTestcontainers()
+    util.Logger.text() >>> LayersTestMock.layer()
 
   def rdfDataObjects: List[RdfDataObject] = List.empty[RdfDataObject]
 
-  type env = LayersTest.DefaultTestEnvironmentWithoutSipi with Client with Scope
+  type env = LayersTestMock.Environment with Client with Scope
 
   private def prepare: ZIO[AppServer.AppServerEnvironment, Throwable, AppServer] = for {
     appServer <- AppServer.init()

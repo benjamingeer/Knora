@@ -40,6 +40,7 @@ import org.knora.webapi.slice.infrastructure.Jwt
 import org.knora.webapi.slice.infrastructure.api.ManagementEndpoints
 import org.knora.webapi.slice.lists.api.ListsEndpointsV2
 import org.knora.webapi.slice.resourceinfo.api.ResourceInfoEndpoints
+import org.knora.webapi.slice.resources.api.ValuesEndpoints
 import org.knora.webapi.slice.search.api.SearchEndpoints
 import org.knora.webapi.slice.security.Authenticator
 import org.knora.webapi.slice.security.AuthenticatorError
@@ -100,6 +101,7 @@ object DocsGenerator extends ZIOAppDefault {
     ShaclEndpoints.layer,
     StoreEndpoints.layer,
     UsersEndpoints.layer,
+    ValuesEndpoints.layer,
   )
 
   private def writeToFile(endpoints: Seq[AnyEndpoint], path: Path, name: String) = {

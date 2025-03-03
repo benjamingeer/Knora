@@ -5,7 +5,10 @@
 
 package org.knora.webapi
 
+import zio.json.JsonCodec
+
 import org.knora.webapi.JsonLdRendering.Flat
+import org.knora.webapi.slice.admin.api.Codecs.TapirCodec
 
 /**
  * Indicates the schema that a Knora ontology or ontology entity conforms to
@@ -51,6 +54,9 @@ case object ApiV2Complex extends ApiV2Schema {
 }
 
 object ApiV2Schema {
+
+  given JsonCodec[ApiV2Schema]              = JsonCodec[String].transformOrFail(ApiV2Schema.from, _.name)
+  given TapirCodec.StringCodec[ApiV2Schema] = TapirCodec.stringCodec(ApiV2Schema.from, _.name)
 
   val default: ApiV2Schema = ApiV2Complex
 
