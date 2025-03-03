@@ -18,6 +18,7 @@ import org.knora.webapi.config.AppConfig
 import org.knora.webapi.core.MessageRelay
 import org.knora.webapi.messages.*
 import org.knora.webapi.messages.IriConversions.*
+import org.knora.webapi.messages.OntologyConstants.KnoraApiV2Complex as KA
 import org.knora.webapi.messages.OntologyConstants.KnoraBase.StillImageExternalFileValue
 import org.knora.webapi.messages.OntologyConstants.KnoraBase.StillImageFileValue
 import org.knora.webapi.messages.admin.responder.permissionsmessages.PermissionADM
@@ -45,9 +46,11 @@ import org.knora.webapi.slice.admin.domain.service.KnoraUserRepo
 import org.knora.webapi.slice.admin.domain.service.LegalInfoService
 import org.knora.webapi.slice.admin.domain.service.ProjectService
 import org.knora.webapi.slice.common.KnoraIris.ResourceIri
+import org.knora.webapi.slice.common.api.AuthorizationRestService
 import org.knora.webapi.slice.ontology.domain.model.Cardinality.AtLeastOne
 import org.knora.webapi.slice.ontology.domain.model.Cardinality.ExactlyOne
 import org.knora.webapi.slice.ontology.domain.model.Cardinality.ZeroOrOne
+import org.knora.webapi.slice.ontology.domain.service.OntologyRepo
 import org.knora.webapi.slice.resourceinfo.domain.IriConverter
 import org.knora.webapi.store.triplestore.api.TriplestoreService
 import org.knora.webapi.store.triplestore.api.TriplestoreService.Queries.Select
@@ -65,6 +68,8 @@ final case class ValuesResponderV2(
   triplestoreService: TriplestoreService,
   permissionsResponder: PermissionsResponder,
   legalInfoService: LegalInfoService,
+  ontologyRepo: OntologyRepo,
+  auth: AuthorizationRestService,
 )(implicit val stringFormatter: StringFormatter) {
 
   /**
@@ -1172,46 +1177,31 @@ final case class ValuesResponderV2(
     requestingUser: User,
     apiRequestId: UUID,
   ): Task[SuccessResponseV2] = {
-    def deleteTask(): Task[SuccessResponseV2] = {
+    val deleteTask: Task[SuccessResponseV2] = {
       for {
-        // Convert the submitted property IRI to the internal schema.
-        submittedInternalPropertyIri <- ZIO.attempt(deleteValue.propertyIri.toOntologySchema(InternalSchema))
-
-        // Get ontology information about the submitted property.
-
-        propertyInfoRequestForSubmittedProperty =
-          PropertiesGetRequestV2(
-            propertyIris = Set(submittedInternalPropertyIri),
-            allLanguages = false,
-            requestingUser,
-          )
-
-        propertyInfoResponseForSubmittedProperty <-
-          messageRelay.ask[ReadOntologyV2](propertyInfoRequestForSubmittedProperty)
-
-        propertyInfoForSubmittedProperty: ReadPropertyInfoV2 =
-          propertyInfoResponseForSubmittedProperty.properties(
-            submittedInternalPropertyIri,
-          )
-
-        // Don't accept link properties.
-        _ <-
-          ZIO.when(propertyInfoForSubmittedProperty.isLinkProp) {
-            ZIO.fail(
-              BadRequestException(
-                s"Invalid property <${propertyInfoForSubmittedProperty.entityInfoContent.propertyIri.toOntologySchema(ApiV2Complex)}>. Use a link value property to submit a link.",
-              ),
+        _ <- auth.ensureUserIsNotAnonymous(requestingUser)
+        propertyIri <-
+          iriConverter
+            .asPropertyIri(deleteValue.propertyIri.toIri)
+            .mapError(BadRequestException.apply)
+            // Don't accept knora-api:hasStandoffLinkToValue.
+            .filterOrFail(_.toComplexSchema.toIri != KA.HasStandoffLinkToValue)(
+              BadRequestException(s"Values of <${KA.HasStandoffLinkToValue}> cannot be deleted directly"),
             )
-          }
 
-        // Don't accept knora-api:hasStandoffLinkToValue.
-        _ <- ZIO.when(deleteValue.propertyIri.toString == OntologyConstants.KnoraApiV2Complex.HasStandoffLinkToValue)(
-               ZIO.fail(BadRequestException(s"Values of <${deleteValue.propertyIri}> cannot be deleted directly")),
-             )
+        propertyInfoForSubmittedProperty <-
+          ontologyRepo
+            .findProperty(propertyIri)
+            .someOrFail(NotFoundException(s"Property not found: $propertyIri"))
+            // Don't accept link properties.
+            .filterOrFail(!_.isLinkProp)(
+              BadRequestException(s"Invalid property <$propertyIri>. Use a link value property to submit a link."),
+            )
 
         // Make an adjusted version of the submitted property: if it's a link value property, substitute the
         // corresponding link property, whose objects we will need to query. Get ontology information about the
         // adjusted property.
+        submittedInternalPropertyIri = propertyIri.toInternalSchema
         adjustedInternalPropertyInfo <-
           getAdjustedInternalPropertyInfo(
             submittedPropertyIri = deleteValue.propertyIri,
@@ -1349,15 +1339,7 @@ final case class ValuesResponderV2(
           )
       } yield SuccessResponseV2(s"Value <$deletedValueIri> marked as deleted")
     }
-
-    for {
-      // Don't allow anonymous users to create values.
-      _ <- ZIO.when(requestingUser.isAnonymousUser)(
-             ZIO.fail(ForbiddenException("Anonymous users aren't allowed to update values")),
-           )
-      // Do the remaining pre-update checks and the update while holding an update lock on the resource.
-      taskResult <- IriLocker.runWithIriLock(apiRequestId, deleteValue.resourceIri, deleteTask())
-    } yield taskResult
+    IriLocker.runWithIriLock(apiRequestId, deleteValue.resourceIri, deleteTask)
   }
 
   /**

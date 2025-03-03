@@ -18,6 +18,7 @@ import org.knora.webapi.slice.admin.domain.model.User
 import org.knora.webapi.slice.admin.domain.service.KnoraGroupService
 import org.knora.webapi.slice.admin.domain.service.KnoraProjectService
 import org.knora.webapi.slice.common.api.AuthorizationRestService.isActive
+import org.knora.webapi.slice.common.api.AuthorizationRestService.isNotAnonymous
 import org.knora.webapi.slice.common.api.AuthorizationRestService.isProjectMember
 import org.knora.webapi.slice.common.api.AuthorizationRestService.isSystemAdminOrProjectAdminInAnyProject
 import org.knora.webapi.slice.common.api.AuthorizationRestService.isSystemAdminOrUser
@@ -27,6 +28,9 @@ final case class AuthorizationRestService(
   knoraProjectService: KnoraProjectService,
   knoraGroupService: KnoraGroupService,
 ) {
+  def ensureUserIsNotAnonymous(user: User): IO[ForbiddenException, Unit] =
+    checkActiveUser(user, isNotAnonymous, "Anonymous users aren't allowed to perform this operation.")
+
   def ensureSystemAdmin(user: User): IO[ForbiddenException, Unit] = {
     lazy val msg =
       s"You are logged in with username '${user.username}', but only a system administrator has permissions for this operation."
@@ -119,6 +123,7 @@ object AuthorizationRestService {
     isSystemAdminOrUser(userADM) || isProjectAdmin(userADM, project)
   def isSystemAdminOrProjectAdminInAnyProject(user: User): Boolean =
     isSystemAdminOrUser(user) || user.permissions.isProjectAdminInAnyProject()
+  def isNotAnonymous(user: User): Boolean = !user.isAnonymousUser
 
   def isProjectMember(projectIri: ProjectIri): User => Boolean =
     user => user.isProjectMember(projectIri) || user.isProjectAdmin(projectIri) || isSystemAdminOrUser(user)
